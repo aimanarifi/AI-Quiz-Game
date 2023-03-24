@@ -8,7 +8,6 @@
 ## Getting started
 Before executing the program. Make sure you have all the required packages. You can do it simply by running the code below in the terminal
 
-"""
-pip install -r requirement.txt
-"""
+
+> pip install -r requirement.txt
 
