@@ -47,14 +47,13 @@ def fetch_users_data(cursor):
 
 
 def main():
-    with sqlite3.connect('../../AIGame.db') as connection:
+    with sqlite3.connect('AIGame.db') as connection:
         cursor = connection.cursor()
-
         try:
             create_users_table(cursor)
             create_houses_table(cursor)
             create_questions_table(cursor)
-            # insert_users_data(cursor)
+            # insert_users_data(cursor) already done it
             user_data_result = fetch_users_data(cursor)
             print(user_data_result)
         except sqlite3.Error as e:
