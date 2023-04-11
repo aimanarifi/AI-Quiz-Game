@@ -24,7 +24,7 @@ stats_blocks = [ None for i in range(14)]
 class StatsBlock(pygame.sprite.Sprite):
 
     """
-    This text block is a wrapper consists of three types text surfaces. The title and the info.
+    This text block is a wrapper consists of three types text surfaces(header,subheader and data).
     This is used for example to handle the display of data like 
     
     'AI House              <-- Header
@@ -109,7 +109,9 @@ class StatsBlock(pygame.sprite.Sprite):
             screen.blit(self.data_surf[i], self.data_rect[i])
 
 def setup(player):
-
+    """
+    TODO: fetch all data from player instance variable
+    """
     global stats_blocks
     
     for i, header in enumerate([player_name] + HOUSES):
