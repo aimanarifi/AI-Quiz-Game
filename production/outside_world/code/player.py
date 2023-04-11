@@ -33,17 +33,7 @@ class Player(pygame.sprite.Sprite):
                            'backward': get_images(
                                '../../assets/graphics/player-animations/backward/movement')}
 
-        # general setup
-        # self.image = pygame.Surface((32, 64))
-        # self.image.fill('green')
-
-        #print(len(get_images('./graphics/player-animations/forward/idle')))
-        #print(len(get_images2('C://Users//alex7//OneDrive//Pictures//Camera Roll')))
-        #print(len(get_images2('../assets/graphics/player-animations/forward/idle')))
-        #print(len(get_images2('../../assets/graphics/player-animations/forward/idle')))
-
-        #print(self.frame_index)
-        #print(self.animations[self.status])
+        #setup
         self.image = self.animations[self.status][self.frame_index]
         self.rect = self.image.get_rect(center=pos)
 
