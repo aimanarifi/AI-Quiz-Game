@@ -1,5 +1,3 @@
-import pygame
-
 """
 AI Group Project Team 7 Spring22/23
 
@@ -8,8 +6,10 @@ Created by: Muhammad Kamaludin
 Modified by:
 Last modified: 8/4/2023
 """
-pygame.init()
 
+import pygame
+
+pygame.init()
 
 class Quiz:
 
