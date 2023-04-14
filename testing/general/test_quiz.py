@@ -19,8 +19,8 @@ class TestOptionClass(unittest.TestCase):
         o = quiz.Quiz.Option("answer1", True)
         self.assertEqual(o.rect.left, 0)
         self.assertEqual(o.rect.top, 0)
-        self.assertEqual(o.rect.right, o.BLOCK_WIDTH)
-        self.assertEqual(o.rect.bottom, o.BLOCK_HEIGHT)
+        self.assertEqual(o.rect.right, o.rect.width)
+        self.assertEqual(o.rect.bottom, o.rect.height)
 
         #Changed pos
         o.set_position([10,10,0,0])

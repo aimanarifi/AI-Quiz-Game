@@ -4,45 +4,46 @@ AI Group Project Team 7 Spring22/23
 Desc: This module contains Quiz and Quiz.Option classes that is used for the general quiz template
 Created by: Muhammad Kamaludin
 Modified by:
-Last modified: 8/4/2023
+Last modified: 14/4/2023
 """
 
 import pygame
-
+from typing import Optional
 pygame.init()
 
 class Quiz:
 
     #Essential graphics object
-    background = None
+    background,background_rect = None, None
+    question_bg_surf, question_bg_rect = None, None
     question_surf, question_rect = None, None
     button_txt, button_txt_rect = None, None 
     submit_button , submit_button_rect = None, None
 
-    question_font = pygame.font.Font(pygame.font.get_default_font(), 32)
-    button_font = pygame.font.Font(pygame.font.get_default_font(), 24)
+    FONT_PATH = "graphics/font/PeaberryBase.ttf"
+    question_font = pygame.font.Font(FONT_PATH, 32)
+    button_font = pygame.font.Font(FONT_PATH, 24)
+
+    CLOUD_CROSS = pygame.transform.scale_by(pygame.image.load("graphics/art/cloud_cross.png"),4)
+    CLOUD_CIRCLE = pygame.transform.scale_by(pygame.image.load("graphics/art/cloud_circle.png"),4)
+    CLOUD_TICK = pygame.transform.scale_by(pygame.image.load("graphics/art/cloud_tick.png"),4)
 
     #Non graphics object
     clock = pygame.time.Clock()
     is_submitted = False
     on_click = False
+
     class Option(pygame.sprite.Sprite):
-
-        option_font = pygame.font.Font(pygame.font.get_default_font(), 20)
-        BLOCK_WIDTH = 300
-        BLOCK_HEIGHT = 80
-
-        def __init__(self, txt: str, is_answer: bool):
+        option_font = None
+        def __init__(self, txt: str, is_answer: bool, quiz: Optional[any] = None):
             super().__init__()
-
-            #the block 
-            self.image = pygame.Surface((self.BLOCK_WIDTH, self.BLOCK_HEIGHT))
+            self.quiz = quiz
+            self.option_font = pygame.font.Font(self.quiz.FONT_PATH, 20) if self.quiz  else pygame.font.Font(pygame.font.get_default_font(), 20)
+            self.image = pygame.transform.scale_by(pygame.image.load("graphics/art/UI/beige_rectangle_2x7.png"),4.5)
             self.rect = self.image.get_rect()
-            self.txt = Quiz.Option.option_font.render(txt, False, 'Black')
+            self.txt = self.option_font.render(txt, False, 'Black')
             self.txt_rect = self.txt.get_rect(center=self.rect.center)
             self.is_answer = is_answer
-
-
 
         def set_position(self, sides: list[int]):
 
@@ -53,19 +54,15 @@ class Quiz:
             self.txt_rect.center = self.rect.center
 
         def update(self, quiz):
-            #Create hover and click effect
+            #click effect
             if self == quiz.selected_option:
-                self.image.fill('Yellow')
-            elif self.rect.collidepoint(pygame.mouse.get_pos()):
-                self.image.fill((254, 250, 224))
-            else:
-                self.image.fill('White')
+                screen.blit(Quiz.CLOUD_CIRCLE, (self.rect.right - 64 -16,self.rect.top + 32))
 
             if quiz.is_submitted:
                 if self.is_answer:
-                    self.image.fill('Green')
+                    screen.blit(Quiz.CLOUD_TICK, (self.rect.right - 64 -16,self.rect.top + 32))
                 if self == quiz.selected_option and not self.is_answer:
-                    self.image.fill('Red')
+                    screen.blit(Quiz.CLOUD_CROSS, (self.rect.right - 64 -16,self.rect.top + 32))
 
             screen.blit(self.txt,self.txt_rect)
 
@@ -73,20 +70,16 @@ class Quiz:
 
         self.question = question
 
-        self.options = [self.Option(opt, opt == answer) for opt in choice]
+        self.options = [self.Option(opt, opt == answer,self) for opt in choice]
         self.options_group = pygame.sprite.Group()
         for opt in self.options:
             self.options_group.add(opt)
-
         self.selected_option = None
-        self.score = 0
-        self.clock = pygame.time.Clock()
-        self.start_time = 0
-        self.end_time = 0
 
     def display(self, screen: pygame.Surface):
 
-        screen.blit(self.background, (0,0))
+        screen.blit(self.background, self.background_rect)
+        screen.blit(self.question_bg_surf,self.question_bg_rect)
         screen.blit(self.question_surf, self.question_rect)
         screen.blit(self.submit_button, self.submit_button_rect)
         screen.blit(self.button_txt, self.button_txt_rect)
@@ -98,13 +91,16 @@ class Quiz:
         Initialize essential graphics objects
         """
         #set the background
-        self.background = pygame.Surface(screen.get_size())
-        self.background.fill('Black')
+        self.background = pygame.transform.scale_by(pygame.image.load("graphics/art/quiz_bg.png"),2)
+        self.background_rect = self.background.get_rect()
+        #self.background.fill('#262b44')
         #Set the question
+        self.question_bg_surf = pygame.transform.scale_by(pygame.image.load("graphics/art/UI/brown_rectangle_3x14.png"),4.5)
+        self.question_bg_rect = self.question_bg_surf.get_rect(midtop=(screen.get_width()/2,64))
         self.question_surf = self.question_font.render(self.question,False , "White")
-        self.question_rect = self.question_surf.get_rect(center=( screen.get_width()/2 , 200))
+        self.question_rect = self.question_surf.get_rect(center=(self.question_bg_rect.center))
         #set the answer options
-        REF_POINT = (screen.get_width()/2 , screen.get_height()*3/4-100) # the center between four option blocks (x,y)
+        REF_POINT = (screen.get_width()/2 , screen.get_height()*3/4-50) # the center between four option blocks (x,y)
         for index, opt in enumerate(self.options):
             binary_index = format(index, '02b')
             sides = [0,0,0,0] #value of [left, top, right, bottom]
@@ -122,21 +118,29 @@ class Quiz:
             self.options_group.add(opt)
         
         #set submit button
-        self.button_txt = self.button_font.render("submit", False, 'Black')
+        self.button_txt = self.button_font.render("submit", False, 'White')
         self.button_txt_rect = self.button_txt.get_rect()
-        self.submit_button = pygame.Surface((self.button_txt_rect.width+16,self.button_txt_rect.height+16))
-        self.submit_button.fill("White")
-        self.submit_button_rect = self.submit_button.get_rect(midbottom=(REF_POINT[0], screen.get_height() - 32))
+        self.submit_button = pygame.transform.scale_by(pygame.image.load("graphics/art/UI/button_2x1.png"),4.5)
+        self.submit_button_rect = self.submit_button.get_rect(midbottom=(REF_POINT[0], screen.get_height() - 16))
         self.button_txt_rect.center = self.submit_button_rect.center
+
+        #play BGM
+        pygame.mixer.init()
+        pygame.mixer.Channel(0).play(pygame.mixer.Sound('graphics/audio/quiz_bgm.wav'),-1)
 
     def run(self, screen: pygame.Surface):
 
         self.setup(screen)
 
+        #some variable for animation
+        counter,inc = 0, 1
+        temp_rect = self.button_txt_rect.bottom
+        mouse_hold = False
+
         #Actual quiz logic
         is_finished = False
         while not is_finished:
-            
+            counter += 1
             self.on_click = False
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -146,18 +150,48 @@ class Quiz:
                 if event.type == pygame.MOUSEBUTTONUP:
                     self.on_click = True
 
+            
             #Handle interaction(s) with the answer options
             if not self.is_submitted and self.on_click:
                 for opt in self.options:
-                    self.selected_option = opt if opt.rect.collidepoint(pygame.mouse.get_pos()) else self.selected_option
+                    #self.selected_option = opt if opt.rect.collidepoint(pygame.mouse.get_pos()) else self.selected_option
+                    if opt.rect.collidepoint(pygame.mouse.get_pos()):
+                        self.selected_option = opt
+                        pygame.mixer.Channel(1).play(pygame.mixer.Sound('graphics/audio/quiz_select_answer.wav'))
 
             #Handle interaction(s) with the submit button 
-            if self.on_click and self.submit_button_rect.collidepoint(pygame.mouse.get_pos()) and self.selected_option is not None:
-                is_finished = self.is_submitted if self.is_submitted else is_finished
-                self.is_submitted = True
-                self.button_txt = self.button_font.render("Continue", False, 'Black')
-                self.button_txt_rect = self.button_txt.get_rect(center=self.submit_button_rect.center)
+            if self.submit_button_rect.collidepoint(pygame.mouse.get_pos()):
+                
+                #button click micro interaction
+                if pygame.mouse.get_pressed()[0]:
+                    self.submit_button = pygame.transform.scale_by(pygame.image.load("graphics/art/UI/button_2x1_clicked.png").convert_alpha(),4.5)
+                    self.button_txt_rect.bottom = temp_rect + 4
+                    if not mouse_hold:
+                        pygame.mixer.Channel(1).play(pygame.mixer.Sound('graphics/audio/button_click.wav'))
+                    mouse_hold = True   
+                else:
+                    mouse_hold = False
+                    self.submit_button = pygame.transform.scale_by(pygame.image.load("graphics/art/UI/button_2x1.png").convert_alpha(),4.5)
+                    self.button_txt_rect.bottom = temp_rect
 
+                #Update quiz state
+                if self.on_click and self.selected_option:
+                    is_finished = self.is_submitted if self.is_submitted else is_finished
+                    self.is_submitted = True
+                    self.button_txt = self.button_font.render("Continue", False, 'White')
+                    self.button_txt_rect = self.button_txt.get_rect(center=self.submit_button_rect.center)
+    
+                    if self.selected_option.is_answer:
+                        pygame.mixer.Channel(0).play(pygame.mixer.Sound('graphics/audio/quiz_correct.wav'))
+                    else:
+                        pygame.mixer.Channel(0).play(pygame.mixer.Sound('graphics/audio/quiz_wrong.wav'))
+
+            #animate background
+            inc = -1 if self.background_rect.left == 0 else inc
+            inc = 1 if self.background_rect.right == screen.get_width() else inc
+            if not counter % 2:
+                self.background_rect.left += inc    
+            
             self.display(screen)
 
             pygame.display.update()
@@ -165,17 +199,24 @@ class Quiz:
 
         return True
 
-    def get_quizzes():
-        """TO DO
-        static method to fetch quiz from db
-        """
-        return False
+    def get_score(self):
 
+        if self.selected_option:
+            return int(self.selected_option.is_answer)
+        else:
+            return 0
+    
 if __name__ == "__main__":
 
-    screen = pygame.display.set_mode((720,720))
+    screen = pygame.display.set_mode((1280,720))
     pygame.display.set_caption("Quiz page")
 
+    #create quiz object
     q1 = Quiz("This is the prompt", ["AAAA","BBBB","CCCC","DDDD"], "CCCC")
+
+    #run the page
     q1.run(screen)
+
+    #get score
+    print(q1.get_score())
 
