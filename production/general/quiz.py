@@ -91,7 +91,7 @@ class Quiz:
         Initialize essential graphics objects
         """
         #set the background
-        self.background = pygame.transform.scale_by(pygame.image.load("graphics/art/quiz_bg.png"),2)
+        self.background = pygame.transform.scale_by(pygame.image.load("graphics/art/bg_1.png"),2)
         self.background_rect = self.background.get_rect()
         #self.background.fill('#262b44')
         #Set the question
