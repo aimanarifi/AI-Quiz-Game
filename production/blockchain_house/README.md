@@ -3,6 +3,7 @@
 ## Minigame Idea: 2d Platformer without Violence 
 ## Quiz : IBM BlockChain 
 - Study IBM BlockChain Here: https://www.ibm.com/topics/blockchain
+- Study IBM Watson Text-To-Speech Here: https://cloud.ibm.com/apidocs/text-to-speech 
 ## Development Process Demo Videos 
 - IBM Watson Text-To-Speech with Python:  https://youtu.be/7ILl0a43fxA (2023.March.31st)
 - Implementation of IBM BlockChain Minigame (1st Iteration) : https://youtu.be/JAxNuIBFcBU (2023.April.14)
