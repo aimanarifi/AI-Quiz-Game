@@ -2,7 +2,7 @@ import pygame
 from settings import *
 from player import Player
 from sprites import Generic
-
+from pytmx.util_pygame import load_pygame
 
 class Level:
     def __init__(self):
@@ -16,6 +16,12 @@ class Level:
         self.setup()
 
     def setup(self):
+        tmx_data = load_pygame('../data/tmx/outside_world.tmx')
+
+        for x, y, surf in tmx_data.get_layer_by_name('Water Layer').tiles():
+            Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
+
+
         self.player = Player((100, 100), self.all_sprites)
         Generic(
             pos=(0, 0),
