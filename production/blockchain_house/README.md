@@ -1,5 +1,6 @@
 # IBM BlockChain House and Minigame with Quiz 
 ## Author: Kyungtae Han only.  
+## Email : khan3@sheffield.ac.uk
 ## Minigame Idea: 2d Platformer without Violence 
 ## Quiz : IBM BlockChain 
 - Study IBM BlockChain Here: https://www.ibm.com/topics/blockchain
