@@ -1,5 +1,6 @@
 # IBM BlockChain House and Minigame with Quiz 
 ## Author: Kyungtae Han only.  
+## Email : khan3@sheffield.ac.uk
 ## Minigame Idea: 2d Platformer without Violence 
 ## Quiz : IBM BlockChain 
 - Study IBM BlockChain Here: https://www.ibm.com/topics/blockchain
@@ -12,3 +13,4 @@
 - Implementation of IBM Watson Text-To-Speech with Quiz NPC (IBM BlockChain Quiz included.) : https://youtu.be/j0_2rScWspo (2023.April.19th)
 - Implementation of IBM BlockChain LeaderBoard and Stats Page : https://youtu.be/s6AvcpRUO5I (2023.April.19th)
 - Implementation of IBM Watson Text-To-Speech with Welcome Voice, LeaderBoard and Stats : https://youtu.be/nRJ4jNXiTjo (2023.April.21st)
+- Implementation of IBM Watson with Achievement Page : https://youtu.be/Uur1yVBnqIA (2023.April.23rd)
