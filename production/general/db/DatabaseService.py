@@ -1,133 +1,149 @@
 """
-This database service class provides the ability to add, delete, update and select against a SQLite database,
-corresponding to four methods that the developer can call and follow the instructions in the method to achieve the
-functionality.
-A method is provided to create all tables needed in the database, which will be called at the start of the program.
-
-Written by Zhongjie Huang
-Last modified: 24/4/2023
+Written by: Zhongjie Huang, Muhammad
+Last modified: 27/04/2023
 """
 
 import sqlite3
+from project.production.general import quiz
 
 
-def insert_data(table_name, columns, values):
+def create_tables():
     """
-    This function is used to insert data into a table, taking three parameters, which are table name, columns name and
-    values corresponding to the columns name.
-    For example:
-        insert_data("HOUSES", "HOUSE_ID", "3")
-    You can add multiple column names and values:
-        insert_data("HOUSES", "HOUSE_ID, HOUSE_NUMBER", "3, 4")
-    If the value is non-numeric, you need to add single quotes:
-        insert_data("HOUSES", "HOUSE_DESCRIPTION", "'house'")
-    You can only add a whole row!
+    This function is used to create all tables needed for this project in the database.
     """
     with sqlite3.connect('AIGame.db') as connection:
         cursor = connection.cursor()
-        insert_data_query = f"INSERT INTO {table_name} ({columns}) VALUES ({values})"
         try:
-            cursor.execute(insert_data_query)
+            cursor.execute('''CREATE TABLE IF NOT EXISTS USER (
+            ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            USERNAME TEXT,
+            MONEY REAL NOT NULL DEFAULT 0,
+            EXPERIENCE REAL NOT NULL DEFAULT 0,
+            EXP_AI REAL NOT NULL DEFAULT 0,
+            EXP_BLOCKCHAIN REAL NOT NULL DEFAULT 0,
+            EXP_CLOUD REAL NOT NULL DEFAULT 0,
+            EXP_CYBERSECURITY REAL NOT NULL DEFAULT 0,
+            EXP_DATASCIENCE	REAL NOT NULL DEFAULT 0,
+            EXP_IOT	REAL NOT NULL DEFAULT 0,
+            HIGHSCORE_AI REAL NOT NULL DEFAULT 0,
+            HIGHSCORE_BLOCKCHAIN REAL NOT NULL DEFAULT 0,
+            HIGHSCORE_CLOUD	REAL NOT NULL DEFAULT 0,
+            HIGHSCORE_CYBERSECURITY	REAL NOT NULL DEFAULT 0,
+            HIGHSCORE_DATASCIENCE REAL NOT NULL DEFAULT 0,
+            HIGHSCORE_IOT REAL NOT NULL DEFAULT 0
+            )''')
+            cursor.execute('''CREATE TABLE IF NOT EXISTS QUESTIONS (
+            ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            QUESTION TEXT,
+            OPTION_A TEXT NOT NULL,
+            OPTION_B TEXT NOT NULL,
+            OPTION_C TEXT NOT NULL,
+            OPTION_D TEXT NOT NULL,
+            CORRECT_OPTION TEXT NOT NULL,
+            DIFFICULTY INTEGER NOT NULL,
+            HOUSE TEXT NOT NULL
+            )''')
             connection.commit()
-            print(f"A row contains columns: ({columns}) in table: ({table_name}) has been added successfully "
-                  f"with values: ({values})")
         except sqlite3.Error as e:
-            print("An error occurred: ", e)
+            print("An error has occurred: ", e)
             connection.rollback()
 
 
-def delete_data(table_name, conditions):
+def get_user():
     """
-    This function is used to delete data from a table, taking two parameters, which are table name and conditions.
-    For example:
-        delete_data("HOUSES", "ID = 1")
-    If the assigned value is non-numeric, you need to add single quotes:
-        delete_data("HOUSES", "ID = 1 AND HOUSE_NAME = 'AI'")
-    You can only delete a whole row!
-    """
-    with sqlite3.connect('AIGame.db') as connection:
-        cursor = connection.cursor()
-        delete_data_query = f"DELETE FROM {table_name} WHERE {conditions}"
-        try:
-            cursor.execute(delete_data_query)
-            connection.commit()
-            print(f"Rows in table: ({table_name}) with conditions: ({conditions}) have been deleted successfully")
-        except sqlite3.Error as e:
-            print("An error occurred: ", e)
-            connection.rollback()
-
-
-def update_data(table_name, columns_set, conditions):
-    """
-    This function is used to update the data on a table, taking three parameters, which are table name, columns set
-    and conditions.
-    For example:
-        update_data("HOUSES", "HOUSE_NUMBER = 10", "ID = 1")
-    You can choose not to have a condition, in this case you must set the condition to None:
-        update_data("HOUSES", "HOUSE_NUMBER = 10", None)
-    If the assigned value is non-numeric, you need to add single quotes:
-        update_data("HOUSES", "HOUSE_NUMBER = 10, HOUSE_NAME = 'AI'", "ID = 1")
-    """
-    with sqlite3.connect('AIGame.db') as connection:
-        cursor = connection.cursor()
-        if conditions:
-            update_data_query = f"UPDATE {table_name} SET {columns_set} WHERE {conditions}"
-        else:
-            update_data_query = f"UPDATE {table_name} SET {columns_set}"
-        try:
-            cursor.execute(update_data_query)
-            connection.commit()
-            print(f"Rows in table: ({table_name}) with conditions: ({conditions}) have been updated successfully with "
-                  f"columns_set: ({columns_set})")
-        except sqlite3.Error as e:
-            print("An error occurred: ", e)
-            connection.rollback()
-
-
-def select_data(table_name, columns, conditions):
-    """
-    This function is used to select the data from a table, taking three parameters, which are table name, columns and
-    conditions.
-    For example:
-        select_data("HOUSES", "HOUSE_NUMBER, HOUSE_NAME", "ID = 1")
-    You can choose not to have a condition, in this case you must set the condition to None:
-        select_data("HOUSES", "HOUSE_NUMBER, HOUSE_NAME", None)
-    You can select all columns at once:
-        select_data("HOUSES", "*", None)
-    If the assigned value is non-numeric, you need to add single quotes:
-        select_data("HOUSES", "HOUSE_NUMBER", "HOUSE_NAME = 'AI'")
-    The returned results are in a list and tuple, you need to used index to get it.
-    """
-    with sqlite3.connect('AIGame.db') as connection:
-        cursor = connection.cursor()
-        if conditions:
-            select_data_query = f"SELECT {columns} FROM {table_name} WHERE {conditions}"
-        else:
-            select_data_query = f"SELECT {columns} FROM {table_name}"
-        data_results = None
-        try:
-            cursor.execute(select_data_query)
-            data_results = cursor.fetchall()
-            print(f"Rows in table: ({table_name}) with conditions: ({conditions}) have been selected successfully "
-                  f"with columns: ({columns})")
-        except sqlite3.Error as e:
-            print("An error occurred: ", e)
-    return data_results
-
-
-def create_all_tables():
-    """
-    This function is used to create all tables and should be called in the launch part of the game program.
+    This function is used to get the user's data, which will be returned in a tuple
     """
     with sqlite3.connect('AIGame.db') as connection:
         cursor = connection.cursor()
         try:
-            cursor.execute('''CREATE TABLE IF NOT EXISTS Table_name (
-                              ID INTEGER PRIMARY KEY AUTOINCREMENT);''')
-            connection.commit()
+            cursor.execute("SELECT * FROM USER")
+            userData = cursor.fetchone()
         except sqlite3.Error as e:
-            print("An error occurred: ", e)
-            connection.rollback()
+            print("An error has occurred: ", e)
+        return userData
 
 
-insert_data("HOUSES", "HOUSE_NAME, HOUSE_DESCRIPTION", "'AI', 'AII'")
+def update_user(user):
+    """
+    This function is used to update user's data, each time when it is called, the user's data will be updated automatically if
+    there is a change. e.g. part of save game progress.
+    It takes a user instance as the parameter
+    """
+    with sqlite3.connect('AIGame.db') as connection:
+        cursor = connection.cursor()
+        try:
+            cursor.execute("SELECT money, experience, exp_ai, exp_blockchain, exp_cloud, "
+                           "exp_cybersecurity, exp_datascience, exp_iot, highscore_ai, highscore_blockchain, "
+                           "highscore_cloud, highscore_cybersecurity, highscore_datascience, highscore_iot FROM USER")
+            userData = cursor.fetchone()
+        except sqlite3.Error as e:
+            print("An error has occurred: ", e)
+        if user.money != userData[0] or user.experience != userData[1] or user.exp_ai != userData[
+            2] or user.exp_blockchain != userData[3] \
+                or user.exp_cloud != userData[4] or user.exp_cybersecurity != userData[5] or user.exp_datascience != \
+                userData[6] or \
+                user.exp_iot != userData[7] or user.highscore_ai != userData[8] or user.highscore_blockchain != \
+                userData[9] or \
+                user.highscore_cloud != userData[10] or user.highscore_cybersecurity != userData[
+            11] or user.highscore_datascience != userData[12] \
+                or user.highscore_iot != userData[13]:
+            try:
+                cursor.execute(
+                    f"UPDATE USER SET money = {user.money}, experience = {user.experience}, exp_ai = {user.exp_ai}, "
+                    f"exp_blockchain = {user.exp_blockchain}, exp_cloud = {user.exp_cloud}, "
+                    f"exp_cybersecurity = {user.exp_cybersecurity}, exp_datascience = {user.exp_datascience}, exp_iot = {user.exp_iot}, "
+                    f"highscore_ai = {user.highscore_ai}, highscore_blockchain = {user.highscore_blockchain}, "
+                    f"highscore_cloud = {user.highscore_cloud}, highscore_cybersecurity = {user.highscore_cybersecurity}, "
+                    f"highscore_datascience = {user.highscore_datascience}, highscore_iot = {user.highscore_iot}")
+                connection.commit()
+                print("User's data has been updated successfully")
+            except sqlite3.Error as e:
+                print("An error has occurred: ", e)
+                connection.rollback()
+
+
+def get_questions(difficulty: int, house: str):
+    """
+    This function is used to get all questions from the questions table.
+    All questions corresponding to the difficulty condition will be returned in a tuple
+    It takes a degree of difficulty and house name as parameters
+    """
+    with sqlite3.connect('AIGame.db') as connection:
+        cursor = connection.cursor()
+        try:
+            cursor.execute(
+                f"SELECT QUESTION, OPTION_A, OPTION_B, OPTION_C, OPTION_D, CORRECT_OPTION FROM QUESTIONS WHERE DIFFICULTY = {difficulty} AND HOUSE = {house}")
+            questions = cursor.fetchone()
+        except sqlite3.Error as e:
+            print("An error has occurred: ", e)
+        for question in len(questions):
+            ques = questions[question][0]
+            options = [questions[question][1], questions[question][2], questions[question][3], questions[question][4]]
+            answer = questions[question][5]
+            quiz.__init__(ques, options, answer)
+        return questions
+
+
+class User:
+    def __init__(self, username='Player', money=0.0, experience=0.0, exp_ai=0.0, exp_blockchain=0.0, exp_cloud=0.0, exp_cybersecurity=0.0,
+                 exp_datascience=0.0, exp_iot=0.0, highscore_ai=0.0, highscore_blockchain=0.0, highscore_cloud=0.0, highscore_cybersecurity=0.0,
+                 highscore_datascience=0.0, highscore_iot=0.0):
+        self.username = username
+        self.money = money
+        self.experience = experience
+        self.exp_ai = exp_ai
+        self.exp_blockchain = exp_blockchain
+        self.exp_cloud = exp_cloud
+        self.exp_cybersecurity = exp_cybersecurity
+        self.exp_datascience = exp_datascience
+        self.exp_iot = exp_iot
+        self.highscore_ai = highscore_ai
+        self.highscore_blockchain = highscore_blockchain
+        self.highscore_cloud = highscore_cloud
+        self.highscore_cybersecurity = highscore_cybersecurity
+        self.highscore_datascience = highscore_datascience
+        self.highscore_iot = highscore_iot
+
+
+if __name__ == '__main__':
+    create_tables()
