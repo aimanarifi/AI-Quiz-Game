@@ -1,2 +1,3 @@
 ibm-watson==6.1.0
 pygame
+pytmx
