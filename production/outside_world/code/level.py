@@ -1,9 +1,12 @@
 import pygame
 import os
+
+#import production
 from settings import *
 from player import Player
-from sprites import Generic, Portal, Blacksmith, Wave, Fish, Tree
+from sprites import Generic, Portal, Blacksmith, Wave, Fish, Tree, Interaction
 from pytmx.util_pygame import load_pygame
+#from production.general.statistics import run
 
 
 def get_images_portal(folder_dir):
@@ -38,6 +41,9 @@ class Level:
         # sprite groups
         self.all_sprites = CameraGroup()
         self.collision_sprites = pygame.sprite.Group()
+        self.interaction_sprites = pygame.sprite.Group()
+
+        #self.banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),6.7)
 
         self.setup()
 
@@ -90,6 +96,9 @@ class Level:
         for x, y, surf in tmx_data.get_layer_by_name('House Entrance').tiles():
             Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
 
+        for x, y, surf in tmx_data.get_layer_by_name('Frame').tiles():
+            Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
+
         # trees
         for obj in tmx_data.get_layer_by_name('Tree Objects'):
             Tree((obj.x, obj.y), obj.image, self.all_sprites, obj.name, LAYERS['tree'])
@@ -116,21 +125,47 @@ class Level:
             Portal((obj.x, obj.y), portal_frames, [self.all_sprites, self.collision_sprites])
 
         # player
-        self.player = Player((100, 100), self.all_sprites, self.collision_sprites)
+        for obj in tmx_data.get_layer_by_name('Player'):
+            if obj.name == 'Start':
+                self.player = Player((obj.x, obj.y), self.all_sprites, self.collision_sprites, self.interaction_sprites)
+            if obj.name == 'Blacksmith':
+                Interaction((obj.x,obj.y), (obj.width,obj.height), self.interaction_sprites, obj.name)
+            if obj.name == "Ladder1":
+                Interaction((obj.x,obj.y), (obj.width,obj.height), self.interaction_sprites, obj.name)
+            if obj.name == "Ladder2":
+                Interaction((obj.x, obj.y), (obj.width, obj.height), self.interaction_sprites, obj.name)
+            if obj.name == "AI_House":
+                Interaction((obj.x, obj.y), (obj.width, obj.height), self.interaction_sprites, obj.name)#
+            if obj.name == "Blockchain_House":
+                Interaction((obj.x, obj.y), (obj.width, obj.height), self.interaction_sprites, obj.name)
+            if obj.name == "IOT_House":
+                Interaction((obj.x, obj.y), (obj.width, obj.height), self.interaction_sprites, obj.name)
+            if obj.name == "DS_House":
+                Interaction((obj.x, obj.y), (obj.width, obj.height), self.interaction_sprites, obj.name)
+            if obj.name == "CS_House":
+                Interaction((obj.x, obj.y), (obj.width, obj.height), self.interaction_sprites, obj.name)
+            if obj.name == "Cloud_House":
+                Interaction((obj.x, obj.y), (obj.width, obj.height), self.interaction_sprites, obj.name)
+            if obj.name == "Player_House":
+                Interaction((obj.x, obj.y), (obj.width, obj.height), self.interaction_sprites, obj.name)
 
         # image of tiled map for testing
-        Generic(
+        '''Generic(
             pos=(0, 0),
             surf=pygame.image.load("../data/tmx/outside_world.png").convert_alpha(),
             groups=self.all_sprites,
             z=LAYERS["ground"],
-        )
+        )'''
 
     def run(self, dt):
         self.display_surface.fill('black')
         #self.display_surface.blit(Generic.hitbox)
         self.all_sprites.layered_draw(self.player)
         self.all_sprites.update(dt)
+
+        #while self.player.run_stats_status == True:
+            #print("running stats page")
+            #production.general.statistics.run()
         # pygame.transform.scale(self.display_surface, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
@@ -153,11 +188,33 @@ class CameraGroup(pygame.sprite.Group):
         self.internal_offset.x = self.internal_surf_size[0] // 2 - self.half_w
         self.internal_offset.y = self.internal_surf_size[1] // 2 - self.half_h
 
+        self.bg_surf = pygame.image.load('../../graphics/art/bg_1.png')
+        self.bg_surf_sized = pygame.transform.scale(self.bg_surf, (1280, 720))
+
+        self.banner_image = pygame.transform.scale_by(pygame.image.load('../../graphics/art/UI/beige_rectangle_2x7.png'),4)
+        self.big_banner_image = pygame.transform.scale_by(pygame.image.load('../../graphics/art/UI/beige_rectangle_2x7.png'),4.15)
+        self.biggest_banner_image = pygame.transform.scale_by(pygame.image.load('../../graphics/art/UI/beige_rectangle_2x7.png'),4.3)
+        self.smallest_font = pygame.font.Font('../../graphics/font/PeaberryBase.ttf', 14)
+        self.small_font = pygame.font.Font('../../graphics/font/PeaberryBase.ttf', 15)
+        self.medium_font = pygame.font.Font('../../graphics/font/PeaberryBase.ttf', 18)
+
+        self.ai_text_surf = self.medium_font.render("This is the AI Mini-Game, Press X to Play", False, 'Black')
+        self.blockchain_text_surf = self.small_font.render("This is the Blockchain Mini-Game, Press X to Play",
+                                                            False, 'Black')
+        self.iot_text_surf = self.medium_font.render("This is the I.O.T Mini-Game, Press X to Play", False, 'Black')
+        self.ds_text_surf = self.small_font.render("This is the Data Science Mini-Game, Press X to Play", False, 'Black')
+        self.cs_text_surf = self.small_font.render("This is the Cybersecurity Mini-Game, Press X to Play", False, 'Black')
+        self.cloud_text_surf = self.medium_font.render("This is the Cloud Mini-Game, Press X to Play", False, 'Black')
+        self.stats_text_surf = self.medium_font.render("View Stats Here, Press X", False, 'Black')
+        self.house_text_surf = self.medium_font.render("Enter Home Here, Press X", False, 'Black')
+        self.ladder_text_surf = self.medium_font.render("Enter Ladder to other Island, Press X", False, 'Black')
+
     def layered_draw(self, player):
         self.offset.x = player.rect.centerx - SCREEN_WIDTH / 2
         self.offset.y = player.rect.centery - SCREEN_HEIGHT / 2
 
-        self.internal_surf.fill('black')
+        self.internal_surf.fill('#262B44')
+        # self.internal_surf.blit(self.bg_surf_sized, (0,0))
 
         for layer in LAYERS.values():
             if (layer != 8) and (layer != 9):
@@ -168,7 +225,7 @@ class CameraGroup(pygame.sprite.Group):
                         self.internal_surf.blit(sprite.image, offset_rect)
             else:
                 for sprite in sorted(self.sprites(), key = lambda sprite: (sprite.rect.centery + sprite.rect.h/1.5)):
-                    #print(sprite.rect.centery)
+                    # print(sprite.rect.centery)
                     if sprite.z == layer:
                         offset_rect = sprite.rect.copy()
                         offset_rect.center -= self.offset
@@ -178,3 +235,49 @@ class CameraGroup(pygame.sprite.Group):
         scaled_rect = scaled_surf.get_rect(center=(self.half_w, self.half_h))
 
         self.display_surface.blit(scaled_surf, scaled_rect)
+
+        if player.ai_banner_status:
+            self.display_surface.blit(self.banner_image, (1280*(1/2) - self.banner_image.get_width()/2, 720*(4/5)))
+            self.display_surface.blit(self.ai_text_surf, (1280*(1/2) - self.ai_text_surf.get_width()/2, 720*(4/5)
+                                                          + self.banner_image.get_height()/2 - 10))
+        if player.blockchain_banner_status:
+            self.display_surface.blit(self.banner_image, (1280*(1/2) - self.banner_image.get_width()/2, 720*(4/5)))
+            self.display_surface.blit(self.blockchain_text_surf, (1280*(1/2) - self.blockchain_text_surf.get_width()/2, 720*(4/5)
+                                                          + self.banner_image.get_height()/2 - 10))
+
+        if player.iot_banner_status:
+            self.display_surface.blit(self.banner_image, (1280*(1/2) - self.banner_image.get_width()/2, 720*(4/5)))
+            self.display_surface.blit(self.iot_text_surf, (1280*(1/2) - self.iot_text_surf.get_width()/2, 720*(4/5)
+                                                          + self.banner_image.get_height()/2 - 10))
+
+        if player.ds_banner_status:
+            self.display_surface.blit(self.big_banner_image, (1280*(1/2) - self.big_banner_image.get_width()/2, 720*(4/5)))
+            self.display_surface.blit(self.ds_text_surf, (1280*(1/2) - self.ds_text_surf.get_width()/2, 720*(4/5)
+                                                          + self.big_banner_image.get_height()/2 - 10))
+
+        if player.cs_banner_status:
+            self.display_surface.blit(self.biggest_banner_image, (1280*(1/2) - self.biggest_banner_image.get_width()/2, 720*(4/5)))
+            self.display_surface.blit(self.cs_text_surf, (1280*(1/2) - self.cs_text_surf.get_width()/2, 720*(4/5)
+                                                          + self.biggest_banner_image.get_height()/2 - 10))
+
+        if player.cloud_banner_status:
+            self.display_surface.blit(self.banner_image, (1280*(1/2) - self.banner_image.get_width()/2, 720*(4/5)))
+            self.display_surface.blit(self.cloud_text_surf, (1280*(1/2) - self.cloud_text_surf.get_width()/2, 720*(4/5)
+                                                          + self.banner_image.get_height()/2 - 10))
+        if player.stats_banner_status:
+            self.display_surface.blit(self.banner_image, (1280*(1/2) - self.banner_image.get_width()/2, 720*(4/5)))
+            self.display_surface.blit(self.stats_text_surf, (1280*(1/2) - self.stats_text_surf.get_width()/2, 720*(4/5)
+                                                          + self.banner_image.get_height()/2 - 10))
+
+        if player.house_banner_status:
+            self.display_surface.blit(self.banner_image, (1280*(1/2) - self.banner_image.get_width()/2, 720*(4/5)))
+            self.display_surface.blit(self.house_text_surf, (1280*(1/2) - self.house_text_surf.get_width()/2, 720*(4/5)
+                                                          + self.banner_image.get_height()/2 - 10))
+
+        if player.ladder_banner_status:
+            self.display_surface.blit(self.banner_image, (1280*(1/2) - self.banner_image.get_width()/2, 720*(4/5)))
+            self.display_surface.blit(self.ladder_text_surf, (1280*(1/2) - self.ladder_text_surf.get_width()/2, 720*(4/5)
+                                                          + self.banner_image.get_height()/2 - 10))
+
+
+

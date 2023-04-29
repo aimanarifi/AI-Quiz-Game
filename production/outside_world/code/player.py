@@ -2,6 +2,7 @@ import pygame
 from os import walk
 import os
 from settings import *
+import time
 
 
 def get_images(folder_dir):
@@ -16,7 +17,7 @@ def get_images(folder_dir):
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, group, collision_sprites):
+    def __init__(self, pos, group, collision_sprites, interaction_sprites):
         super().__init__(group)
 
         # animation setup
@@ -47,6 +48,24 @@ class Player(pygame.sprite.Sprite):
         # collision
         self.hitbox = self.rect.copy().inflate(-60, -60)
         self.collision_sprites = collision_sprites
+        self.interaction_sprites = interaction_sprites
+
+        # overlay
+        self.ai_banner_status = False
+        self.blockchain_banner_status = False
+        self.iot_banner_status = False
+        self.ds_banner_status = False
+        self.cs_banner_status = False
+        self.cloud_banner_status = False
+        self.stats_banner_status = False
+        self.house_banner_status = False
+        self.ladder_banner_status = False
+
+        # mini-game / stats / house
+        self.run_stats_status = False
+
+        # self.font = pygame.font.Font('graphics/font/PeaberryBase.ttf', 24)
+        # self.banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),6.7)
 
     def animate(self, dt):
         self.frame_index += 6 * dt
@@ -76,6 +95,56 @@ class Player(pygame.sprite.Sprite):
             self.animation_status = "left"
         else:
             self.direction.x = 0
+
+        if keys[pygame.K_x]:
+            collided_interaction_sprite = pygame.sprite.spritecollide(self, self.interaction_sprites, False)
+            print(collided_interaction_sprite)
+            if collided_interaction_sprite:
+                print(collided_interaction_sprite)
+                if collided_interaction_sprite[0].name == 'Blacksmith':
+                    self.animation_status = 'left_idle'
+                    self.run_stats_status = True
+                if collided_interaction_sprite[0].name == 'Ladder1':
+                    self.pos.x = 901
+                    self.pos.y = 219
+                    time.sleep(0.1)  # avoids error by allowing collided_interaction_sprite to update
+                if collided_interaction_sprite[0].name == 'Ladder2':
+                    self.pos.x = 663
+                    self.pos.y = 374
+                    time.sleep(0.1) # avoids error by allowing collided_interaction_sprite to update
+
+        collided_interaction_sprite = pygame.sprite.spritecollide(self, self.interaction_sprites, False)
+        print(collided_interaction_sprite)
+        if collided_interaction_sprite:
+            if collided_interaction_sprite[0].name == 'AI_House':
+                self.ai_banner_status = True
+            if collided_interaction_sprite[0].name == 'Blockchain_House':
+                self.blockchain_banner_status = True
+            if collided_interaction_sprite[0].name == 'IOT_House':
+                self.iot_banner_status = True
+            if collided_interaction_sprite[0].name == 'DS_House':
+                self.ds_banner_status = True
+            if collided_interaction_sprite[0].name == 'CS_House':
+                self.cs_banner_status = True
+            if collided_interaction_sprite[0].name == 'Cloud_House':
+                self.cloud_banner_status = True
+            if collided_interaction_sprite[0].name == 'Blacksmith':
+                self.stats_banner_status = True
+            if collided_interaction_sprite[0].name == 'Player_House':
+                self.house_banner_status = True
+            if collided_interaction_sprite[0].name == 'Ladder1' or collided_interaction_sprite[0].name == 'Ladder2':
+                self.ladder_banner_status = True
+        else:
+            self.ai_banner_status = False
+            self.blockchain_banner_status = False
+            self.iot_banner_status = False
+            self.ds_banner_status = False
+            self.cs_banner_status = False
+            self.cloud_banner_status = False
+            self.stats_banner_status = False
+            self.house_banner_status = False
+            self.ladder_banner_status = False
+                #print(self.ai_banner_status)
 
     def check_status(self):
         # idle
@@ -110,7 +179,7 @@ class Player(pygame.sprite.Sprite):
         # hor movement
         self.pos.x += self.direction.x * self.speed * dt
         self.hitbox.centerx = round(self.pos.x)
-        self.rect.centerx = self.hitbox.centerx   # change to hitbox
+        self.rect.centerx = self.hitbox.centerx  # change to hitbox
         self.collision('horizontal')
 
         # ver movement

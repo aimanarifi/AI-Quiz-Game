@@ -23,6 +23,13 @@ class Generic(pygame.sprite.Sprite):
         self.hitbox = self.rect.copy()
 
 
+class Interaction(Generic):
+    def __init__(self, pos, size, groups, name):
+        surf = pygame.Surface(size)
+        super().__init__(pos, surf, groups)
+        self.name = name
+
+
 class Tree(Generic):
     def __init__(self, pos, surf, groups, name, z=LAYERS['tree']):
         super().__init__(pos, surf, groups, z)
