@@ -1,6 +1,6 @@
 """
 Written by: Zhongjie Huang, Muhammad
-Last modified: 27/04/2023
+Last modified: 29/04/2023
 """
 
 import sqlite3
@@ -60,7 +60,8 @@ def get_user():
             userData = cursor.fetchone()
         except sqlite3.Error as e:
             print("An error has occurred: ", e)
-        return userData
+        
+    return userData
 
 
 def update_user(user):
@@ -69,6 +70,7 @@ def update_user(user):
     there is a change. e.g. part of save game progress.
     It takes a user instance as the parameter
     """
+
     with sqlite3.connect('AIGame.db') as connection:
         cursor = connection.cursor()
         try:
@@ -76,32 +78,43 @@ def update_user(user):
                            "exp_cybersecurity, exp_datascience, exp_iot, highscore_ai, highscore_blockchain, "
                            "highscore_cloud, highscore_cybersecurity, highscore_datascience, highscore_iot FROM USER")
             userData = cursor.fetchone()
+
         except sqlite3.Error as e:
             print("An error has occurred: ", e)
-        if user.money != userData[0] or user.experience != userData[1] or user.exp_ai != userData[
-            2] or user.exp_blockchain != userData[3] \
-                or user.exp_cloud != userData[4] or user.exp_cybersecurity != userData[5] or user.exp_datascience != \
-                userData[6] or \
-                user.exp_iot != userData[7] or user.highscore_ai != userData[8] or user.highscore_blockchain != \
-                userData[9] or \
-                user.highscore_cloud != userData[10] or user.highscore_cybersecurity != userData[
-            11] or user.highscore_datascience != userData[12] \
-                or user.highscore_iot != userData[13]:
-            try:
-                cursor.execute(
-                    f"UPDATE USER SET money = {user.money}, experience = {user.experience}, exp_ai = {user.exp_ai}, "
-                    f"exp_blockchain = {user.exp_blockchain}, exp_cloud = {user.exp_cloud}, "
-                    f"exp_cybersecurity = {user.exp_cybersecurity}, exp_datascience = {user.exp_datascience}, exp_iot = {user.exp_iot}, "
-                    f"highscore_ai = {user.highscore_ai}, highscore_blockchain = {user.highscore_blockchain}, "
-                    f"highscore_cloud = {user.highscore_cloud}, highscore_cybersecurity = {user.highscore_cybersecurity}, "
-                    f"highscore_datascience = {user.highscore_datascience}, highscore_iot = {user.highscore_iot}")
-                connection.commit()
-                print("User's data has been updated successfully")
-            except sqlite3.Error as e:
-                print("An error has occurred: ", e)
-                connection.rollback()
+        
+        #record all changes into a list
+        changes = []
+        if user.money != userData[0]:                   changes.append(f"money = {user.money}")
+        if user.experience > userData[1]:               changes.append(f"experience = {user.experience}")
+        if user.exp_ai > userData[2]:                   changes.append(f"exp_ai = {user.exp_ai}")
+        if user.exp_blockchain > userData[3]:           changes.append(f"exp_blockchain = {user.exp_blockchain}")
+        if user.exp_cloud > userData[4]:                changes.append(f"exp_cloud = {user.exp_cloud}")
+        if user.exp_cybersecurity > userData[5]:        changes.append(f"exp_cybersecurity = {user.exp_cybersecurity}")
+        if user.exp_datascience > userData[6]:          changes.append(f"exp_datascience = {user.exp_datascience}")
+        if user.exp_iot > userData[7]:                  changes.append(f"exp_iot = {user.exp_iot}")
+        if user.highscore_ai > userData[8]:             changes.append(f"highscore_ai = {user.highscore_ai}")
+        if user.highscore_blockchain > userData[9]:     changes.append(f"highscore_blockchain = {user.highscore_blockchain}")
+        if user.highscore_cloud > userData[10]:         changes.append(f"highscore_cloud = {user.highscore_cloud}")
+        if user.highscore_cybersecurity > userData[11]: changes.append(f"highscore_cybersecurity = {user.highscore_cybersecurity}")
+        if user.highscore_datascience > userData[12]:   changes.append(f"highscore_datascience = {user.highscore_datascience}")
+        if user.highscore_iot > userData[13]:           changes.append(f"highscore_iot = {user.highscore_iot}")
 
+        if not len(changes): return #return if no changes detected
 
+        #format the execute statement string, it'll combine all changes in the list into a string. it'll add comma automatically
+        execute_str = "UPDATE USER SET "
+        for i, c in enumerate(changes):
+            execute_str += c
+            execute_str += "," if i != len(changes) - 1 else ""
+        #execute update
+        try:
+            cursor.execute(execute_str)
+            connection.commit()
+            print("User's data has been updated successfully")
+        except sqlite3.Error as e:
+            print("An error has occurred: ", e)
+            connection.rollback()
+            
 def get_questions(difficulty: int, house: str):
     """
     This function is used to get all questions from the questions table.
@@ -113,15 +126,14 @@ def get_questions(difficulty: int, house: str):
         try:
             cursor.execute(
                 f"SELECT QUESTION, OPTION_A, OPTION_B, OPTION_C, OPTION_D, CORRECT_OPTION FROM QUESTIONS WHERE DIFFICULTY = {difficulty} AND HOUSE = {house}")
-            questions = cursor.fetchone()
+            questions = cursor.fetchall()
         except sqlite3.Error as e:
             print("An error has occurred: ", e)
-        for question in len(questions):
-            ques = questions[question][0]
-            options = [questions[question][1], questions[question][2], questions[question][3], questions[question][4]]
-            answer = questions[question][5]
-            quiz.__init__(ques, options, answer)
-        return questions
+
+        for i, (question, option1, option2, option3, option4, answer) in enumerate(questions):
+            questions[i] = quiz.Quiz(question, [option1, option2, option3, option4], answer)
+
+    return questions
 
 
 class User:
