@@ -1,12 +1,20 @@
+import statistics
+
 import pygame
 import os
+import sys
 
+sys.path.append(os.path.join(os.path.dirname(__file__),'../../../'))
+
+from production.general import statistics
 #import production
 from settings import *
 from player import Player
 from sprites import Generic, Portal, Blacksmith, Wave, Fish, Tree, Interaction
 from pytmx.util_pygame import load_pygame
-#from production.general.statistics import run
+
+
+
 
 
 def get_images_portal(folder_dir):
@@ -49,8 +57,7 @@ class Level:
 
     def setup(self):
         # importing tmx file (tiled map)
-        tmx_data = load_pygame('../data/tmx/outside_world.tmx')
-        print("alex bakers mum is in notty house")
+        tmx_data = load_pygame('outside_world/data/tmx/outside_world.tmx')
 
         # importing static tiles
         # water
@@ -105,7 +112,7 @@ class Level:
 
         # importing animated object tiles
         # blacksmith / stat man
-        blacksmith_frames = get_images('../../assets/graphics/outside_world_graphics/Blacksmith')
+        blacksmith_frames = get_images('assets/graphics/outside_world_graphics/Blacksmith')
         for obj in tmx_data.get_layer_by_name('Blacksmith'):
             Blacksmith((obj.x, obj.y), blacksmith_frames, [self.all_sprites, self.collision_sprites])
 
@@ -119,7 +126,7 @@ class Level:
 
         # TODO Make animation smooth or replace portals
         # portals
-        portal_frames = get_images_portal('../../assets/graphics/outside_world_graphics/Portal/animated')
+        portal_frames = get_images_portal('assets/graphics/outside_world_graphics/Portal/animated')
         for obj in tmx_data.get_layer_by_name('Portal'):
             # obj_image = pygame.transform.scale(obj.image, (obj.width, obj.width))
             Portal((obj.x, obj.y), portal_frames, [self.all_sprites, self.collision_sprites])
@@ -163,9 +170,10 @@ class Level:
         self.all_sprites.layered_draw(self.player)
         self.all_sprites.update(dt)
 
-        #while self.player.run_stats_status == True:
-            #print("running stats page")
-            #production.general.statistics.run()
+        while self.player.run_stats_status == True:
+            print("running stats page")
+            statistics.run()  # stuck in loop
+            self.player.run_stats_status = False  # only runs when exits the run loop
         # pygame.transform.scale(self.display_surface, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
@@ -188,15 +196,15 @@ class CameraGroup(pygame.sprite.Group):
         self.internal_offset.x = self.internal_surf_size[0] // 2 - self.half_w
         self.internal_offset.y = self.internal_surf_size[1] // 2 - self.half_h
 
-        self.bg_surf = pygame.image.load('../../graphics/art/bg_1.png')
-        self.bg_surf_sized = pygame.transform.scale(self.bg_surf, (1280, 720))
+        #self.bg_surf = pygame.image.load('graphics/art/bg_1.png')
+        #self.bg_surf_sized = pygame.transform.scale(self.bg_surf, (1280, 720))
 
-        self.banner_image = pygame.transform.scale_by(pygame.image.load('../../graphics/art/UI/beige_rectangle_2x7.png'),4)
-        self.big_banner_image = pygame.transform.scale_by(pygame.image.load('../../graphics/art/UI/beige_rectangle_2x7.png'),4.15)
-        self.biggest_banner_image = pygame.transform.scale_by(pygame.image.load('../../graphics/art/UI/beige_rectangle_2x7.png'),4.3)
-        self.smallest_font = pygame.font.Font('../../graphics/font/PeaberryBase.ttf', 14)
-        self.small_font = pygame.font.Font('../../graphics/font/PeaberryBase.ttf', 15)
-        self.medium_font = pygame.font.Font('../../graphics/font/PeaberryBase.ttf', 18)
+        self.banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),4)
+        self.big_banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),4.15)
+        self.biggest_banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),4.3)
+        self.smallest_font = pygame.font.Font('graphics/font/PeaberryBase.ttf', 14)
+        self.small_font = pygame.font.Font('graphics/font/PeaberryBase.ttf', 15)
+        self.medium_font = pygame.font.Font('graphics/font/PeaberryBase.ttf', 18)
 
         self.ai_text_surf = self.medium_font.render("This is the AI Mini-Game, Press X to Play", False, 'Black')
         self.blockchain_text_surf = self.small_font.render("This is the Blockchain Mini-Game, Press X to Play",

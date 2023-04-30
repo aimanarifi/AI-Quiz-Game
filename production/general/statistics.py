@@ -110,7 +110,7 @@ class StatsBlock(pygame.sprite.Sprite):
             screen.blit(self.subheaders_surf[i], self.subheaders_rect[i])
             screen.blit(self.data_surf[i], self.data_rect[i])
 
-def setup(player):
+def setup():
     """
     TODO: fetch all data from player instance variable
     """
@@ -165,9 +165,9 @@ def setup(player):
     button_rect = button_surf.get_rect(bottomright=(screen.get_width()-64, title_rect.bottom ))
     pygame.mixer.init()
 
-def run(player):
+def run():
 
-    setup(player)
+    setup()
     global button_surf
     inc, counter = 1,0
     mouse_hold, on_click = False, False

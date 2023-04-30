@@ -62,14 +62,14 @@ class Blacksmith(Generic):
 
 class Wave(Generic):
     def __init__(self, pos, name, groups):
-        self.frames = get_images('../../assets/graphics/outside_world_graphics/Water Ambience Split/small-waves')
+        self.frames = get_images('assets/graphics/outside_world_graphics/Water Ambience Split/small-waves')
         # animation setup
         if name == "small":
-            self.frames = get_images('../../assets/graphics/outside_world_graphics/Water Ambience Split/small-waves')
+            self.frames = get_images('assets/graphics/outside_world_graphics/Water Ambience Split/small-waves')
         elif name == "med":
-            self.frames = get_images('../../assets/graphics/outside_world_graphics/Water Ambience Split/med-waves')
+            self.frames = get_images('assets/graphics/outside_world_graphics/Water Ambience Split/med-waves')
         elif name == "big":
-            self.frames = get_images('../../assets/graphics/outside_world_graphics/Water Ambience Split/big-waves')
+            self.frames = get_images('assets/graphics/outside_world_graphics/Water Ambience Split/big-waves')
 
         self.frame_index = 0
 
@@ -92,12 +92,12 @@ class Wave(Generic):
 
 class Fish(Generic):
     def __init__(self, pos, name, groups):
-        self.frames = get_images('../../assets/graphics/outside_world_graphics/Water Ambience Split/small-fish')
+        self.frames = get_images('assets/graphics/outside_world_graphics/Water Ambience Split/small-fish')
         # animation setup
         if name == "small":
-            self.frames = get_images('../../assets/graphics/outside_world_graphics/Water Ambience Split/small-fish')
+            self.frames = get_images('assets/graphics/outside_world_graphics/Water Ambience Split/small-fish')
         elif name == "big":
-            self.frames = get_images('../../assets/graphics/outside_world_graphics/Water Ambience Split/big-fish')
+            self.frames = get_images('assets/graphics/outside_world_graphics/Water Ambience Split/big-fish')
 
         self.frame_index = 0
 
