@@ -7,6 +7,7 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__),'../../../'))
 
 from production.general import statistics
+from production.cloud_house import cloud_house
 #import production
 from settings import *
 from player import Player
@@ -174,7 +175,11 @@ class Level:
             print("running stats page")
             statistics.run()  # stuck in loop
             self.player.run_stats_status = False  # only runs when exits the run loop
-        # pygame.transform.scale(self.display_surface, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+        while self.player.run_cloud_status == True:
+            print("running cloud page")
+            cloud_house.run()
+            self.player.run_cloud_status = False
 
 
 class CameraGroup(pygame.sprite.Group):

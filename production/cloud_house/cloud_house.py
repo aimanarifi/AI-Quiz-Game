@@ -118,10 +118,10 @@ def run():
     """
 
     global key_hold
-
+    loop = True
     setup()
 
-    while True:
+    while loop:
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -130,6 +130,10 @@ def run():
 
             if event.type == pygame.KEYUP and event.key == pygame.K_f:
                 key_hold = False
+
+            if event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE:
+                loop = False
+
 
         check_player_movement()
         check_player_level_access()

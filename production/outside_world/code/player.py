@@ -63,6 +63,7 @@ class Player(pygame.sprite.Sprite):
 
         # mini-game / stats / house
         self.run_stats_status = False
+        self.run_cloud_status = False
 
         # self.font = pygame.font.Font('graphics/font/PeaberryBase.ttf', 24)
         # self.banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),6.7)
@@ -101,9 +102,11 @@ class Player(pygame.sprite.Sprite):
             print(collided_interaction_sprite)
             if collided_interaction_sprite:
                 print(collided_interaction_sprite)
-                if collided_interaction_sprite[0].name == 'Blacksmith':
+                if collided_interaction_sprite[0].name == 'Blacksmith':   # stats man
                     self.animation_status = 'left_idle'
                     self.run_stats_status = True
+                if collided_interaction_sprite[0].name == 'Cloud_House':
+                    self.run_cloud_status = True
                 if collided_interaction_sprite[0].name == 'Ladder1':
                     self.pos.x = 901
                     self.pos.y = 219

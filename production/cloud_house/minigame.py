@@ -9,9 +9,14 @@ Modified by:
 Last modified: 27/4/2023
 """
 
+import sys
+import os
+
+sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
+
 import pygame
 import level_builder
-import general.quiz as quiz
+import production.general.quiz as quiz
 
 def run_level(level: level_builder.Level):
     """
