@@ -4,14 +4,14 @@ Last modified: 29/04/2023
 """
 
 import sqlite3
-from project.production.general import quiz
+from production.general import quiz
 
-
+DB_PATH = "general/db/AIGame.db"
 def create_tables():
     """
     This function is used to create all tables needed for this project in the database.
     """
-    with sqlite3.connect('AIGame.db') as connection:
+    with sqlite3.connect(DB_PATH) as connection:
         cursor = connection.cursor()
         try:
             cursor.execute('''CREATE TABLE IF NOT EXISTS USER (
@@ -53,14 +53,18 @@ def get_user():
     """
     This function is used to get the user's data, which will be returned in a tuple
     """
-    with sqlite3.connect('AIGame.db') as connection:
+    with sqlite3.connect(DB_PATH) as connection:
         cursor = connection.cursor()
         try:
             cursor.execute("SELECT * FROM USER")
             userData = cursor.fetchone()
+            print("user: =",userData)
         except sqlite3.Error as e:
             print("An error has occurred: ", e)
-        
+
+        if userData:
+            userData = User(userData[1],userData[2],userData[3],userData[4],userData[5],userData[6],userData[7],userData[8],userData[9],userData[10],userData[11],userData[12],userData[13],userData[14],userData[15])
+
     return userData
 
 
@@ -71,7 +75,7 @@ def update_user(user):
     It takes a user instance as the parameter
     """
 
-    with sqlite3.connect('AIGame.db') as connection:
+    with sqlite3.connect(DB_PATH) as connection:
         cursor = connection.cursor()
         try:
             cursor.execute("SELECT money, experience, exp_ai, exp_blockchain, exp_cloud, "
@@ -108,6 +112,7 @@ def update_user(user):
             execute_str += "," if i != len(changes) - 1 else ""
         #execute update
         try:
+            print(execute_str)
             cursor.execute(execute_str)
             connection.commit()
             print("User's data has been updated successfully")
@@ -121,7 +126,7 @@ def get_questions(difficulty: int, house: str):
     All questions corresponding to the difficulty condition will be returned in a tuple
     It takes a degree of difficulty and house name as parameters
     """
-    with sqlite3.connect('AIGame.db') as connection:
+    with sqlite3.connect(DB_PATH) as connection:
         cursor = connection.cursor()
         try:
             cursor.execute(

@@ -8,6 +8,7 @@ Last modified: 9/4/2023
 """
 import pygame
 from typing import Optional
+from production.general.db import DatabaseService as DB
 
 pygame.init()
 
@@ -112,7 +113,7 @@ class StatsBlock(pygame.sprite.Sprite):
 
 def setup():
     """
-    TODO: fetch all data from player instance variable
+    Initialise necessary things
     """
     global screen, bg_surf,bg_rect, stats_blocks, statsblocks_wrapper_surf, statsblocks_wrapper_rect
     global title_surf, title_rect, title_bg_surf, title_bg_rect, button_surf, button_rect
@@ -127,15 +128,22 @@ def setup():
     title_bg_surf = pygame.transform.scale(title_bg_surf, (title_rect.width+16, title_rect.height/2))
     title_bg_rect = title_bg_surf.get_rect(bottomleft=(title_rect.left-8, title_rect.bottom))
 
+    player_stats = DB.get_user()
+
     exp = f"{exp:,.2f}" if isinstance(exp, float) else str(exp)
     exp_bg_surf = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/black_bar2_6x1.png'), 3)
     exp_bg_rect = exp_bg_surf.get_rect(bottomleft = (title_bg_rect.right+16, title_bg_rect.bottom))
     exp_surfs = [small_font.render('Overall Exp:', False, 'White'), small_font.render(exp, False, 'White')]
     exp_rects[0] = exp_surfs[0].get_rect(left=exp_bg_rect.left+10, bottom=exp_bg_rect.bottom-8)
     exp_rects[1] = exp_surfs[1].get_rect(right=exp_bg_rect.right-10, bottom=exp_bg_rect.bottom-8)
+
+    exps = [player_stats.exp_ai, player_stats.exp_blockchain, player_stats.exp_cloud, player_stats.exp_cybersecurity, player_stats.exp_datascience, player_stats.exp_iot]
+    personal_bests = [player_stats.highscore_ai, player_stats.highscore_blockchain, player_stats.highscore_cloud, player_stats.highscore_cybersecurity, player_stats.highscore_datascience, player_stats.highscore_iot]
+
+    print(exps)
     #initialize all stats blocks
     for i, header in enumerate(HOUSES):
-        stats_blocks[i] = StatsBlock(header, ['Experience','Personal Best'], [exps[i-1],personal_bests[i-1]])
+        stats_blocks[i] = StatsBlock(header, ['Experience','Personal Best'], [exps[i],personal_bests[i]])
 
     #Position the stats block in a wrapper and 2x3 grid below it
     statsblocks_wrapper_surf = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/brown_rectangle_14x6.png'),5.2)
