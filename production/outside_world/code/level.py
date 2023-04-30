@@ -5,9 +5,11 @@ import os
 import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__),'../../../'))
-
+print(sys.path)
 from production.general import statistics
 from production.cloud_house import cloud_house
+from production.player_house.code.main import Game
+
 #import production
 from settings import *
 from player import Player
@@ -180,6 +182,17 @@ class Level:
             print("running cloud page")
             cloud_house.run()
             self.player.run_cloud_status = False
+
+        while self.player.run_player_house_status == True:
+            print("running house page")
+            gamePlayerHouse = Game()
+            gamePlayerHouse.run()
+            self.player.run_player_house_status = False
+
+
+        '''while self.player.run_blockchain_status == True:
+            blockchain_house.run()
+            self.player.run_blockchain_status'''
 
 
 class CameraGroup(pygame.sprite.Group):

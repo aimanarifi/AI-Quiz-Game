@@ -63,6 +63,7 @@ class Player(pygame.sprite.Sprite):
 
         # mini-game / stats / house
         self.run_stats_status = False
+        self.run_player_house_status = False
         self.run_cloud_status = False
 
         # self.font = pygame.font.Font('graphics/font/PeaberryBase.ttf', 24)
@@ -107,6 +108,8 @@ class Player(pygame.sprite.Sprite):
                     self.run_stats_status = True
                 if collided_interaction_sprite[0].name == 'Cloud_House':
                     self.run_cloud_status = True
+                if collided_interaction_sprite[0].name == 'Player_House':
+                    self.run_player_house_status = True
                 if collided_interaction_sprite[0].name == 'Ladder1':
                     self.pos.x = 901
                     self.pos.y = 219

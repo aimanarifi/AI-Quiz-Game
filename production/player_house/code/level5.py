@@ -1,7 +1,12 @@
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__),'../../../'))
+
 import pygame
-from settings import *
-from player import Player
-from sprites import Generic
+from production.player_house.code.settings5 import *
+from production.player_house.code.player5 import Player
+from production.player_house.code.sprites5 import Generic
 
 
 class Level:
@@ -19,7 +24,7 @@ class Level:
         self.player = Player((100, 100), self.all_sprites)
         Generic(
             pos=(0, 0),
-            surf=pygame.image.load("production/player_house/data/tmx/player_house.png").convert_alpha(),
+            surf=pygame.image.load("player_house/data/tmx/player_house.png").convert_alpha(),
             groups=self.all_sprites,
             z=LAYERS["Floor"],
         )
@@ -29,6 +34,10 @@ class Level:
         self.all_sprites.layered_draw(self.player)
         self.all_sprites.update(dt)
         pygame.transform.scale(self.display_surface, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+
+   
+            
 
 
 class CameraGroup(pygame.sprite.Group):

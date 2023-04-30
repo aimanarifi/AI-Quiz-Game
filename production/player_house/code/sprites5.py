@@ -1,5 +1,10 @@
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__),'../../../'))
+
 import pygame
-from settings import *
+from production.player_house.code.settings5 import *
 
 
 class Generic(pygame.sprite.Sprite):
