@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "./production/blockchain_house/ibm_blockchain/assets/npc/npcVoice",
+        "./production/blockchain_house/ibm_blockchain/assets/npc/npcVoice/emma"
+    ]
+}
