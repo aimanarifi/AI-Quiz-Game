@@ -1,7 +1,12 @@
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__),'../../../'))
+
 import pygame
-from settings import *
-from player import Player
-from sprites import Generic
+from production.player_house.code.settings5 import *
+from production.player_house.code.player5 import Player
+from production.player_house.code.sprites5 import Generic
 
 
 class Level:

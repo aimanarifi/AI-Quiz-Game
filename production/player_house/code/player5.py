@@ -1,7 +1,12 @@
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__),'../../../'))
+
 import pygame
 from os import walk
 import os
-from settings import *
+from production.player_house.code.settings5 import *
 
 
 def get_images(folder_dir):
@@ -72,6 +77,7 @@ class Player(pygame.sprite.Sprite):
             self.animation_status = "left"
         else:
             self.direction.x = 0
+
 
     def check_status(self):
         # idle
