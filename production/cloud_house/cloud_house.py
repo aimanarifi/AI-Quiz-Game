@@ -1,16 +1,15 @@
 import pygame
 import minigame
+import production.general.db.DatabaseService as DB
 from sys import exit
-
-#pygame.init()
-
 
 def setup():
     """
     Declare essential variables and objects
     """
-    global screen, clock, house_surf, house_rect
-    global player_surf, player_rect, player_progress # <-- temp, will use general player class
+
+    global screen, clock, bg, bg_rect, house_surf, house_rect
+    global player_surf, player_rect, player_stats
     global levels_access_rect
     global text_bubble_surf, text_bubble_rect
     global key_hold, key_hold_counter
@@ -19,14 +18,16 @@ def setup():
     screen.fill((25,36,40))
     clock = pygame.time.Clock()
 
+    bg = pygame.transform.scale_by(pygame.image.load("cloud_house/assets/cloud_base.png"),2.5)
+    bg_rect = bg.get_rect(center=screen.get_rect().center)
     house_surf = pygame.Surface((500,500)) # <--This is temp- Load house image
-    house_surf.fill((254,250,224))
     house_rect = house_surf.get_rect(center=screen.get_rect().center)
     
     player_surf = pygame.Surface((20,20))
     player_rect = player_surf.get_rect(midbottom=house_rect.midbottom)
-    player_progress = 0
+    player_stats = DB.get_user()
     
+    print(player_stats)
     levels_access_rect = [pygame.Rect(0,0, 100, 100) for i in range(3)]
     levels_access_rect[0].midleft = (house_rect.left, 440)
     levels_access_rect[1].midright = (house_rect.right, 250)
@@ -34,12 +35,14 @@ def setup():
 
     text_bubble_surf, text_bubble_rect = None, None
     key_hold, key_hold_counter = False, 0
-
+    
 def display():
     """
     Blit everything
     """
-    screen.blit(house_surf, house_rect)
+
+    screen.blit(bg,bg_rect)
+    #screen.blit(house_surf, house_rect)
 
     for level_access_rect in levels_access_rect:
         pygame.draw.rect(screen, (139,94,52), level_access_rect)
@@ -89,7 +92,7 @@ def check_player_level_access():
             if key_hold_counter == 100:
                 print("successfully hold")
                 key_hold_counter = 0
-                minigame.run(difficulty)
+                minigame.run(difficulty, player_stats)
 
         else:
             key_hold = True
@@ -101,7 +104,7 @@ def check_player_level_access():
     #Upon collision, it shows instruction to access the game and handle all necessary input
     for i, access_rect in enumerate(levels_access_rect):
 
-        if player_progress >= i and player_rect.colliderect(access_rect):
+        if player_stats.exp_cloud >= i and player_rect.colliderect(access_rect):
             any_collision = True
             hold_f_to_enter( i + 1)
             if not text_bubble_surf:

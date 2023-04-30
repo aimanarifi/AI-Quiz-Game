@@ -8,13 +8,12 @@ Created by: Muhammad Kamaludin
 Modified by:
 Last modified: 27/4/2023
 """
-
 import sys
 import os
 
-sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
 
 import pygame
+import production.general.db.DatabaseService as DB
 import level_builder
 import production.general.quiz as quiz
 
@@ -80,7 +79,8 @@ def run_level(level: level_builder.Level):
 def setup(**setting):
 
     global screen, bg, clock
-    global levels
+    global levels, score
+    global player_stats
     
     
     screen = pygame.display.get_surface()
@@ -88,9 +88,10 @@ def setup(**setting):
 
     clock = pygame.time.Clock()
     difficulty = setting["difficulty"]
+    player_stats = setting["player_stats"]
     levels = level_builder.get_levels( 3*(difficulty-1)+1,3*(difficulty-1)+3)
     quizzes = [quiz.Quiz(f"Question {i}", ["A","B","C","D"],"B") for i in range(len(levels))]
-
+    score = 0
     #set quizzes to the sublevels
     for i, level in enumerate(levels):
         level.quiz = quizzes[i]
@@ -98,17 +99,23 @@ def setup(**setting):
 
     return True
 
-def run(diff: int = 0):
+def run(diff: int = 0, user=None):
     """
     This is the entry point of the minigame
     """
-    setup(difficulty = diff)
+    setup(difficulty = diff, player_stats = user)
 
-    global levels
-    print(len(levels))
+    global levels, player_stats, score
+
     for level in levels:
         run_level(level)
+        score += level.quiz.get_score()
 
+    if score > 3:
+            player_stats.exp_cloud += 1 
+            player_stats.highscore_cloud = score
+
+    DB.update_user(player_stats)
     #display score page
     
 
