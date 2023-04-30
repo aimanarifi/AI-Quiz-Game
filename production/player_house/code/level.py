@@ -19,7 +19,7 @@ class Level:
         self.player = Player((100, 100), self.all_sprites)
         Generic(
             pos=(0, 0),
-            surf=pygame.image.load("production/player_house/data/tmx/player_house.png").convert_alpha(),
+            surf=pygame.image.load("player_house/data/tmx/player_house.png").convert_alpha(),
             groups=self.all_sprites,
             z=LAYERS["Floor"],
         )
@@ -29,6 +29,10 @@ class Level:
         self.all_sprites.layered_draw(self.player)
         self.all_sprites.update(dt)
         pygame.transform.scale(self.display_surface, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+
+   
+            
 
 
 class CameraGroup(pygame.sprite.Group):

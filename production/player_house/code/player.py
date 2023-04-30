@@ -23,16 +23,16 @@ class Player(pygame.sprite.Sprite):
         self.animation_status = "forward_idle"
         self.frame_index = 0
 
-        self.animations = {'forward_idle': get_images('production/assets/graphics/player-animations/forward/idle'),
-                           'forward': get_images('production/assets/graphics/player-animations/forward/movement'),
-                           'right_idle': get_images('production/assets/graphics/player-animations/right/idle'),
-                           'right': get_images('production/assets/graphics/player-animations/right/movement'),
-                           'left_idle': get_images('production/assets/graphics/player-animations/left/idle'),
-                           'left': get_images('production/assets/graphics/player-animations/left/movement'),
+        self.animations = {'forward_idle': get_images('assets/graphics/player-animations/forward/idle'),
+                           'forward': get_images('assets/graphics/player-animations/forward/movement'),
+                           'right_idle': get_images('assets/graphics/player-animations/right/idle'),
+                           'right': get_images('assets/graphics/player-animations/right/movement'),
+                           'left_idle': get_images('assets/graphics/player-animations/left/idle'),
+                           'left': get_images('assets/graphics/player-animations/left/movement'),
                            'backward_idle': get_images(
-                               'production/assets/graphics/player-animations/backward/idle'),
+                               'assets/graphics/player-animations/backward/idle'),
                            'backward': get_images(
-                               'production/assets/graphics/player-animations/backward/movement')}
+                               'assets/graphics/player-animations/backward/movement')}
 
         # image setup
         self.image = self.animations[self.animation_status][self.frame_index]
@@ -97,3 +97,9 @@ class Player(pygame.sprite.Sprite):
 
         self.move(dt)
         self.animate(dt)
+    
+
+    def checkCollision(self, sprite1, sprite2):
+            col = pygame.sprite.collide_rect(sprite1, sprite2)
+            
+    
