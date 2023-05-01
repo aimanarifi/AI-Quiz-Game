@@ -8,14 +8,11 @@ Created by: Muhammad Kamaludin
 Modified by:
 Last modified: 27/4/2023
 """
-import sys
-import os
-
 
 import pygame
 import production.general.db.DatabaseService as DB
-import level_builder
 import production.general.quiz as quiz
+from production.cloud_house import level_builder
 
 def run_level(level: level_builder.Level):
     """

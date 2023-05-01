@@ -12,7 +12,6 @@ import pygame
 import cloud_house.minigame as mg
 import cloud_house.cloud_house as ch
 
-
 pygame.init()
 screen = pygame.display.set_mode((1280,720))
 pygame.display.set_caption('Cloud house: Currently running directly from cloudhouse main')
