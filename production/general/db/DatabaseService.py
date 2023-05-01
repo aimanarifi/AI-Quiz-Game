@@ -58,7 +58,6 @@ def get_user():
         try:
             cursor.execute("SELECT * FROM USER")
             userData = cursor.fetchone()
-            print("user: =",userData)
         except sqlite3.Error as e:
             print("An error has occurred: ", e)
 
@@ -112,7 +111,6 @@ def update_user(user):
             execute_str += "," if i != len(changes) - 1 else ""
         #execute update
         try:
-            print(execute_str)
             cursor.execute(execute_str)
             connection.commit()
             print("User's data has been updated successfully")
