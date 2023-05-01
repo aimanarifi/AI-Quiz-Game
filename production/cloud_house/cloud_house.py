@@ -1,5 +1,16 @@
+"""
+AI Group Project Team 7 Spring22/23
+
+Desc: This module control and display the minigame of the cloud house.
+It imports level_builder so it can display the the minigame level 
+
+Created by: Muhammad Kamaludin
+Modified by:
+Last modified: 1/5/2023
+"""
+
 import pygame
-from production.cloud_house import minigame, border
+from production.cloud_house import minigame, border, player
 import production.general.db.DatabaseService as DB
 from sys import exit
 
@@ -10,23 +21,25 @@ def setup():
     Declare essential variables and objects
     """
 
-    global screen, clock, bg, bg_rect, house_surf, house_rect
+    global screen, clock, bg, bg_rect, bg_inc, bg_counter, house_surf, house_rect
     global npcs_surf, npcs_rect
-    global player_surf, player_rect, player_stats
+    global player_sprite, player_feet_rect, player_stats
     global text_banner_surf, text_banner_rect, display_text_banner
     global walkable_area_border # an object of Border
     global key_hold, key_hold_counter
     global all_text_messages, displayed_text_messages
     FONT = pygame.font.Font('graphics/font/PeaberryBase.ttf', 17)
-
+    
     #pygame essential objects
     screen = pygame.display.get_surface()
     screen.fill((25,36,40))
     clock = pygame.time.Clock()
 
     #background
-    bg = pygame.transform.scale_by(pygame.image.load("cloud_house/assets/bg_sky.png"),ZOOM_SCALE)
+    bg = pygame.transform.scale_by(pygame.image.load("cloud_house/assets/bg_sky.png"),ZOOM_SCALE*2)
     bg_rect = bg.get_rect(center=screen.get_rect().center)
+    bg_inc = 1 #the changes of x coordinate every frame (for animation)
+    bg_counter = 0
 
     #house and the map
     house_surf = pygame.transform.scale_by(pygame.image.load("cloud_house/assets/base.png"),ZOOM_SCALE) 
@@ -39,8 +52,10 @@ def setup():
     walkable_area_border = border.Border(points)    
 
     #player
-    player_surf = pygame.Surface((20,20))
-    player_rect = player_surf.get_rect(midbottom=(640,508))
+    player_sprite = player.Player()
+    player_sprite.rect.center = (640,508-25)
+    player_feet_rect = pygame.Rect((0,0),(20,20))
+    player_feet_rect.midbottom = (640,508)
     player_stats = DB.get_user()
     
     #npc
@@ -60,23 +75,44 @@ def setup():
     displayed_text_messages = [None,None] #some text banner requires 2 lines of text
 
     key_hold, key_hold_counter = False, 0
-    
+
+def animate_bg():
+    """
+    Make the background move left and right
+    """
+    global bg_rect, bg_inc, bg_counter
+    bg_counter += 1
+    bg_inc = -1 if bg_rect.left == 0 else bg_inc
+    bg_inc = 1 if bg_rect.right == screen.get_width() else bg_inc
+
+    if not bg_counter % 2: bg_rect.left += bg_inc
+
 def display():
     """
     Blit everything
     """
     global display_text_banner, displayed_text_messages
 
+    #the bg and map
+    animate_bg()
     screen.blit(bg,bg_rect)
     screen.blit(house_surf, house_rect)
+
+    #npcs
     for i in range(3):
         screen.blit(npcs_surf[i], npcs_rect[i])
 
     #for coord1, coord2 in walkable_area_border.edges:
-    #    pygame.draw.line(screen, "Black", coord1, coord2)
+    #    pygame.draw.line(screen, "Black", coord1, coord2) <--uncomment to see walkable area
 
-    screen.blit(player_surf, player_rect)
+    #pygame.draw.rect(screen,"Black",player_feet_rect) <-player hitbox
 
+    #animate the player every 1 second, and blit the player
+
+    player_sprite.animate()
+    screen.blit(player_sprite.image, player_sprite.rect)
+    
+    #text banner overlay
     if display_text_banner: 
         screen.blit(text_banner_surf,text_banner_rect)
         display_text_banner = False
@@ -98,18 +134,34 @@ def check_player_movement():
     """
     keys = pygame.key.get_pressed()
 
+    is_idle = True
     #update player rect if the condition are met
-    if (keys[pygame.K_w] or keys[pygame.K_UP]) and not (walkable_area_border.is_colliding(player_rect.midtop) or any([ npc.collidepoint(player_rect.midtop) for npc in npcs_rect])):
-        player_rect.y -= 2
+    if (keys[pygame.K_w] or keys[pygame.K_UP]) and not (walkable_area_border.is_colliding(player_feet_rect.midtop) or any([ npc.collidepoint(player_feet_rect.midtop) for npc in npcs_rect])):
+        player_sprite.animation_status = "backward"
+        player_sprite.rect.y -= player_sprite.speed
+        player_feet_rect.y -= player_sprite.speed
+        is_idle = False
+    
+    if (keys[pygame.K_s] or keys[pygame.K_DOWN]) and not (walkable_area_border.is_colliding(player_feet_rect.midbottom) or any([ npc.collidepoint(player_feet_rect.midbottom) for npc in npcs_rect])):
+        player_sprite.animation_status = "forward"
+        player_sprite.rect.y += player_sprite.speed
+        player_feet_rect.y += player_sprite.speed
+        is_idle = False
 
-    if (keys[pygame.K_s] or keys[pygame.K_DOWN]) and not (walkable_area_border.is_colliding(player_rect.midbottom) or any([ npc.collidepoint(player_rect.midbottom) for npc in npcs_rect])):
-        player_rect.y += 2
+    if (keys[pygame.K_a] or keys[pygame.K_LEFT]) and not (walkable_area_border.is_colliding(player_feet_rect.midleft) or any([ npc.collidepoint(player_feet_rect.midleft) for npc in npcs_rect])):
+        player_sprite.animation_status = "left"
+        player_sprite.rect.x -= player_sprite.speed
+        player_feet_rect.x -= player_sprite.speed
+        is_idle = False
 
-    if (keys[pygame.K_a] or keys[pygame.K_LEFT]) and not (walkable_area_border.is_colliding(player_rect.midleft) or any([ npc.collidepoint(player_rect.midleft) for npc in npcs_rect])):
-        player_rect.x -= 2
-
-    if (keys[pygame.K_d] or keys[pygame.K_RIGHT]) and not (walkable_area_border.is_colliding(player_rect.midright) or any([ npc.collidepoint(player_rect.midright) for npc in npcs_rect])):
-        player_rect.x += 2
+    if (keys[pygame.K_d] or keys[pygame.K_RIGHT]) and not (walkable_area_border.is_colliding(player_feet_rect.midright) or any([ npc.collidepoint(player_feet_rect.midright) for npc in npcs_rect])):
+        player_sprite.animation_status = "right"
+        player_sprite.rect.x += player_sprite.speed
+        player_feet_rect.x += player_sprite.speed
+        is_idle = False
+    
+    if is_idle:
+        player_sprite.animation_status = player_sprite.animation_status.split('_')[0] + '_idle'
 
 def check_npc_interaction():
     """
@@ -145,7 +197,7 @@ def check_npc_interaction():
     #Upon collision, it shows instruction to access the game and handle all necessary input
     for i, npc_rect in enumerate(npcs_rect):
         
-        if player_stats.exp_cloud >= i and player_rect.colliderect(npc_rect):
+        if player_stats.exp_cloud >= i and player_feet_rect.colliderect(npc_rect):
             
             displayed_text_messages[0] = all_text_messages[3]
             displayed_text_messages[1] = all_text_messages[5]
@@ -159,7 +211,7 @@ def check_npc_interaction():
 def check_sign_interaction():
     
     global display_text_banner, all_text_messages, displayed_text_messages
-    if border.Border([(720,458),(720,526)]).is_colliding(player_rect.midright):
+    if border.Border([(720,458),(720,526)]).is_colliding(player_feet_rect.midright):
         display_text_banner = True
         displayed_text_messages[0] = all_text_messages[4]
         displayed_text_messages[1] = None
@@ -185,12 +237,6 @@ def run():
 
             if event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE:
                 loop = False
-            
-            if event.type == pygame.KEYUP and event.key == pygame.K_q:
-                global player_rect
-                print(f"top = {player_rect.top}, bottom = {player_rect.bottom}, left = {player_rect.left}, right = {player_rect.right}")
-
-
 
         check_player_movement()
         check_npc_interaction()
@@ -198,7 +244,7 @@ def run():
         display()
 
         pygame.display.update()
-        clock.tick(60)
+        clock.tick()
 
 if __name__ == "__main__":
 
