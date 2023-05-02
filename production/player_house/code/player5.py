@@ -100,7 +100,7 @@ class Player(pygame.sprite.Sprite):
         print(collided_interaction_sprite)
         if collided_interaction_sprite:
             if collided_interaction_sprite[0].name == 'Treasure chest':
-                self.ai_banner_status = True
+                self.chest_banner_status = True
         else:
                 self.chest_banner_status = False
 

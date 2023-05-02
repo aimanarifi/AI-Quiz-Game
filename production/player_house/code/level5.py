@@ -6,7 +6,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__),'../../../'))
 import pygame
 from production.player_house.code.settings5 import *
 from production.player_house.code.player5 import Player
-from production.player_house.code.sprites5 import Generic
+from production.player_house.code.sprites5 import Generic, Chest, Interaction
 from pytmx.util_pygame import load_pygame
 
 
@@ -39,13 +39,19 @@ class Level:
 
         for x, y, surf in tmx_data.get_layer_by_name('Carpet').tiles():
             Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
+        
 
         # layers that should not be traversed over / should force collision (bush, rocks)
-        for layer in ['Decor', 'Treasure chest', 'Border']:
+        for layer in ['Decor', 'Border']:
             for x, y, surf in tmx_data.get_layer_by_name(layer).tiles():
                 Generic((x * TILE_SIZE, y * TILE_SIZE), surf, [self.all_sprites, self.collision_sprites])
+        
+        
+        for x, y, surf in tmx_data.get_layer_by_name('Treasure chest').tiles():
+            Chest((x * TILE_SIZE, y * TILE_SIZE), surf, [self.all_sprites, self.collision_sprites, self.interaction_sprites], 'Treasure chest')
+            Interaction((x,y), (2,2), self.interaction_sprites, 'Treasure Chest')
 
-    
+        
 
     def run(self, dt):
         
@@ -74,9 +80,13 @@ class CameraGroup(pygame.sprite.Group):
         self.internal_offset.x = self.internal_surf_size[0] // 2 - self.half_w
         self.internal_offset.y = self.internal_surf_size[1] // 2 - self.half_h
 
+        self.banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),4)
+        self.big_banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),4.15)
         self.biggest_banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),4.3)
+        self.smallest_font = pygame.font.Font('graphics/font/PeaberryBase.ttf', 14)
+        self.small_font = pygame.font.Font('graphics/font/PeaberryBase.ttf', 15)
         self.medium_font = pygame.font.Font('graphics/font/PeaberryBase.ttf', 18)
-        self.chest_text_surf = self.medium_font.render("This is your Achievements Chest, Press X to Open", False, 'Black')
+        self.chest_text_surf = self.medium_font.render("Press X to Open your Achievements Chest", False, 'Black')
 
     def layered_draw(self, player):
         self.offset.x = player.rect.centerx - SCREEN_WIDTH / 2
@@ -106,6 +116,6 @@ class CameraGroup(pygame.sprite.Group):
 
 
         if player.chest_banner_status:
-            self.display_surface.blit(self.banner_image, (1280*(1/2) - self.banner_image.get_width()/2, 720*(4/5)))
-            self.display_surface.blit(self.ai_text_surf, (1280*(1/2) - self.ai_text_surf.get_width()/2, 720*(4/5)
-                                                          + self.banner_image.get_height()/2 - 10))
+            self.display_surface.blit(self.biggest_banner_image, (1280*(1/2) - self.biggest_banner_image.get_width()/2, 720*(4/5)))
+            self.display_surface.blit(self.chest_text_surf, (1280*(1/2) - self.chest_text_surf.get_width()/2, 720*(4/5)
+                                                          + self.biggest_banner_image.get_height()/2 - 10))
