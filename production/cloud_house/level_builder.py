@@ -57,6 +57,7 @@ class Tile():
         self.surf = pygame.transform.scale_by(self.surf,2.5)
         self.surf = pygame.transform.rotate(self.surf,90*self.current_direction)
         self.rect = self.surf.get_rect(center=temp_rect.center)
+        self.locked = False
 
 class Level():
     """
@@ -113,7 +114,7 @@ class Level():
         row_count = len(self.layout)
         wrapper_rect = pygame.Rect(0,0,tile_width*row_count,tile_width*row_count)
         wrapper_rect.center = (screen.get_width()/2,screen.get_height()/2)
-
+        
         for row_index, row in enumerate(self.layout):
             for col_index, tile in enumerate(row):
                 x = wrapper_rect.topleft[0] + tile.rect.width*col_index
