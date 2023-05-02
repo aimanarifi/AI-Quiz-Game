@@ -1,10 +1,12 @@
+from copy import deepcopy
+
 import pygame
 from random import randint
 
 class TicTacToe():
     def __init__(self, game):
         self.game = game
-        self.first_turn = randint(0,1)
+        self.first_turn = 1
 
         if self.first_turn == 0:
             self.player_turn = False
@@ -12,20 +14,32 @@ class TicTacToe():
             self.player_turn = True
 
         self.winner = None
+        self.tie = False
+        self.real_winner = None
+        self.real_tie = False
 
         self.board_array = ["-", "-", "-",
                             "-", "-", "-",
                             "-", "-", "-"]
 
     def check_input(self):
+        self.checkIfWin()
+        self.checkIfTie()
+
+        if self.winner is not None:
+            self.real_winner = self.winner
+            #print(self.real_winner)
+
+        if self.tie:
+            self.real_tie = True
+            #print(self.real_tie)
+
         key = pygame.key.get_pressed()
 
         if (not self.winner) and self.player_turn:
             if key[pygame.K_1] and self.board_array[0] == "-":
                 self.board_array[0] = "x"
                 self.player_turn = False
-            elif self.board_array[0] == "o":
-                print("piece dere")
 
         if (not self.winner) and self.player_turn:
             if key[pygame.K_2] and self.board_array[1] == "-":
@@ -46,8 +60,8 @@ class TicTacToe():
             if key[pygame.K_5] and self.board_array[4] == "-":
                 self.board_array[4] = "x"
                 self.player_turn = False
-            elif self.board_array[4] == "o":
-                print("piece dere")
+            #elif self.board_array[4] == "o":
+             #   print("piece in the 5th pos")
 
         if (not self.winner) and self.player_turn:
             if key[pygame.K_6] and self.board_array[5] == "-":
@@ -68,8 +82,8 @@ class TicTacToe():
             if key[pygame.K_9] and self.board_array[8] == "-":
                 self.board_array[8] = "x"
                 self.player_turn = False
-            elif self.board_array[8] == "o":
-                print("piece dere")
+            #elif self.board_array[8] == "o":
+             #   print("piece in the 9th pos")
 
     # check for win or tie
     def checkHorizontal(self):
@@ -103,19 +117,84 @@ class TicTacToe():
             return True
 
     def checkIfWin(self):
-        if self.checkHorizontal() or self.checkRow() or self.checkDiag():
-            print(f"The winner is {self.winner}!")
+        self.checkHorizontal()
+        self.checkDiag()
+        self.checkRow()
 
     def checkIfTie(self):
         if "-" not in self.board_array:
-            print("It is a tie!")
+            if self.winner is None:
+                self.tie = True
 
-    def computer_move(self):
+    def random_computer_move(self):
         while not self.player_turn:
             position = randint(0, 8)
             if self.board_array[position] == "-":
                 self.board_array[position] = "o"
                 self.player_turn = True
+
+    def computer_move(self):
+        self.checkIfWin()
+        self.checkIfTie()
+
+        if self.winner is not None:
+            self.real_winner = self.winner
+            # print(self.real_winner)
+
+        if self.tie:
+            self.real_tie = True
+
+        bestScore = -800
+        bestMove = 0
+        for index, value in enumerate(self.board_array):
+            if self.board_array[index] == "-":
+                self.board_array[index] = "o"
+                score = self.minimax(False)  # start by simulating the x move
+                self.board_array[index] = "-"
+                if score > bestScore:
+                    bestScore = score
+                    bestMove = index
+
+        self.board_array[bestMove] = "o"
+        self.player_turn = True
+        #return
+
+    def minimax(self, isMaximizing):
+        self.checkIfWin()
+        self.checkIfTie()
+
+        if self.winner == "o":
+            self.winner = None
+            return 1
+        elif self.winner == "x":
+            self.winner = None
+            return -1
+        elif self.tie is True:
+            self.tie = False
+            return 1
+
+        if isMaximizing:
+            # simulate a O move
+            bestScore = -800
+            for index, value in enumerate(self.board_array):
+                if self.board_array[index] == "-":
+                    self.board_array[index] = "o"
+                    score = self.minimax(False)
+                    self.board_array[index] = "-"
+                    if score > bestScore:
+                        bestScore = score
+            return bestScore
+        else:
+            # simulate an X move
+            bestScore = 800
+            for index, value in enumerate(self.board_array):
+                if self.board_array[index] == "-":
+                    self.board_array[index] = "x"
+                    score = self.minimax(True)
+                    self.board_array[index] = "-"
+                    if score < bestScore:
+                        bestScore = score
+            return bestScore
 
     def draw_board(self):
         pass
@@ -126,8 +205,8 @@ class TicTacToe():
         else:
             self.check_input()
 
-        self.checkIfWin()
-        self.checkIfTie()
+
+
 
 
 class Game:
@@ -276,47 +355,14 @@ class Game:
     def run(self):
         while True:
             self.setup()
-            self.tic_tac_toe.run()
+
+            if (self.tic_tac_toe.real_winner is None) and self.tic_tac_toe.real_tie:
+                self.tic_tac_toe.run()
+
             self.draw_board()
             self.check_events()
             pygame.display.update()
             self.clock.tick(60)
-
-            '''print(1)
-            print(self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + self.grid_surf.get_width()/6)
-            print(self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + self.grid_surf.get_height()/6)
-
-            print(2)
-            print(self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + 3*self.grid_surf.get_width()/6)
-            print(self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + self.grid_surf.get_height()/6)
-
-            print(3)
-            print(self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + 5*self.grid_surf.get_width()/6)
-            print(self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + self.grid_surf.get_height()/6)
-
-            print(4)
-            print(self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + self.grid_surf.get_width()/6)
-            print(self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + 3*self.grid_surf.get_height()/6)
-
-            print(5)
-            print(self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + 3*self.grid_surf.get_width()/6)
-            print(self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + 3*self.grid_surf.get_height()/6)
-
-            print(6)
-            print(self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + 5*self.grid_surf.get_width()/6)
-            print(self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + 3*self.grid_surf.get_height()/6)
-
-            print(7)
-            print(self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + self.grid_surf.get_width()/6)
-            print(self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + 5*self.grid_surf.get_height()/6)
-
-            print(8)
-            print(self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + 3*self.grid_surf.get_width()/6)
-            print(self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + 5*self.grid_surf.get_height()/6)
-
-            print(9)
-            print(self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + 5*self.grid_surf.get_width()/6)
-            print(self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + 5*self.grid_surf.get_height()/6)'''
 
 if __name__ == '__main__':
     game = Game()
