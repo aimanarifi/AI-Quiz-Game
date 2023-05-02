@@ -232,6 +232,7 @@ class Game:
         self.score = 0
 
         self.large_font = pygame.font.Font('assets/Khonjin.ttf', 72)
+        self.largeish_font = pygame.font.Font('assets/Khonjin.ttf', 50)
         self.medium_font = pygame.font.Font("assets/Khonjin.ttf", 32)
         self.small_font = pygame.font.Font("assets/Khonjin.ttf", 28)
 
@@ -241,18 +242,26 @@ class Game:
                                                 (self.SCREEN_WIDTH / 5, self.SCREEN_WIDTH / 5))
 
         self.score_surf = None
+        self.player_turn_surf = None
+        self.comp_turn_surf = None
 
         self.x_surf = self.large_font.render("x", False, (101, 64, 83))
         self.o_surf = self.large_font.render("o", False, (101, 64, 83))
 
         self.title_surf = self.large_font.render("Tic-Tac-Toe", False, (168, 96, 93))
         self.instruction_surf = self.medium_font.render("Instructions", False, (101, 64, 83))
-        self.instruction_surf_l1 = self.small_font.render("   - Let AI take it's turn (if o' turn)", False, (101, 64, 83))
-        self.instruction_surf_l2 = self.small_font.render("   - Take your turn (if x' turn)", False, (101, 64, 83))
-        self.instruction_surf_l3 = self.small_font.render("   - Answer question correctly", False, (101, 64, 83))
-        self.instruction_surf_l4 = self.small_font.render("   - Or your move will be randomised !!", False, (101, 64, 83))
-        self.instruction_surf_l5 = self.small_font.render("   - Win to increase score !!", False, (101, 64, 83))
-        # self.tic_tac_toe = TicTacToe(self)
+        self.instruction_surf_l1 = self.small_font.render("   - Take your Turn (you are X)", False, (101, 64, 83))
+        self.instruction_surf_l2 = self.small_font.render("   - Answer the Question to let the AI", False, (101, 64, 83))
+        self.instruction_surf_l3 = self.small_font.render("     make its Move", False, (101, 64, 83))
+        self.instruction_surf_l4 = self.small_font.render("   - Answer Question Correctly and the", False, (101, 64, 83))
+        self.instruction_surf_l5 = self.small_font.render("     AI will go Easy", False, (101, 64, 83))
+        self.instruction_surf_l6 = self.small_font.render("   - Otherwise the AI will go a lot", False, (101, 64, 83))
+        self.instruction_surf_l7 = self.small_font.render("     harder !!", False, (101, 64, 83))
+        self.instruction_surf_l8 = self.small_font.render("   - Win to increase score !!", False, (101, 64, 83))
+
+        self.instruction_surfaces = [self.instruction_surf_l1, self.instruction_surf_l2, self.instruction_surf_l3,
+                                     self.instruction_surf_l4, self.instruction_surf_l5, self.instruction_surf_l6,
+                                     self.instruction_surf_l7, self.instruction_surf_l8]
 
         self.center_piece_offset_width = self.grid_surf.get_width()/6 - self.x_surf.get_width()/2
         self.center_piece_offset_height = + self.grid_surf.get_height()/6 - self.x_surf.get_height()/2
@@ -316,6 +325,12 @@ class Game:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 print(pygame.mouse.get_pos())
 
+    def instruction_draw(self, surf, line_number):
+        self.screen.blit(surf, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
+                                                    - self.grid_surf.get_width()*2 + game.INSTRUCTION_OFFSET,
+                                                    self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
+                                                    + self.instruction_surf.get_height()*line_number))
+
     def setup(self):
         # background
         self.screen.blit(self.bg_surf, (0, 0))
@@ -328,35 +343,13 @@ class Game:
         self.screen.blit(self.title_surf, (self.SCREEN_WIDTH / 2 - self.title_surf.get_width() / 2,
                                            80 - self.title_surf.get_height() / 2))
 
-        # instructions
+        # instruction title
         self.screen.blit(self.instruction_surf, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
-                                                 + self.grid_surf.get_width() + game.INSTRUCTION_OFFSET,
+                                                 - self.grid_surf.get_width()*2 + game.INSTRUCTION_OFFSET,
                                                  self.grid_surf.get_height() - self.instruction_surf.get_height() / 2))
 
-        self.screen.blit(self.instruction_surf_l1, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
-                                                    + self.grid_surf.get_width() + game.INSTRUCTION_OFFSET,
-                                                    self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
-                                                    + self.instruction_surf.get_height()))
-
-        self.screen.blit(self.instruction_surf_l2, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
-                                                    + self.grid_surf.get_width() + game.INSTRUCTION_OFFSET,
-                                                    self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
-                                                    + self.instruction_surf_l1.get_height()*2))
-
-        self.screen.blit(self.instruction_surf_l3, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
-                                                    + self.grid_surf.get_width() + game.INSTRUCTION_OFFSET,
-                                                    self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
-                                                    + self.instruction_surf_l1.get_height()*3))
-
-        self.screen.blit(self.instruction_surf_l4, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
-                                                    + self.grid_surf.get_width() + game.INSTRUCTION_OFFSET,
-                                                    self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
-                                                    + self.instruction_surf_l1.get_height()*4))
-
-        self.screen.blit(self.instruction_surf_l5, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
-                                                    + self.grid_surf.get_width() + game.INSTRUCTION_OFFSET,
-                                                    self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
-                                                    + self.instruction_surf_l1.get_height()*5))
+        for i_index, i_surf in enumerate(self.instruction_surfaces):
+            self.instruction_draw(i_surf, i_index+1)
 
     def draw_board(self):
         for index, value in enumerate(self.tic_tac_toe.board_array):
@@ -374,6 +367,30 @@ class Game:
         self.screen.blit(self.score_surf, (self.SCREEN_WIDTH / 2 - self.score_surf.get_width() / 2,
                                            640 - self.title_surf.get_height() / 2))
 
+
+    def draw_player_turn_display(self):
+        self.player_turn_surf = self.large_font.render("It is your turn", False, (101, 64, 83))
+
+        self.screen.blit(self.player_turn_surf, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
+                                                    + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
+                                                    self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
+                                                    + self.instruction_surf_l1.get_height()*3))
+
+    def draw_computer_turn_display(self):
+        self.comp_turn_surf = self.large_font.render("Computers turn", False, (101, 64, 83))
+        self.comp_turn_surf_l2 = self.largeish_font.render("Press X to Answer Quiz", False, (101, 64, 83))
+
+        self.screen.blit(self.comp_turn_surf, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
+                                                    + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
+                                                    self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
+                                                    + self.instruction_surf_l1.get_height()*3))
+
+        self.screen.blit(self.comp_turn_surf_l2, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
+                                               + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
+                                               self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
+                                               + self.instruction_surf_l1.get_height() * 6))
+
+
     def run(self):
         while True:
             self.setup()
@@ -383,6 +400,7 @@ class Game:
 
             self.draw_board()
             self.draw_score()
+            self.draw_computer_turn_display()
             self.check_events()
             pygame.display.update()
             self.clock.tick(60)
