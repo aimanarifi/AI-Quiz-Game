@@ -1,6 +1,3 @@
-import time
-from copy import deepcopy
-
 import pygame
 from random import randint
 
