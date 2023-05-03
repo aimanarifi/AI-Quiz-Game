@@ -1,9 +1,17 @@
 import pygame
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__),'../../'))
+
 from random import randint
+from production.general.quiz import Quiz
+
 
 class TicTacToe():
     def __init__(self, game):
         self.game = game
+
         self.first_turn = 1
 
         if self.first_turn == 0:
@@ -13,6 +21,10 @@ class TicTacToe():
 
         self.winner = None
         self.tie = False
+
+        self.was_q_correct = None
+        self.q_answered = False
+        #self.run_quiz_status = None
 
         self.board_array = ["-", "-", "-",
                             "-", "-", "-",
@@ -150,6 +162,7 @@ class TicTacToe():
         else:
             return False
 
+    # random computer move for correct questions
     def random_computer_move(self):
         while not self.player_turn:
             position = randint(0, 8)
@@ -157,6 +170,7 @@ class TicTacToe():
                 self.board_array[position] = "o"
                 self.player_turn = True
 
+    # minimax computer move for wrong questions
     def computer_move(self):
         best_score = -800
         best_move = 0
@@ -209,7 +223,12 @@ class TicTacToe():
 
     def run(self):
         if not self.player_turn:
-            self.computer_move()
+            if self.q_answered:
+                if self.was_q_correct:
+                    self.random_computer_move()
+                elif not self.was_q_correct:
+                    self.computer_move()
+            #self.computer_move()
         else:
             self.player_move()
 
@@ -229,21 +248,31 @@ class Game:
 
         self.tic_tac_toe = TicTacToe(self)
 
+        self.quiz = Quiz("This is the prompt", ["AAAA","BBBB","CCCC","DDDD"], "CCCC")
+        self.quiz2 = Quiz("This is the prompt", ["AAAA","BBBB","CCCC","DDDD"], "CCCC")
+        self.quiz3 = Quiz("This is the prompt", ["AAAA","BBBB","CCCC","DDDD"], "CCCC")
+        self.quiz4 = Quiz("This is the prompt", ["AAAA","BBBB","CCCC","DDDD"], "CCCC")
+        self.quiz5 = Quiz("This is the prompt", ["AAAA","BBBB","CCCC","DDDD"], "CCCC")
+        self.quiz6 = Quiz("This is the prompt", ["AAAA","BBBB","CCCC","DDDD"], "CCCC")
+        self.quizzes = [self.quiz, self.quiz2, self.quiz3, self.quiz4, self.quiz5, self.quiz6]
+
         self.score = 0
 
-        self.large_font = pygame.font.Font('assets/Khonjin.ttf', 72)
-        self.largeish_font = pygame.font.Font('assets/Khonjin.ttf', 50)
-        self.medium_font = pygame.font.Font("assets/Khonjin.ttf", 32)
-        self.small_font = pygame.font.Font("assets/Khonjin.ttf", 28)
+        self.large_font = pygame.font.Font('cybersecurity_house/assets/Khonjin.ttf', 72)
+        self.largeish_font = pygame.font.Font('cybersecurity_house/assets/Khonjin.ttf', 50)
+        self.medium_font = pygame.font.Font("cybersecurity_house/assets/Khonjin.ttf", 32)
+        self.small_font = pygame.font.Font("cybersecurity_house/assets/Khonjin.ttf", 28)
 
-        self.bg_surf = pygame.transform.scale(pygame.image.load('assets/imgs/bg.png'),
+        self.bg_surf = pygame.transform.scale(pygame.image.load('cybersecurity_house/assets/imgs/bg.png'),
                                               (self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
-        self.grid_surf = pygame.transform.scale(pygame.image.load('assets/imgs/img18.png'),
+        self.grid_surf = pygame.transform.scale(pygame.image.load('cybersecurity_house/assets/imgs/img18.png'),
                                                 (self.SCREEN_WIDTH / 5, self.SCREEN_WIDTH / 5))
 
         self.score_surf = None
         self.player_turn_surf = None
         self.comp_turn_surf = None
+
+        self.run_quiz_status = None
 
         self.x_surf = self.large_font.render("x", False, (101, 64, 83))
         self.o_surf = self.large_font.render("o", False, (101, 64, 83))
@@ -322,6 +351,8 @@ class Game:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     self.new_game()
+                if event.key == pygame.K_x and not self.tic_tac_toe.player_turn:
+                    self.run_quiz_status = True
             if event.type == pygame.MOUSEBUTTONDOWN:
                 print(pygame.mouse.get_pos())
 
@@ -396,11 +427,24 @@ class Game:
             self.setup()
 
             if not self.tic_tac_toe.check_if_game_end():
+                if not self.tic_tac_toe.player_turn:
+                    self.draw_computer_turn_display()
+                    while self.run_quiz_status:
+                        print("running the quiz page")
+                        self.quiz.run()
+                        self.tic_tac_toe.q_answered = True
+                        if self.quiz.get_score() == 1:
+                            self.tic_tac_toe.was_q_correct = True
+                        else:
+                            self.tic_tac_toe.was_q_correct = False
+                        self.run_quiz_status = False
+                else:
+                    self.draw_player_turn_display()
                 self.tic_tac_toe.run()
 
             self.draw_board()
             self.draw_score()
-            self.draw_computer_turn_display()
+            #self.draw_computer_turn_display()
             self.check_events()
             pygame.display.update()
             self.clock.tick(60)
