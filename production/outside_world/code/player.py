@@ -65,6 +65,7 @@ class Player(pygame.sprite.Sprite):
         self.run_stats_status = False
         self.run_player_house_status = False
         self.run_cloud_status = False
+        self.run_data_sci_status = False
 
         # self.font = pygame.font.Font('graphics/font/PeaberryBase.ttf', 24)
         # self.banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),6.7)
@@ -110,6 +111,8 @@ class Player(pygame.sprite.Sprite):
                     self.run_cloud_status = True
                 if collided_interaction_sprite[0].name == 'Player_House':
                     self.run_player_house_status = True
+                if collided_interaction_sprite[0].name == 'DS_House':
+                    self.run_data_sci_status = True
                 if collided_interaction_sprite[0].name == 'Ladder1':
                     self.pos.x = 901
                     self.pos.y = 219
@@ -120,7 +123,7 @@ class Player(pygame.sprite.Sprite):
                     time.sleep(0.1) # avoids error by allowing collided_interaction_sprite to update
 
         collided_interaction_sprite = pygame.sprite.spritecollide(self, self.interaction_sprites, False)
-        print(collided_interaction_sprite)
+        #print(collided_interaction_sprite)
         if collided_interaction_sprite:
             if collided_interaction_sprite[0].name == 'AI_House':
                 self.ai_banner_status = True

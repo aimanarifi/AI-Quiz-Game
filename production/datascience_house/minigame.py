@@ -1,5 +1,5 @@
 import pygame
-from project.production.datascience_house.Levels import LevelOne
+from production.datascience_house.Levels import LevelOne
 # from project.production.datascience_house.minigame import startGame
 
 
