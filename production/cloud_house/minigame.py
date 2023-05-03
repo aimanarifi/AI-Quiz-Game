@@ -176,9 +176,13 @@ def run_level(level: level_builder.Level):
 
                     locked_tile = tile
                     level.quiz.run()
-                    locked_tile.unlock()
-                    locked_tile = None
-                    level.is_answered = True
+
+                    if level.quiz.get_score():
+                        locked_tile.unlock()
+                        locked_tile = None
+                        level.is_answered = True
+                    else:
+                        level.quiz.reset()
         
 
         pygame.display.update()

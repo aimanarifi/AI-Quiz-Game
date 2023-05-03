@@ -116,7 +116,6 @@ class Quiz:
 
     #Non graphics object
     clock = pygame.time.Clock()
-    is_submitted = False
     on_click = False
 
     class Option(pygame.sprite.Sprite):
@@ -162,13 +161,13 @@ class Quiz:
 
     def __init__(self, question: str, choice: list[str], answer: str):
 
-        self.question = question
-
+        self.question = MultilineText(question, 70, self.question_font, "White")
         self.options = [self.Option(opt, opt == answer,self) for opt in choice]
         self.options_group = pygame.sprite.Group()
         for opt in self.options:
             self.options_group.add(opt)
         self.selected_option = None
+        self.is_submitted = False
 
     def display(self):
         """
@@ -199,7 +198,6 @@ class Quiz:
         #Set the question
         self.question_bg_surf = pygame.transform.scale_by(pygame.image.load("graphics/art/UI/brown_rectangle_3x14.png"),4.5)
         self.question_bg_rect = self.question_bg_surf.get_rect(midtop=(self.screen.get_width()/2,64))
-        self.question = MultilineText(self.question, 70, self.question_font, "White")
         self.question_rect = self.question.wrapper_rect
         self.question_rect.center = self.question_bg_rect.center
 
@@ -308,6 +306,10 @@ class Quiz:
         else:
             return 0
     
+    def reset(self):
+        self.is_submitted = False
+        self.selected_option = None
+
 if __name__ == "__main__":
 
     screen = pygame.display.set_mode((1280,720))
