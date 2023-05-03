@@ -9,6 +9,7 @@ print(sys.path)
 from production.general import statistics
 from production.cloud_house import cloud_house
 from production.player_house.code.main import Game
+from production.datascience_house import minigame
 
 #import production
 from settings import *
@@ -188,6 +189,12 @@ class Level:
             gamePlayerHouse = Game()
             gamePlayerHouse.run()
             self.player.run_player_house_status = False
+
+        while self.player.run_data_sci_status == True:
+            print("running data science house")
+            self.display_surface.fill('black')
+            minigame.startGame()
+            self.player.run_data_sci_status = False
 
 
         '''while self.player.run_blockchain_status == True:

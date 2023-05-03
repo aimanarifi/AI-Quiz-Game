@@ -87,7 +87,7 @@ def animate_bg():
 
     if not bg_counter % 2: bg_rect.left += bg_inc
 
-def display():
+def display_level_page():
     """
     Blit everything
     """
@@ -241,7 +241,7 @@ def run():
         check_player_movement()
         check_npc_interaction()
         check_sign_interaction()
-        display()
+        display_level_page()
 
         pygame.display.update()
         clock.tick()
