@@ -319,25 +319,12 @@ if __name__ == "__main__":
     q1 = Quiz(test_question, test_options, "Use Container technologies")
 
     #run the page
+    #By running the object, it will run the quiz page. all of the interactions will be handled automatically
     q1.run()
 
     #get score
     #print(q1.get_score())
 
-    # test_text = "asd asdsdf gfs ag r sdfgsd gr sdf gar g sdfg sdfg r g dsfgdsfg dfs sdfg sksfdgjnsd jvuubrue sdfugu isdfgi kndsfgi ads dadsf a df sdddf sn "
-    # mt = MultilineText( test_text, screen.get_rect(), 50, pygame.font.Font("graphics/font/PeaberryBase.ttf",24), "White")
-
-    # while True:
-    
-    #     for event in pygame.event.get():
-    #         if event.type == pygame.QUIT:
-    #             pygame.quit()
-    #             exit
-
-    #     for i in range(len(mt.formatted_text)):
-    #         screen.blit(mt.surfs[i], mt.rects[i])
-        
-    #     pygame.display.update()
 
 
 
