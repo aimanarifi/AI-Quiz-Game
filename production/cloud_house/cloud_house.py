@@ -67,8 +67,8 @@ def setup():
     text_banner_rect = text_banner_surf.get_rect(topleft=((1280*(1/2) - text_banner_surf.get_size()[0]/2, 720*(4/5))))
     display_text_banner = False
 
-    temp_txt = ["Fancy playing minigame? We'll start with the easy one", "Wow you got potential! Try the harder one",
-            "Come beat this 'Boss' level" , "You've completed this level. Want a replay?", "[This is text for sign board]",
+    temp_txt = ["Hey buddy, come try this minigame :D", "Wow you got potential! Try the medium one",
+            "Come beat this 'Boss' level" , "You need more experience to beat this level", "[This is text for sign board]",
             "Hold [F] to play"]
 
     all_text_messages = [ FONT.render(txt, False, 'Black') for txt in temp_txt]
@@ -195,16 +195,19 @@ def check_npc_interaction():
     any_collision = False
 
     #Upon collision, it shows instruction to access the game and handle all necessary input
-    for i, npc_rect in enumerate(npcs_rect):
+    for i, npc_rect, exp_threshold in zip([0,1,2],npcs_rect,[0,100,200]):
         
-        if player_stats.exp_cloud >= i and player_feet_rect.colliderect(npc_rect):
+        if player_stats.exp_cloud >= exp_threshold and player_feet_rect.colliderect(npc_rect):
             
-            displayed_text_messages[0] = all_text_messages[3]
+            displayed_text_messages[0] = all_text_messages[i]
             displayed_text_messages[1] = all_text_messages[5]
             any_collision = True
             hold_f_to_enter( i + 1)
 
-            if player_stats.exp_cloud == i: displayed_text_messages[0] = all_text_messages[i]
+        if player_stats.exp_cloud < exp_threshold and player_feet_rect.colliderect(npc_rect):
+            displayed_text_messages[0] = all_text_messages[3]
+            displayed_text_messages[1] = None
+            any_collision = True
 
     display_text_banner = any_collision
 

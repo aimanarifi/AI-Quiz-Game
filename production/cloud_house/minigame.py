@@ -25,8 +25,9 @@ def score_screen():
     on_click = False
 
     TXTS_REF_POINT = (screen.get_size()[0]/2, screen.get_size()[1]/2 - 70)
-    message_txt = FONTS[1].render("[this is the message]", False, "Black")
+    message_txt = FONTS[1].render("Well Done, you cleared all sublevels!", False, "Black")
     score_txt = FONTS[1].render(f"score: {score}", False, "Black")
+    exp_txt = FONTS[1].render(f"cloud exp: +{int(score/5)}", False, "Black")
     next_button_rect.center = (screen.get_size()[0]/2, screen.get_size()[1]*3/4 - 70)
     button_text_surf = FONTS[0].render("CONTINUE", False, "White")
     button_text_rect = button_text_surf.get_rect(center = next_button_rect.center)
@@ -44,8 +45,9 @@ def score_screen():
 
         pygame.draw.rect(screen,(25,36,40),bg)
         screen.blit(bg_banner, bg_banner.get_rect(center=bg.center))
-        screen.blit(message_txt, message_txt.get_rect(midbottom= (TXTS_REF_POINT[0],TXTS_REF_POINT[1]-4)))
-        screen.blit(score_txt, score_txt.get_rect(midtop= (TXTS_REF_POINT[0],TXTS_REF_POINT[1]+4)))
+        screen.blit(message_txt, message_txt.get_rect(midbottom= (TXTS_REF_POINT[0],TXTS_REF_POINT[1]- 16)))
+        screen.blit(score_txt, score_txt.get_rect(center= (TXTS_REF_POINT[0],TXTS_REF_POINT[1])))
+        screen.blit(exp_txt, exp_txt.get_rect(midtop=(TXTS_REF_POINT[0],TXTS_REF_POINT[1]+ 16)))
         screen.blit(next_button_surf,next_button_rect)
         screen.blit(button_text_surf, button_text_rect)
 
@@ -250,18 +252,17 @@ def run(diff: int = 0, user=None):
     level_counter = 0
     initial_time = pygame.time.get_ticks()/1000
     for level in levels:
-        level_counter += 1
-        
+        level_counter += 1    
         run_level(level)
-        score += level.quiz.get_score()
+
+    MAX_SCORE = 20000
+    score = int( MAX_SCORE / int(pygame.time.get_ticks()/1000 - initial_time))
 
     
-
-    if score > 3:
-            player_stats.exp_cloud += 1 
-            player_stats.highscore_cloud = score
-
+    player_stats.exp_cloud += int(score/5)  
+    player_stats.highscore_cloud = score
     DB.update_user(player_stats)
+
     score_screen()
 
 
