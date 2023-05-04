@@ -6,15 +6,10 @@ import json
 from ibm_watson import TextToSpeechV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
-
-os.chdir("production/blockchain_house/ibm_blockchain/assets/npc/npcVoice/emma")
-
-
-dialog1Voice_exist = os.path.isfile("matthewDialog1.wav")
-dialog2Voice_exist = os.path.isfile("matthewDialog2.wav")
-dialog3Voice_exist = os.path.isfile("matthewDialog3.wav")
-dialog4Voice_exist = os.path.isfile("matthewDialog4.wav")
-dialog5Voice_exist = os.path.isfile("matthewDialog5.wav")
+#os.chdir("production/blockchain_house/ibm_blockchain/assets/npc/npcVoice/emma") # For emmaVoiceGenerator.py
+#os.chdir("assets/npc/npcVoice/emma") # For BlockChainHouse.py
+os.chdir("assets/npc/npcVoice/emma")
+print("In the Emma Voice Generator, your current directory is",os.getcwd())
 
 emmaIntroVoice_exist = os.path.isfile("emmaIntroVoice.wav")
 emmaDialog2Voice_exist = os.path.isfile("emmaDialog2Voice.wav")
@@ -44,21 +39,22 @@ def watsonGenerator(textFilePath, fileName):
             ).get_result().content) 
     
 
-if not emmaIntroVoice_exist: 
-    watsonGenerator("emmaDialog/emmaIntroVoice.txt", "emmaIntroVoice.wav")
+def generateEmmaVoice():
+    if not emmaIntroVoice_exist: 
+        watsonGenerator("emmaDialog/emmaIntroVoice.txt", "emmaIntroVoice.wav")
 
-if not emmaDialog2Voice_exist: 
-    watsonGenerator("emmaDialog/emmaDialog2.txt", "emmaDialog2Voice.wav")
+    if not emmaDialog2Voice_exist: 
+        watsonGenerator("emmaDialog/emmaDialog2.txt", "emmaDialog2Voice.wav")
+        
+    if not emmaDialog3Voice_exist: 
+        watsonGenerator("emmaDialog/emmaDialog3.txt", "emmaDialog3Voice.wav")
+
+    if not emmaDialog4Voice_exist: 
+        watsonGenerator("emmaDialog/emmaDialog4.txt", "emmaDialog4Voice.wav")
     
-if not emmaDialog3Voice_exist: 
-    watsonGenerator("emmaDialog/emmaDialog3.txt", "emmaDialog3Voice.wav")
+    if not emmaDialog5Voice_exist: 
+        watsonGenerator("emmaDialog/emmaDialog5.txt", "emmaDialog5Voice.wav")
+    
+    os.chdir("../")
+ 
 
-if not emmaDialog4Voice_exist: 
-    watsonGenerator("emmaDialog/emmaDialog4.txt", "emmaDialog4Voice.wav")
-if not emmaDialog5Voice_exist: 
-    watsonGenerator("emmaDialog/emmaDialog5.txt", "emmaDialog5Voice.wav")
-
-
-
-print(os.getcwd())
-print(emmaIntroVoice_exist)

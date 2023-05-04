@@ -24,27 +24,23 @@ import math
 import os
 import sys
 
-
-
-
 os.chdir("production/blockchain_house/ibm_blockchain")
 
 
 print("Your Current Directory in BlockChain House Main file is = ",os.getcwd())
-#production/blockchain_house/ibm_blockchain/
-  
-# # appending the parent directory path
-# sys.path.append('project/production/blockchain_house/ibm_blockchain')
+from emmaVoiceGenerator import generateEmmaVoice
+generateEmmaVoice() # Home Node NPC
+from matthewVoiceGenerator import generateMatthewVoice 
+generateMatthewVoice()
+from rogerVoiceGenerator import generateRogerVoice 
+generateRogerVoice()
+from kingVoiceGenerator import generateTheKingVoice 
+generateTheKingVoice()
+#from quizNPCVoiceGenerator import generateQuizNPCVoice
 
-# from sceneStack import SceneStack
+os.chdir("../../../..")
 
-#from pydub import AudioSegment
-#from pydub.playback import play
-
-
-
-
-
+print("Your Current Directory in BlockChain House Main file is = ",os.getcwd())
 
 
 pygame.init()
@@ -110,29 +106,7 @@ class ObjectStack:
     def pop(self):
         self.push(None)
 
-class IBMWatson: 
-    def __init__(self):
-        print("hello world ")
-       # authenticator = IAMAuthenticator('FbVBCmrflY290CiorB8QH9mUT-nuybxutzFzZLNjTspT')
-        # text_to_speech = TextToSpeechV1(
-        #     authenticator=authenticator
-       # )
 
-        # text_to_speech.set_service_url('https://api.eu-gb.text-to-speech.watson.cloud.ibm.com/instances/2340778d-f272-4d32-bf19-1d83f9ad9a0d')
-
-        # with open('hello_world.wav', 'wb') as audio_file:
-        #     audio_file.write(
-        #         text_to_speech.synthesize(
-        #             watsonText,
-        #             voice='en-US_KevinV3Voice',
-        #             accept='audio/wav'        
-        #         ).get_result().content) 
-
-    # @staticmethod
-    # def autoplay():
-    #     song = AudioSegment.from_wav('hello_world copy.wav')
-    #     play(song)
-        
 class Sqlite: 
     def __init__(self):
         self.commonConn = sqlite3.connect('../../general/db/AIGame.db')
@@ -140,8 +114,6 @@ class Sqlite:
     
     def selectFromAchievementbyID(self,id):
         cur = self.localConn.cursor()
-        # print(type(str(id)),"    " ,difficulty)
-        # print("SELECT * FROM Achievement WHERE id = "+str(id)")
         cur.execute("SELECT * FROM Achievement WHERE id = "+str(id)+";")
        
         rows = cur.fetchall()
@@ -153,17 +125,12 @@ class Sqlite:
         highScore = str(highScorenum)
    
         if self.getHighestScore(idnum) < highScorenum:
-            print("Inn")
             self.commonConn.execute("UPDATE USER SET HIGHSCORE_BLOCKCHAIN = "+ highScore +" WHERE ID = " + id)
             self.commonConn.commit()
-        # self.commonConn.close()
         
         self.localConn.execute("UPDATE Leaderboard SET score = "+ highScore +" WHERE id = " + id)
         self.localConn.commit()
-        # self.localConn.close()
-        # print ("records created succesffuly")
-        # conn.close()
-        # print("uh-oh, you didn't override this in the child class")
+       
     
     def getHighestScore(self,id):
         cur = self.commonConn.cursor()
@@ -178,24 +145,16 @@ class Sqlite:
     def selectFromLocalBlockChain(self):
         cur = self.localConn.cursor()
         cur.execute("SELECT * FROM LeaderBoard")
-
         rows = cur.fetchall()
         return rows # tuples in list 
-        # print(type(rows[0]))
-        
-        # for row in rows:
-        #     print(row[1])
+       
     
     def selectFromAIGame(self):
         cur = self.commonConn.cursor()
         cur.execute("SELECT * FROM USER")
-
         rows = cur.fetchall()
         return rows #tuples in list 
-        # print(type(rows[0]))
-        
-        # for row in rows:
-        #     print(row[1])
+       
             
     def close(self):
         self.localConn.close()
@@ -225,15 +184,7 @@ class Button:
         self.surface.blit(self.text, (0, 0))
         self.rect = pygame.Rect(self.x, self.y, self.size[0], self.size[1])
  
-    # def show(self,screen):
-    #     screen.blit(button1.surface, (self.x, self.y))
-    
-    # def show2(self,screen):
-    #     screen.blit(button2.surface, (self.x, self.y))
-        
-    # def show3(self,screen):
-    #     screen.blit(button3.surface, (self.x, self.y))        
- 
+     
     def click(self, event):
         x, y = pygame.mouse.get_pos()
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -244,20 +195,13 @@ class Button:
 class MiniSprite(pygame.sprite.Sprite):
     def __init__(self, image, startx, starty):
         super().__init__()
-
         self.image = pygame.image.load(image)
         self.rect = self.image.get_rect()
-        # print("background = ",self.rect,image)
-
         self.rect.topleft = [startx, starty]
-        
-       
-
+    
     def update(self):
         pass
         
-    
-
     def draw(self, screen):
         screen.blit(self.image, self.rect)
         
@@ -274,9 +218,6 @@ class MiniPlayer(MiniSprite):
         super().__init__(path, startx, starty)
         self.speed = 4 
         self.standardImage = pygame.image.load("assets/character/down/down1.png")
-        # self.walkCycle = [pygame.image.load("ibm_blockchain/assets/char1.png"),
-        #                   pygame.image.load("ibm_blockchain/assets/char2.png"),
-        #                   pygame.image.load("ibm_blockchain/assets/char3.png")]
         self.walk_cycle = [pygame.image.load("assets/character/right/right1.png"),
                            pygame.image.load("assets/character/right/right2.png"),
                            pygame.image.load("assets/character/right/right3.png")]
@@ -296,11 +237,7 @@ class MiniPlayer(MiniSprite):
         
     def draw(self,screen):
         global walkCount
-        # print ("walkCount = ",walkCount//4, " ", self.facing_left, self.facing_right)
-        # print("self.x = ", self.x , " self.y = ", self.y)
-        # print(self.rect)
-        
-        
+       
         if walkCount + 1 >= 27:
             walkCount = 0
 
@@ -311,116 +248,44 @@ class MiniPlayer(MiniSprite):
             walkImage = pygame.transform.flip(walkImage,True,False)
             screen.blit(walkImage, (self.x,self.y))
             walkCount +=1
-            # print("Innnnn")
+           
         
         elif self.facing_right:
             walkImage = self.walk_cycle[walkCount%3]
             walkImage = pygame.transform.scale(walkImage,(50,50))
             screen.blit(walkImage, (self.x,self.y))
             walkCount +=1
-            # print("Innnnn")
+            
                
         else:
             self.image = pygame.transform.scale(self.standardImage,(50,50))
             screen.blit(self.image, self.rect)
            
         
-    # def animationRender(self):
-        # self.image = self.walk_cycle[self.animationIndex]
-        
-        # if self.facing_left:
-        #     self.image = pygame.transform.flip(self.image,True,False)
-        #     print("walk ani in")
-        
-        # if self.animationIndex < len(self.walk_cycle)-1:
-        #     self.animationIndex +=1 
-        #     print("add more index in ", self.animationIndex)
-            
-        # else:
-        #     self.animationIndex = 0 
-        #  global walkCount
-       
-
-        #  if walkCount + 1 >= 27:
-        #         walkCount = 0
-
-        #  if self.facing_left:
-        #     win.blit(self.walk_cycle[walkCount//3], (x,y))
-        #     walkCount += 1
-        
-        #  elif not self.facing_left:
-        #     win.blit(self.walk_cycle[walkCount//3], (x,y))
-        #     walkCount +=1
-        #  else:
-        #     win.blit(char, (x,y))
-            
-        
     def update(self,key):
         global walkCount
         global VELOCITY
         global MINI_PLAYER_X 
         global MINI_PLAYER_Y 
-        # print("self facing left =", self.facing_left )
-        # print("self facing right = ", self.facing_right)
-        # key = pygame.key.get_pressed()  
         
-         #    if keyPress[K_LEFT]:
-         #         EASY_PLAYER_X -= VELOCITY
-         #    if keyPress[K_RIGHT]:
-         #         EASY_PLAYER_X += VELOCITY
-         #    if keyPress[K_UP]:
-         #         EASY_PLAYER_Y -= VELOCITY
-         #    if keyPress[K_DOWN]:
-         #         EASY_PLAYER_Y += VELOCITY 
-          
         if key[pygame.K_LEFT]:
             self.facing_left = True
-            self.facing_right = False
-            # self.standardImage = pygame.image.load("ibm_blockchain/assets/char3.png")
-            # self.walk_animation()
+            self.facing_right = False   
             MINI_PLAYER_X -= VELOCITY
             
-            # self.move(-self.speed,0)
         elif key[pygame.K_RIGHT] :
             self.facing_left = False
             self.facing_right = True 
-            # self.standardImage = pygame.image.load("ibm_blockchain/assets/char4.png")
-            # self.walk_animation()
-            # self.move(self.speed,0)
             MINI_PLAYER_X += VELOCITY
             
         else : 
             self.facing_left = False 
             self.facing_right = False 
             walkCount = 0
-        # elif key[pygame.K_UP]:
-        #     # self.standardImage = pygame.image.load("ibm_blockchain/assets/char2.png")
-        #     self.move(0,-self.speed)
-        # elif key[pygame.K_DOWN]:
-        #     # self.standardImage = pygame.image.load("ibm_blockchain/assets/char1.png")
-        #     self.move(0,self.speed)
-        # else:
-        #     self.image = self.standardImage
-        
-     
-             
-    
-   
         
     def move(self, x, y):
         self.rect.move_ip([x,y])
-        # if walkCount + 1 >= 27:
-        #         walkCount = 0
-
-        # if self.facing_left:
-        #     win.blit(self.walk_cycle[walkCount//3], (x,y))
-        #     walkCount += 1
-        
-        # elif not self.facing_left:
-        #     win.blit(self.walk_cycle[walkCount//3], (x,y))
-        #     walkCount +=1
-        # else:
-        #     win.blit(char, (x,y))
+       
         
         
 
@@ -429,11 +294,7 @@ class MiniPlatform(MiniSprite):
         super().__init__(path, startx, starty)
         self.x = startx 
         self.y = starty
-        #print("self.rect.topleft = miniplatform", self.rect.topleft)
-        # self.rect = pygame.Rect(startx, starty, 50, 50)
-        # self.image = pygame.transform.scale(self.image,(50,50))
-        # print("platform size = ",self.rect,"  ",self.image)
-        
+       
     
     def getPlatformRect(self):
         self.rect = pygame.Rect(self.x, self.y, 50, 50)
@@ -445,7 +306,6 @@ class MiniPlatform(MiniSprite):
     def draw(self,screen):
         global RED
         self.image = pygame.transform.scale(self.image,(50,50))
-        # pygame.draw.rect(screen, RED, self.rect)
         screen.blit(self.image, self.rect)
                             
                     
@@ -458,15 +318,10 @@ class Ball:
         self.screen = screen
         self.dx = dx 
         self.dy = dy
-        #  def render(self):
-        # pygame.draw.circle(self.screen, GREEN, [self.x, self.y], self.radius)
-        # print("Hello world")
+       
         
     def update(self):
         pass
-        # self.x += 10
-        # self.y += 10
-        # print("pos = ",self.x," ",self.y)
         
     def render(self): 
         pygame.draw.circle(self.screen, GREEN, [self.x, self.y], self.radius)
@@ -479,38 +334,18 @@ class Platform:
         self.screen = screen
         self.dx = dx 
         self.dy = dy
-        #  def render(self):
-        # pygame.draw.circle(self.screen, GREEN, [self.x, self.y], self.radius)
-        # print("Hello world")
-        
+       
     def update(self):
-        # self.x += 10
-        # self.y += 10
         pass
-        #print("pos = ",self.x," ",self.y)
         
     def render(self): 
         pygame.draw.circle(self.screen, GREEN, [self.x, self.y], self.radius)
        
-class Meso: 
-    def __init__(self, x, y, radius, screen, dx,dy):
-        self.x = x
-        self.y = y
-        self.radius = radius
-        self.screen = screen
-        self.dx = dx 
-        self.dy = dy
-    
-    def drawMeso(self):
-        print("Hello Meso.")
-                
+
 class Player:   
     def __init__(self, name, x, y, scaleX, scaleY,path):
-        
-        
         self.x = x
         self.y = y 
-       
         self.scaleX = scaleX 
         self.scaleY = scaleY
         self.character = pygame.image.load(path)
@@ -523,10 +358,10 @@ class Player:
     
     # Character Render Function
     def drawCharacter(self,screen):
-        # print("Hello World")
+       
         screen.blit(self.character,(self.x,self.y))   
         self.characterRect.topleft = self.x,self.y
-        #pygame.draw.rect(screen, RED, self.characterRect,4)        
+              
        
      
 class Npc: 
@@ -541,37 +376,17 @@ class Npc:
         self.name = name
         self.npcRect = self.npc.get_rect()
         
-        #  def render(self):
-        # pygame.draw.circle(self.screen, GREEN, [self.x, self.y], self.radius)
-        # print("Hello world")
     
     def getNpcRect(self):
         self.npcRect = pygame.Rect(self.x, self.y, self.scaleX, self.scaleY)
         return self.npcRect
         
     def update(self):
-        # self.x += 10
-        # self.y += 10
-        # print("pos = ",self.x," ",self.y)
         pass 
     def render(self): 
         self.screen.blit(self.npc,(self.x,self.y))  
-        
-        #Name Tag
-        # global WHITE
-        # global BLACK
-        # NAME_PADDING_X = 10
-        # NAME_PADDING_Y = 5
-        # NAME_X = self.x + NAME_PADDING_X
-        # NAME_Y = self.y + self.scaleY + NAME_PADDING_Y
-        # GAME_FONT = pygame.font.Font(FONT_DIRECTORY, 18)
-        # pygame.draw.rect(self.screen, WHITE, pygame.Rect(self.x, self.y+self.scaleY, 100, 30))
-        # self.screen.blit(GAME_FONT.render(self.name, True, BLACK), (NAME_X, NAME_Y))   
-        
-        
         self.npcRect.topleft = self.x,self.y
-        #pygame.draw.rect(self.screen, RED, self.npcRect,4)        
-        # print("npc rect = ", self.npcRect)
+      
        
 
 class ScoreBoard: 
@@ -582,34 +397,13 @@ class ScoreBoard:
         self.x = x 
         self.y = y 
         
-        #SCORE += SCORE_INCREMENT
-        
     def render(self):
         self.textRect.center = (self.x,self.y)
         self.screen.blit(self.text, (self.x,self.y))
 
-class ProgressBar:
-    def __init__(self, screen, name, x, y, scaleX, scaleY,path):
-        
-        self.screen = screen
-        self.x = x
-        self.y = y 
-        self.scaleX = scaleX 
-        self.scaleY = scaleY
-        self.npc = pygame.image.load(path)
-        self.npc = pygame.transform.scale( self.npc, (scaleX,scaleY) )
-        self.name = name
+
     
-class ExpBar: 
-    def __init__(self, screen, name, x, y, scaleX, scaleY,path):
-        self.screen = screen
-        self.x = x
-        self.y = y 
-        self.scaleX = scaleX 
-        self.scaleY = scaleY
-        self.npc = pygame.image.load(path)
-        self.npc = pygame.transform.scale( self.npc, (scaleX,scaleY) )
-        self.name = name
+
 
 
 IS_DATABASE_OPEN_1 = False
@@ -639,10 +433,7 @@ class Achievement:
         GAME_FONT2 = pygame.font.Font(FONT_DIRECTORY, 15)
         rank = GAME_FONT2.render('ID', True, RED)
         self.screen.blit(rank,  (150, 200))
-        
-        # id = GAME_FONT2.render('ID', True, WHITE)
-        # self.screen.blit(id,  (230, 200))
-        
+          
         username = GAME_FONT2.render('Difficulty', True, RED)
         self.screen.blit(username,  (320, 200)) 
         
@@ -682,9 +473,6 @@ class Achievement:
             
             i+=1
         
-        
-        # new_score = GAME_FONT2.render('Your Progress', True, RED)
-        # self.screen.blit(new_score,  (610, 200)) 
         
 
 IS_DATABASE_OPEN_2 = False 
@@ -727,25 +515,17 @@ class Stats: # Level, Exp
                 # Only when ID is equal
                 if usersRow[0] is leaderBoardRow[0] : 
                     eachInfo = tuple((usersRow[0],usersRow[1],usersRow[2],usersRow[3],usersRow[5]))
-                    # blockChainRankInfo.append(usersRow[0]) # id 
-                    # blockChainRankInfo.append(usersRow[1]) # Username 
-                    # blockChainRankInfo.append(usersRow[11]) # Highest Score
-                    # blockChainRankInfo.append(leaderBoardRow[3]) # New Score
                     blockChainStatsInfo.append(eachInfo)
                     
                 j+=1
             else:
                 break
-        #print(blockChainStatsInfo)
-        
-        userInfo = None 
-        
        
-        
+        userInfo = None 
         for info in blockChainStatsInfo:
                 if info[0] == id:
                     userInfo = info 
-        #print(userInfo)
+       
             
         pygame.draw.rect(self.screen, BLUE, pygame.Rect(60, 60, 900, 600), border_radius = 15)
             
@@ -765,8 +545,6 @@ class Stats: # Level, Exp
         rank = GAME_FONT2.render('ID', True, RED)
         self.screen.blit(rank,  (150, 200))
             
-            # id = GAME_FONT2.render('ID', True, WHITE)
-            # self.screen.blit(id,  (230, 200))
             
         username = GAME_FONT2.render('Username', True, RED)
         self.screen.blit(username,  (280, 200)) 
@@ -810,8 +588,6 @@ class LeaderBoard:
         self.screen = screen
     
     def render(self):
-        # usersRows = None 
-        # leaderBoardRows = None 
         global IS_DATABASE_OPEN_3 
         global usersRows, leaderBoardRows 
         
@@ -820,7 +596,7 @@ class LeaderBoard:
             IS_DATABASE_OPEN_3 = True 
             sqlRunner = Sqlite()
             usersSamples = sqlRunner.selectFromAIGame()  # AIGame.db, Tuples in List 
-            print(usersSamples)
+            
             for usersSample in usersSamples: 
                 usersRows.append(usersSample)
             
@@ -833,11 +609,6 @@ class LeaderBoard:
         else:
             pass
             
-        #print(usersRows)    
-        # leaderBoardRows.sort(key=lambda x: x[3], reverse = True )
-        # usersRows.sort(key=lambda x:x[11], reverse = True )
-        # print(usersRows)
-        # print(leaderBoardRows)
         
         blockChainRankInfo = []
         
@@ -850,10 +621,6 @@ class LeaderBoard:
                 # Only when ID is equal
                 if usersRow[0] is leaderBoardRow[0] : 
                     eachInfo = tuple((usersRow[0],usersRow[1],usersRow[11],leaderBoardRow[3]))
-                    # blockChainRankInfo.append(usersRow[0]) # id 
-                    # blockChainRankInfo.append(usersRow[1]) # Username 
-                    # blockChainRankInfo.append(usersRow[11]) # Highest Score
-                    # blockChainRankInfo.append(leaderBoardRow[3]) # New Score
                     blockChainRankInfo.append(eachInfo)
                     
                 j+=1
@@ -863,7 +630,7 @@ class LeaderBoard:
         
         
         blockChainRankInfo = sorted(blockChainRankInfo,key=lambda x:x[-1],reverse = True)
-        # print(blockChainRankInfo)
+       
         
         global BLUE 
         global WHITE 
@@ -872,9 +639,7 @@ class LeaderBoard:
         
         pygame.draw.rect(self.screen, BLUE, pygame.Rect(60, 60, 900, 600), border_radius = 15)
         
-        # gameBackground = pygame.image.load("ibm_blockchain/assets/npc/ibmBackground.jpeg")
-        # gameBackground = pygame.transform.scale(gameBackground,(900,600))
-        # self.screen.blit(gameBackground,(60,60))
+       
         ibmLogo = pygame.image.load("assets/ibmlogo.jpeg")
         ibmLogo = pygame.transform.scale(ibmLogo,(150,100))
         self.screen.blit(ibmLogo,(80,80))
@@ -893,8 +658,6 @@ class LeaderBoard:
         rank = GAME_FONT2.render('Rank', True, RED)
         self.screen.blit(rank,  (150, 200))
         
-        # id = GAME_FONT2.render('ID', True, WHITE)
-        # self.screen.blit(id,  (230, 200))
         
         username = GAME_FONT2.render('Username', True, RED)
         self.screen.blit(username,  (280, 200)) 
@@ -930,18 +693,7 @@ class Quiz:
         self.y = y 
         self.quiz_content = quiz_content
         self.answer = answer 
-        
-        
-    
-    def writeText(self):
-        print("Hello World")
-        # FONT_DIRECTORY = "ibm_blockchain/assets/PressStart2P.ttf"
-        # QUIZ_FONT = pygame.font.Font(FONT_DIRECTORY, 24)
-        
-        
-        
-        # ANSWER_FONT = pygame.font.Font(FONT_DIRECTORY, 24)
-    
+         
     def checkAnswer(self,userAnswer):
         return self.answer is userAnswer
         
@@ -976,26 +728,20 @@ class Quiz:
         TOP_ANSWER_Y = self.y+QUIZ_MARGIN_Y+QUIZ_HEIGHT+QA_HEIGHT_GAP # Top Y coordinate 
         ANSWER_WIDTH = QUIZ_WIDTH/2
         ANSWER_HEIGHT = 330
-        #ANSWER_TAB_HEIGHT = (BIG_RECT_HEIGHT - (2*QUIZ_MARGIN_Y + ANSWER_HEIGHT_GAP+ QA_HEIGHT_GAP) )/2
+        
         pygame.draw.rect(self.screen, GREEN, (LEFT_ANSWER_X, TOP_ANSWER_Y, ANSWER_WIDTH, ANSWER_HEIGHT),border_radius = radius)
         
         
         # # Bottom Left Answer Tab 
         ANSWER_HEIGHT_GAP = 20 
-        # BOTTOM_ANSWER_Y = TOP_ANSWER_Y+ANSWER_HEIGHT_GAP+180 # Bottom Y coordinate
-        
-        # pygame.draw.rect(self.screen, RED, (LEFT_ANSWER_X, BOTTOM_ANSWER_Y, ANSWER_WIDTH, ANSWER_HEIGHT))
-        
+       
         
         # Top Right Answer Tab 
         ANSWER_WIDTH_GAP = 5 
         RIGHT_ANSWER_X = LEFT_ANSWER_X + ANSWER_WIDTH + ANSWER_WIDTH_GAP
         pygame.draw.rect(self.screen, GREEN, (RIGHT_ANSWER_X, TOP_ANSWER_Y, ANSWER_WIDTH, ANSWER_HEIGHT),border_radius = radius)
         
-        # # Bottom Right Answer Tab 
-        # ANSWER_WIDTH_GAP = 5 
-        # RIGHT_ANSWER_X = LEFT_ANSWER_X + ANSWER_WIDTH + ANSWER_WIDTH_GAP
-        # pygame.draw.rect(self.screen, RED, (RIGHT_ANSWER_X, BOTTOM_ANSWER_Y, ANSWER_WIDTH, ANSWER_HEIGHT))
+       
         
         ######### Displaying Questions and Answers #########################
         QUIZ_PADDING_X  = 30 
@@ -1019,52 +765,28 @@ class Quiz:
         
         
        
-        # self.screen.blit(quiz1,(QUIZ_TEXT_X, QUIZ_TEXT_Y))
-        
-        
         ###### Answer 
         ANSWER_FONT = pygame.font.Font(FONT_DIRECTORY, 120)
         ANSWER_PADDING_X = 70
         ANSWER_PADDING_Y = 70
         
         # Top-Left 
-       
         LEFT_TEXT_X = LEFT_ANSWER_X + ANSWER_PADDING_X 
         TOP_TEXT_Y = TOP_ANSWER_Y + ANSWER_PADDING_Y 
         answer1_content = "O"
         answer1 =  ANSWER_FONT.render(answer1_content, True, BLUE)
         self.screen.blit(answer1,(LEFT_TEXT_X, TOP_TEXT_Y))
         
-        # # Bottom-Left 
-        # BOTTOM_TEXT_Y = TOP_TEXT_Y + ANSWER_HEIGHT_GAP + ANSWER_HEIGHT
-        # answer2_content = "IBM"
-        # answer2 = ANSWER_FONT.render(answer2_content, True, GREEN)
-        # self.screen.blit(answer2,(LEFT_TEXT_X, BOTTOM_TEXT_Y))
-        
-        # Top-Right 
-        
+       
+        # Top-Right  
         RIGHT_TEXT_X = LEFT_ANSWER_X + ANSWER_WIDTH_GAP + ANSWER_WIDTH + ANSWER_PADDING_X
         answer3_content = "X"
         answer3 = ANSWER_FONT.render(answer3_content, True, RED)
         self.screen.blit(answer3,(RIGHT_TEXT_X, TOP_TEXT_Y))
         
-        # # Bottom-Right 
-        # answer4_content = "IBM"
-        # answer4 = ANSWER_FONT.render(answer4_content, True, GREEN)
-        # self.screen.blit(answer4,(RIGHT_TEXT_X, BOTTOM_TEXT_Y))
+       
                      
-class Inventory: 
-     def __init__(self, screen, name, x, y, scaleX, scaleY,path):
-        
-        self.screen = screen
-        self.x = x
-        self.y = y 
-        self.scaleX = scaleX 
-        self.scaleY = scaleY
-        self.npc = pygame.image.load(path)
-        self.npc = pygame.transform.scale( self.npc, (scaleX,scaleY) )
-        self.name = name
-                                          
+           
 class Dialog: 
     def __init__(self, screen, npcFilePath, npcName, dialogue_content, endChatButton, prevButton, nextButton, yesButton, noButton):
         self.screen = screen
@@ -1077,19 +799,7 @@ class Dialog:
         self.yesButton = yesButton 
         self.noButton = noButton
         
-    
-    
-    # @staticmethod 
-    # def hearClick(self,event):
-    #     print("Heard from Dialog Class")
-    #     print(event)
-    #     global LAWN_GREEN
-    #     if self.nextButton:
-    #         endChatRect = pygame.draw.rect(screen, LAWN_GREEN, pygame.Rect(50, 130, x, y))    
-    #         return endChatRect
-        
-    #     return None
-    
+     
     def drawDialogText(self):
         global FONT_DIRECTORY 
         global BLACK
@@ -1097,38 +807,12 @@ class Dialog:
         FONT_SIZE = 12
         endChatFont = pygame.font.Font(FONT_DIRECTORY, FONT_SIZE)
         
-        # splitByChar = []
-        # splitByChar.extend(self.dialogue_content)
-        # print(splitByChar)
         n = 43
         splitByString = [self.dialogue_content[i:i+n] for i in range(0, len(self.dialogue_content), n)]
-        # print(splitByString)
-        
-        
-        
-        
-        # j=0
-        # #+ FONT_SIZE*newIndex
-        # for index in range(0,len(self.dialogue_content)):
-        #     eachChar = self.dialogue_content[index]
-        #     text =  endChatFont.render(eachChar, True, BLACK)
-        #     if index > 44: 
-        #         j+=1
-        #         resetIndex = index % 45
-        #         self.screen.blit(text,(390+ FONT_SIZE*resetIndex , 280+ (FONT_SIZE+10)*j))
-        #     else:
-        #         self.screen.blit(text,(390 + FONT_SIZE*index, 280))
-        
-        
-        
-        
-       
-       
         
         for index in range (0,len(splitByString)):
             text = endChatFont.render(splitByString[index],2,BLACK)
             text_rect = text.get_rect(topleft=(390,280+FONT_SIZE*index+10))
-            # pygame.draw.rect(self.screen, RED, text_rect, 2)
             self.screen.blit(text,text_rect)
       
     
@@ -1282,41 +966,12 @@ class Dialog:
         authorLogo = endChatFont.render("designed by Kyungtae Han",6,WHITE)
         authorLogo_rect = authorLogo.get_rect(center = (845,220)) # 235+280+13+15
         self.screen.blit(authorLogo,authorLogo_rect)
-        #print(DIALOG_X,"    " ,DIALOG_HEIGHT)
-        
-        # endChatButton = self.drawEndChatButton(screen, 120,50, True)
-        # print(endChatButton)
-        
-        
-        ### Dialog box
-        # pygame.display.get_surface().blit(self.surf, self.rect)
-        # pygame.draw.rect(self.surf, "white", pygame.Rect(0, 0, 1000, 250), 4)
-        ###
-
-        ### Text
-        # y = 25
-        # lines = self.text.split("\n")
-        # for line in lines:
-        #     for i in range(len(line)):
-        #         pygame.time.delay(35)
-        #         font_surf = self.font.render(line[0:i+1], False, "white")
-        #         font_rect = font_surf.get_rect(topleft = (25, y))
-        #         self.surf.blit(font_surf, font_rect)
-        #         pygame.display.update()
-        #     y += 50
+       
 
 
     
 ########################################################## Object End ############################################################
 
-#####
-# def exitButton(screen):
-#     # Exit
-#     exitButton = pygame.image.load("ibm_blockchain/assets/exitPygameIcon.png")
-#     exitButton = pygame.transform.scale(exitButton,(50,50))
-#     exitButtonRect = exitButton.get_rect(topleft=(30, 30))
-#     pygame.draw.rect(screen, RED, exitButtonRect,4) 
-#     screen.blit(exitButton, exitButtonRect)
 
 def gravityCheck(singleObj,multiObj):
     return pygame.sprite.spritecollide(singleObj,multiObj,False)
@@ -1338,8 +993,7 @@ def unknownQuizNPC(screen, events, keyPress, npcFilePath,npcRect,playerRect):
         global QUIZ_INDEX 
         
         global IS_QUIZNPC_PLAYED, quizNPCDialogVoice 
-        # global MINI_PLAYER_X
-        # print("BEFORE COMING IN ", TOWN_NPC_DIALOG_INDEX)
+        
         
         if npcRect.colliderect(playerRect) and keyPress[K_SPACE]:
            
@@ -1353,9 +1007,7 @@ def unknownQuizNPC(screen, events, keyPress, npcFilePath,npcRect,playerRect):
                 IS_QUIZNPC_PLAYED[QUIZ_NPC_DIALOG_INDEX] = False 
                 quizNPCDialogVoice[QUIZ_NPC_DIALOG_INDEX].set_volume(1.4)
                 quizNPCDialogVoice[QUIZ_NPC_DIALOG_INDEX].play() 
-            # portal_sound.play()
-            # PLAYER_X -= 1 
-            # PLAYER_Y -= 1
+           
             filePath = npcFilePath
             
             dialog1 = "I am Quiz NPC of IBM BlockChain World. Who are you there? "
@@ -1387,7 +1039,6 @@ def unknownQuizNPC(screen, events, keyPress, npcFilePath,npcRect,playerRect):
         
             for event in events:
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                            
                                 if endChatRect is not None and endChatRect.collidepoint(pygame.mouse.get_pos()):
                                     quizNPCDialogVoice[QUIZ_NPC_DIALOG_INDEX].stop() 
                                     QUIZ_NPC_DIALOG_INDEX = 0
@@ -1410,18 +1061,13 @@ def unknownQuizNPC(screen, events, keyPress, npcFilePath,npcRect,playerRect):
                                      
                                     
                                 if yesChatRect is not None and yesChatRect.collidepoint(pygame.mouse.get_pos()):
-                                    #  MINI_PLAYER_X, MINI_PLAYER_Y = 0 ,630
                                     quizNPCDialogVoice[QUIZ_NPC_DIALOG_INDEX].stop()
-                                    
                                     IS_QUIZ_STARTED = True
                                     IS_SPACEBAR_PRESSED_0 = False 
                                     QUIZ_INDEX = 0
-                                    #print(IS_QUIZ_STARTED)
-                                     
                                     
                                 if  noChatRect is not None and noChatRect.collidepoint(pygame.mouse.get_pos()):  
                                      quizNPCDialogVoice[QUIZ_NPC_DIALOG_INDEX].stop()
-                                    #  MINI_PLAYER_X -=10
                                      QUIZ_NPC_DIALOG_INDEX = 0  
                                      IS_SPACEBAR_PRESSED_0 = False 
         else:    
@@ -1452,7 +1098,7 @@ class SceneStack:
 
 
 
-USER_ID = 1
+USER_ID = 10
 
 PLAYER_X = 512
 PLAYER_Y = 700        
@@ -1478,13 +1124,6 @@ automaticRespawn_bgm = pygame.mixer.Sound("assets/miniplatform/winterTile/sound/
 class HomeNode(SceneStack):
     def __init__(self):
         SceneStack.__init__(self)
-        # self.character =  pygame.image.load("ibm_blockchain/assets/ship.png")
-        # self.character = pygame.transform.scale( self.character, (40,40) )
-        #path = "ibm_blockchain/assets/ship.png"
-        # global PLAYER_X 
-        # global PLAYER_Y
-        # print(PLAYER_X, PLAYER_Y,"in HomeNode")
-        # self.player = Player("Kevin", PLAYER_X, PLAYER_Y, 50, 50, path)
         pygame.mixer.init() 
         pygame.mixer.music.load("assets/background/music/mapleSheffield.mp3") 
         pygame.mixer.music.set_volume(0.4)
@@ -1493,20 +1132,17 @@ class HomeNode(SceneStack):
         global WELCOME_VOICE 
         WELCOME_VOICE.play()
         
-        x,y = 200,400
-        VELOCITY = 8
         
     def ProcessInput(self, events, keyPress):
         self.events = events
         self.keyPress = keyPress
-        # print("Hello WOrld")
+       
         global PLAYER_X 
         global PLAYER_Y 
         global IS_LEADERBOARD_OPEN, IS_STATS_OPEN, IS_ACHIEVEMENT_OPEN
-        # self.player.processInput(PLAYER_X,PLAYER_Y,events,pressed_keys)
         global OPEN_STATS_VOICE, OPEN_LEADERBOARD_VOICE, CLOSE_STATS_VOICE, CLOSE_LEADERBOARD_VOICE, OPEN_ACHIEVEMENT_VOICE, CLOSE_ACHIEVEMENT_VOICE
         
-        # self.character.processInput(events, pressed_keys)
+       
         for event in events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                 # Move to the next scene when the user pressed Enter
@@ -1531,30 +1167,14 @@ class HomeNode(SceneStack):
                 if not IS_ACHIEVEMENT_OPEN:
                     IS_ACHIEVEMENT_OPEN = True   
                     OPEN_ACHIEVEMENT_VOICE.play()
-                    #OPEN_STATS_VOICE.play()
+                   
                 else: 
                     IS_ACHIEVEMENT_OPEN = False 
                     CLOSE_ACHIEVEMENT_VOICE.play()   
-                    #CLOSE_STATS_VOICE.play()     
+                   
                 
         VELOCITY = 10
-        # for event in events:
-        #     if event.type == pygame.KEYDOWN :
-        #         if event.key == pygame.K_LEFT:
-        #            print(PLAYER_X,PLAYER_Y,"in HomeNode ProcessInput")
-        #            PLAYER_X -= velocity
-        #         if event.key == pygame.K_RIGHT:
-        #             print(PLAYER_X,PLAYER_Y,"in HomeNode ProcessInput")
-        #             PLAYER_X += velocity
-        #         if event.key == pygame.K_UP:
-        #             print(PLAYER_X,PLAYER_Y,"in HomeNode ProcessInput")
-        #             PLAYER_Y -= velocity
-        #         if event.key == pygame.K_DOWN:   
-        #             print(PLAYER_X,PLAYER_Y,"in HomeNode ProcessInput")
-        #             PLAYER_Y += velocity 
-        
-        
-        
+      
        # Changing the coordinates of the player
         if keyPress[K_LEFT]:
             PLAYER_X -= VELOCITY
@@ -1564,87 +1184,13 @@ class HomeNode(SceneStack):
             PLAYER_Y -= VELOCITY
         if keyPress[K_DOWN]:
             PLAYER_Y += VELOCITY  
-        
-    
-        # print(PLAYER_X, PLAYER_Y)
-        
-        
+         
     def Update(self):
         pass
     
     def Render(self, screen):
-        
-        # global PLAYER_X 
-        # global PLAYER_Y
-        # leftTreesRect = pygame.Rect(5,100,395,395)
-        # pygame.draw.rect(screen, RED, leftTreesRect, 4)
-        
-        # rightTreesRect = pygame.Rect(620,102,400,400)
-        # pygame.draw.rect(screen, RED, rightTreesRect, 4)
-        
-        # leftRiverRect = pygame.Rect(0,600,450,200)
-        # pygame.draw.rect(screen,RED,leftRiverRect,4)
-        
-        # rightRiverRect = pygame.Rect(600,600,450,200)
-        # pygame.draw.rect(screen,RED,rightRiverRect,4)
-        
-        # leftStatueRect = pygame.Rect(340,508,110,90)
-        # pygame.draw.rect(screen,RED,leftStatueRect,4)
-        
-        # rightStatueRect = pygame.Rect(600,508,110,90)
-        # pygame.draw.rect(screen,RED,rightStatueRect,4)
-    
-    
-        # if playerRect.colliderect(leftTreesRect) or playerRect.colliderect(rightTreesRect):
-        #     PLAYER_X =  512 
-        #     PLAYER_Y = 500
-            
-        # if playerRect.colliderect(leftRiverRect) or playerRect.colliderect(rightRiverRect):  
-        #     PLAYER_X =  512 
-        #     PLAYER_Y = 700  
-            
-        # if playerRect.colliderect(leftStatueRect) or  playerRect.colliderect(rightStatueRect) : 
-        #     PLAYER_X = 512
-        #     PLAYER_Y = 508  
-       
+          
         resetSurface(screen)
-        # path = "ibm_blockchain/assets/character/down/down1.png"
-        # player = Player("Kevin", PLAYER_X, PLAYER_Y, 50, 50, path)
-        # player.drawCharacter(screen)
-        
-        # global PLAYER_X 
-        # global PLAYER_Y
-        # leftTreesRect = pygame.Rect(5,100,395,395)
-        # pygame.draw.rect(screen, RED, leftTreesRect, 4)
-        
-        # rightTreesRect = pygame.Rect(620,102,400,400)
-        # pygame.draw.rect(screen, RED, rightTreesRect, 4)
-        
-        # leftRiverRect = pygame.Rect(0,600,450,200)
-        # pygame.draw.rect(screen,RED,leftRiverRect,4)
-        
-        # rightRiverRect = pygame.Rect(600,600,450,200)
-        # pygame.draw.rect(screen,RED,rightRiverRect,4)
-        
-        # leftStatueRect = pygame.Rect(340,508,110,90)
-        # pygame.draw.rect(screen,RED,leftStatueRect,4)
-        
-        # rightStatueRect = pygame.Rect(600,508,110,90)
-        # pygame.draw.rect(screen,RED,rightStatueRect,4)
-    
-    
-        # if playerRect.colliderect(leftTreesRect) or playerRect.colliderect(rightTreesRect):
-        #     PLAYER_X =  512 
-        #     PLAYER_Y = 500
-            
-        # if playerRect.colliderect(leftRiverRect) or playerRect.colliderect(rightRiverRect):  
-        #     PLAYER_X =  512 
-        #     PLAYER_Y = 700  
-            
-        # if playerRect.colliderect(leftStatueRect) or  playerRect.colliderect(rightStatueRect) : 
-        #     PLAYER_X = 512
-        #     PLAYER_Y = 508  
-        
          
         # Field 
         field = pygame.image.load("assets/background/field.png")
@@ -1667,7 +1213,6 @@ class HomeNode(SceneStack):
             screen.blit(river,(i,600))
             rect = river.get_rect()
             rect.center = i+50,600+50
-            #pygame.draw.rect(screen, GREEN, rect,4)
             screen.blit(river,(i,700))
             i+=STEP
         
@@ -1698,7 +1243,6 @@ class HomeNode(SceneStack):
             
             rect = tree.get_rect()
             rect.center = i+50,600+50 
-            #pygame.draw.rect(screen, RED, rect,4)
             i+=STEP
         
         global LIGHT_GREEN, ANSWER_FONT 
@@ -1712,9 +1256,6 @@ class HomeNode(SceneStack):
         screen.blit(answer1,(452, 262))
             
         #NPC    
-        # npcDesk = pygame.image.load("ibm_blockchain/assets/npcDesk.png")
-        # npcDesk = pygame.transform.scale(npcDesk,(235,100))
-        # screen.blit(npcDesk,(400,200))
         FONT_DIRECTORY = "assets/font/Satisfy-Regular.ttf"
         GAME_FONT = pygame.font.Font(FONT_DIRECTORY, 20)
         authorSignature = GAME_FONT.render('Kyungtae Han', True, WHITE)
@@ -1727,7 +1268,6 @@ class HomeNode(SceneStack):
         
         # Character
         global PLAYER_X, PLAYER_Y
-        # screen.blit(self.character,(200,400))
         path = "assets/character/down/down1.png"
         player = Player("Kevin", PLAYER_X, PLAYER_Y, 50, 50, path)
         player.drawCharacter(screen)
@@ -1776,45 +1316,57 @@ class HomeNode(SceneStack):
         
         pygame.mixer.init() 
         portal_sound = pygame.mixer.Sound("assets/background/music/effect/maplestory_portal.mp3") 
-        
         hover_sound = pygame.mixer.Sound("assets/background/music/effect/CLICK_009.wav")
-        # emmaNPCIntroVoice = pygame.mixer.Sound("ibm_blockchain/assets/npc/npcVoice/emma/emmaIntroVoice.wav")
-        
-        
-        
+       
         count = 0 
         
         global TOWN_NPC_DIALOG_INDEX
         global IS_SPACEBAR_PRESSED_1, IS_EMMAVOICE_PLAYED
         
-        # if easyNPCRect.colliderect(playerRect) and self.keyPress[K_SPACE]:
-        #     IS_SPACEBAR_PRESSED = True
-        # if easyNPCRect.colliderect(playerRect):
-        #     IS_EMMAVOICE_PLAYED = True 
-            
-        # else:
-        #     IS_EMMAVOICE_PLAYED = False 
         global emmaNPCDialogVoice   
         if easyNPCRect.colliderect(playerRect) and self.keyPress[K_SPACE]:
             IS_SPACEBAR_PRESSED_1 = True    
         
-        # print("BEFORE COMING IN ", TOWN_NPC_DIALOG_INDEX)
+       
         if easyNPCRect.colliderect(playerRect) and IS_SPACEBAR_PRESSED_1 is True and TOWN_NPC_DIALOG_INDEX>=0:
             if IS_EMMAVOICE_PLAYED[TOWN_NPC_DIALOG_INDEX] : 
                 IS_EMMAVOICE_PLAYED[TOWN_NPC_DIALOG_INDEX] = False 
                 emmaNPCDialogVoice[TOWN_NPC_DIALOG_INDEX].play()
                 
-            # portal_sound.play()
-            # PLAYER_X -= 1 
-            # PLAYER_Y -= 1
             filePath = "assets/npc/jay.png"
             
-            dialog1 = "Hey there, are you busy right now? I am Dr. Emma Norling from University of Sheffield. I have something to talk with you."
-            dialog2 = """Again, I'm Emma Norling, Senior University teacher. I obtained BEng (Hons) from the University of Melbourne, worked as a tutor and lecturer in the Department of Computer Science at this institution, moving on to complete my PhD in Computer Science here. I undertook postdoctoral studies in the Centre for Policy Modelling (Manchester Metropolitan University), before moving into a lecturing position in the School of Mathematics, Computing and Digital Technology there."""
-            dialog3 = "Please look at my Google Scholar Page to get to know me. Here is the link: https://scholar.google.com/citations?user=J3qy6zUAAAAJ&hl=en . My email is : e.j.norling@sheffield.ac.uk . My office is Department of Computer Science, Regent Court (DCS), 211 Portobello, Sheffield, S1 4DP, Sheffield, United Kingdom.   "
-            dialog4 = "We are currently working with IBM on AI, especially cooperating with AI Group Project. The University of Sheffield is planning to reach top 1-tier list as Stanford, MIT, and Harvard. "
-            dialog5 = "Do you wanna go our initial model IBM BlockChain Minigame? This reflects my research interests centred around agent-based systems, particularly agent-based modelling of human behaviour, from cognitive modelling to social simulation! Oh!, it might be incorporated into computational models, both in the context of improving models of human behaviour, and also in designing better computational and robotic interfaces. (Automatically send you to IBM BlockChain Arcade Zone!)"
-            exitDialog = "It is said that you are not interested in our research with IBM. Talk to you later. (Emma is keeping push you behind.)"
+            dialog1_txt = open('assets/npc/npcVoice/emma/emmaDialog/emmaDialog1.txt','r')
+            dialog1 = dialog1_txt.read()
+            dialog1_txt.close()
+            
+            dialog2_txt = open('assets/npc/npcVoice/emma/emmaDialog/emmaDialog2.txt','r')
+            dialog2 = dialog2_txt.read()
+            dialog2_txt.close()
+            
+            dialog3_txt = open('assets/npc/npcVoice/emma/emmaDialog/emmaDialog3.txt','r')
+            dialog3 = dialog3_txt.read()
+            dialog3_txt.close()
+            
+            dialog4_txt = open('assets/npc/npcVoice/emma/emmaDialog/emmaDialog4.txt','r')
+            dialog4 = dialog4_txt.read()
+            dialog4_txt.close()
+            
+            dialog5_txt = open('assets/npc/npcVoice/emma/emmaDialog/emmaDialog5.txt','r')
+            dialog5 = dialog5_txt.read()
+            dialog5_txt.close()
+            
+            
+            if len(dialog1) > 590: 
+                raise Exception("emmaDialog1 exceeded 590 characters.", len(dialog1))
+            if len(dialog2) > 590: 
+                raise Exception("emmaDialog2 exceeded 590 characters.", len(dialog2))
+            if len(dialog3) > 590: 
+                raise Exception("emmaDialog3 exceeded 590 characters.", len(dialog3))
+            if len(dialog4) > 590: 
+                raise Exception("emmaDialog4 exceeded 590 characters.", len(dialog4))
+            if len(dialog5) > 590: 
+                raise Exception("emmaDialog5 exceeded 590 characters.", len(dialog5))
+            
             
             dialogStack = [Dialog(screen, filePath, "Dr.Emma Norling", dialog1, True, False, True, False, False),
                            Dialog(screen, filePath, "Dr.Emma Norling", dialog2, True, True, True, False, False),
@@ -1840,66 +1392,50 @@ class HomeNode(SceneStack):
                                 emmaNPCDialogVoice[TOWN_NPC_DIALOG_INDEX].stop()
                                 TOWN_NPC_DIALOG_INDEX= 0
                                 IS_SPACEBAR_PRESSED_1 = False  
-                                 
-                                #print(TOWN_NPC_DIALOG_INDEX)
                                 hover_sound.play()
                                
                             if nextChatRect is not None and nextChatRect.collidepoint(pygame.mouse.get_pos()):
-                                #print("nextChatRect")
                                 hover_sound.play()
                                 emmaNPCDialogVoice[TOWN_NPC_DIALOG_INDEX].stop()
                                 IS_EMMAVOICE_PLAYED[TOWN_NPC_DIALOG_INDEX+1] = True 
                                 TOWN_NPC_DIALOG_INDEX +=1 
-                                #print(TOWN_NPC_DIALOG_INDEX)
+                               
                             if prevChatRect is not None and prevChatRect.collidepoint(pygame.mouse.get_pos()):
-                                #print("prevChatRect")
                                 emmaNPCDialogVoice[TOWN_NPC_DIALOG_INDEX].stop()
                                 IS_EMMAVOICE_PLAYED[TOWN_NPC_DIALOG_INDEX-1] = True 
                                 hover_sound.play()
                                 TOWN_NPC_DIALOG_INDEX -=1
-                                #print(TOWN_NPC_DIALOG_INDEX)
+                               
                                 
                             if yesChatRect is not None and yesChatRect.collidepoint(pygame.mouse.get_pos()):
-                                #print("yesChatRect")
                                 emmaNPCDialogVoice[TOWN_NPC_DIALOG_INDEX].stop()
                                 hover_sound.play()
-                                #print(TOWN_NPC_DIALOG_INDEX)
                                 portal_sound.play()
                                 IS_SPACEBAR_PRESSED_1 = False 
                                 self.push(GameIntroNode())
-                            if  noChatRect is not None and noChatRect.collidepoint(pygame.mouse.get_pos()):  
-                                #print("nochatrect")
-                               
-                                emmaNPCDialogVoice[TOWN_NPC_DIALOG_INDEX].stop()
-                                hover_sound.play()
-                                #print(TOWN_NPC_DIALOG_INDEX)
                                 
+                            if  noChatRect is not None and noChatRect.collidepoint(pygame.mouse.get_pos()):  
+                                emmaNPCDialogVoice[TOWN_NPC_DIALOG_INDEX].stop()
+                                hover_sound.play() 
                                 TOWN_NPC_DIALOG_INDEX= 0
                                 IS_SPACEBAR_PRESSED_1 = False  
                         
-                    
-            
-            
-            # self.pop()
-            # self.push(GameIntroNode())
         else:    
             count+=1
-            
             TOWN_NPC_DIALOG_INDEX = 0
             IS_SPACEBAR_PRESSED_1 = False
             IS_EMMAVOICE_PLAYED[TOWN_NPC_DIALOG_INDEX] = True 
             emmaNPCDialogVoice[TOWN_NPC_DIALOG_INDEX].stop()
-            # IS_SPACEBAR_PRESSED = False           
+           
             
         global USER_ID     
+        
         global IS_LEADERBOARD_OPEN    
-       
         if IS_LEADERBOARD_OPEN : 
             LeaderBoard(screen).render()
         else: 
             pass
-        #Stats(screen).render(3)
-        
+       
         
         global IS_STATS_OPEN
         if IS_STATS_OPEN : 
@@ -1913,52 +1449,7 @@ class HomeNode(SceneStack):
         else: 
             pass
         
-        # boundaryColor = (147,184,30)
-        
-        # leftTreesRect = pygame.Rect(5,100,395,395)
-        # pygame.draw.rect(screen, boundaryColor , leftTreesRect, 1)
-        
-        # rightTreesRect = pygame.Rect(620,102,400,400)
-        # pygame.draw.rect(screen, boundaryColor , rightTreesRect, 1)
-        
-        # leftRiverRect = pygame.Rect(0,600,450,200)
-        # pygame.draw.rect(screen,boundaryColor ,leftRiverRect,1)
-        
-        # rightRiverRect = pygame.Rect(600,600,450,200)
-        # pygame.draw.rect(screen,boundaryColor ,rightRiverRect,1)
-        
-        # leftStatueRect = pygame.Rect(340,508,110,90)
-        # pygame.draw.rect(screen,boundaryColor ,leftStatueRect,1)
-        
-        # rightStatueRect = pygame.Rect(600,508,110,90)
-        # pygame.draw.rect(screen,boundaryColor ,rightStatueRect,1)
-    
-    
-        # if playerRect.colliderect(leftTreesRect) or playerRect.colliderect(rightTreesRect):
-        #     PLAYER_X =  512 
-        #     PLAYER_Y = 500
-            
-        # if playerRect.colliderect(leftRiverRect) or playerRect.colliderect(rightRiverRect):  
-        #     PLAYER_X =  512 
-        #     PLAYER_Y = 700  
-            
-        # if playerRect.colliderect(leftStatueRect) or  playerRect.colliderect(rightStatueRect) : 
-        #     PLAYER_X = 512
-        #     PLAYER_Y = 508   
-    
-        # global LIGHT_GREEN, ANSWER_FONT 
-        # pygame.draw.rect(screen, (51,51,51), pygame.Rect(432, 247, 180, 43), border_radius = 10 )
-        
-        # LIGHT_GREEN = (234,230,70)
-        # FONT_DIRECTORY = "ibm_blockchain/assets/font/PressStart2P.ttf"
-        # ANSWER_FONT = pygame.font.Font(FONT_DIRECTORY, 10)
-        # answer1_content = "Dr.Emma Norling"
-        # answer1 =  ANSWER_FONT.render(answer1_content, True, LIGHT_GREEN)
-        # screen.blit(answer1,(452, 262))
-        
-        #print(pygame.mouse.get_pos())
-        
-        # self.player.drawCharacter(screen)   
+       
         
 EASY_WELCOME_VOICE = pygame.mixer.Sound("assets/npc/npcVoice/matthew/easyWelcome.wav")
 MEDIUM_WELCOME_VOICE = pygame.mixer.Sound("assets/npc/npcVoice/roger/mediumWelcome.wav")
@@ -1967,8 +1458,6 @@ class GameIntroNode(SceneStack):
     def __init__(self):
         global WIDTH, HEIGHT
         SceneStack.__init__(self)
-        #self.character =  pygame.image.load("ibm_blockchain/assets/ship.png")
-        #self.character = pygame.transform.scale( self.character, (40,40) )
         
         pygame.mixer.init() 
         pygame.mixer.music.load("assets/background/music/gameOverWin.mp3") 
@@ -2049,30 +1538,25 @@ class GameIntroNode(SceneStack):
                 if not IS_ACHIEVEMENT_OPEN:
                     IS_ACHIEVEMENT_OPEN = True  
                     OPEN_ACHIEVEMENT_VOICE.play()
-                    #OPEN_STATS_VOICE.play()
+                   
                 else: 
                     IS_ACHIEVEMENT_OPEN = False 
                     CLOSE_ACHIEVEMENT_VOICE.play()   
-                    #CLOSE_STATS_VOICE.play()     
+                      
                 
-                # # Return Home 
-                # if (60<=mouse_x<=100) and (60 <= mouse_y <= 100):
-                #     self.push(GameIntroNode())    
-                #     print(" Home clicked")
+              
                 
                     
         mouse_x, mouse_y = pygame.mouse.get_pos()
         pygame.mixer.init() 
-        #hover_sound = pygame.mixer.Sound("ibm_blockchain/assets/MaplestoryMouseHover.wav") 
+        
         if (415 <= mouse_x <= 601) and (346 <= mouse_y <= 419) :
             print("Easy Hovered")    
-            #hover_sound.play(0)
         if (418 <= mouse_x <= 598) and (450 <= mouse_y <= 514) : 
             print ("Medium Hovered")
-            #hover_sound.play(0)
         if (418 <= mouse_x <= 595) and (548 <= mouse_y <= 617) :
             print("hard Hovered")    
-            #hover_sound.play(0)
+            
             
     
     def Update(self):
@@ -2089,25 +1573,7 @@ class GameIntroNode(SceneStack):
         gameBackground = pygame.image.load("assets/background/minigameBackground.png")
         gameBackground = pygame.transform.scale(gameBackground,(1024,800))
         screen.blit(gameBackground,(0,0))
-        
-        
-        
-
-        # # Field 
-        # field = pygame.image.load("ibm_blockchain/assets/field.png")
-        # field = pygame.transform.scale( field, (1024,800) )
-        # screen.blit(field,(0,0))
-        # ScoreBoard 
-        
-        
-        # global SCORE
-        # text = GAME_FONT.render(f'Score: {SCORE}', True, GREEN, BLUE)
-        # textRect = text.get_rect()
-        # textRect.center = (150,20)
-        
-        #SCORE += SCORE_INCREMENT
-        # screen.blit(text, textRect)
-        
+                
         GAME_FONT2 = pygame.font.Font(FONT_DIRECTORY, 42)
         text = GAME_FONT2.render('IBM BLOCKCHAIN MINIGAME', True, GREEN, BLUE)
         textRect = text.get_rect()
@@ -2117,18 +1583,10 @@ class GameIntroNode(SceneStack):
         text2 = GAME_FONT3.render('PLEASE SELECT THE MODE TO CONTINUE...', True, GREEN, BLUE)
         textRect2 = text2.get_rect()
         textRect2.center = (WIDTH // 2 - 20  , HEIGHT // 4 + 100)
-
-        # text3 = GAME_FONT3.render('Press [Y] to continue', True, WHITE, BLACK)
-        # textRect3 = text3.get_rect()
-        # textRect3.center = (WIDTH // 2 -20  , HEIGHT // 4 + 200)
         
         screen.blit(text, textRect)   
         screen.blit(text2, textRect2)   
-        # screen.blit(text3, textRect3) 
-        
-        # ball1 = Ball(512, 400, 20, screen)
-        # ball1.render()
-        
+       
         
         midWidth, midHeight = WIDTH/2, HEIGHT/2 
         global BLACK,WHITE
@@ -2143,7 +1601,7 @@ class GameIntroNode(SceneStack):
         button1 = pygame.transform.scale(button1,(200,200))
         button1_rect = button1.get_rect(center=(midWidth, midHeight))
         screen.blit(button1,button1_rect)
-        # pygame.draw.rect(screen, BLUE, button1_rect,4) 
+       
         #EasyText
         button1_text = GAME_FONT3.render('EASY', True, BLACK, WHITE)
         button1_textRect = button1_text.get_rect(center=(midWidth, midHeight-25))
@@ -2154,7 +1612,7 @@ class GameIntroNode(SceneStack):
         button2 = pygame.transform.scale(button2,(200,200))
         button2_rect = button2.get_rect(center=(midWidth, midHeight+100))
         screen.blit(button2,button2_rect)
-        # pygame.draw.rect(screen, RED, button2_rect,4) 
+       
         #Medium Text
         button2_text = GAME_FONT3.render('MEDIUM', True, BLACK, WHITE)
         button2_textRect = button2_text.get_rect(center=(midWidth, midHeight+100-25))
@@ -2170,21 +1628,12 @@ class GameIntroNode(SceneStack):
         button3_textRect = button1_text.get_rect(center=(midWidth, midHeight+100*2-25))
         screen.blit(button3_text, button3_textRect)
 
-
-
-        # #Exit
-        # exitButton = pygame.image.load("ibm_blockchain/assets/exitPygameIcon.png")
-        # exitButton = pygame.transform.scale(exitButton,(40,40))
-        # exitButtonRect = exitButton.get_rect(topleft=(20, 20))
-        # pygame.draw.rect(screen, RED, exitButtonRect,4) 
-        # screen.blit(exitButton, exitButtonRect)
         
         #Refresh 
         refreshButtonPath = "assets/button/homeIcon.png"
         refreshButton = pygame.image.load(refreshButtonPath)
         refreshButton = pygame.transform.scale(refreshButton,(40,40))
         refreshButtonRect = refreshButton.get_rect(topleft=(20, 20))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
         screen.blit(refreshButton, refreshButtonRect)
         
         # University Logo 
@@ -2192,7 +1641,6 @@ class GameIntroNode(SceneStack):
         uniLogo = pygame.image.load(uniLogoPath)
         uniLogo = pygame.transform.scale(uniLogo,(300,80))
         uniLogoRect= uniLogo.get_rect(topleft=(200, 650))
-        # pygame.draw.rect(screen, RED, uniLogoRect,4) 
         screen.blit(uniLogo, uniLogoRect)
         
         # University Logo 
@@ -2200,19 +1648,16 @@ class GameIntroNode(SceneStack):
         ibmLogo = pygame.image.load(ibmLogoPath)
         ibmLogo = pygame.transform.scale(ibmLogo,(300,80))
         ibmLogoRect= ibmLogo.get_rect(topleft=(550, 650))
-        # pygame.draw.rect(screen, RED, ibmLogoRect,4) 
         screen.blit(ibmLogo, ibmLogoRect)
         
         global USER_ID 
+        
         global IS_LEADERBOARD_OPEN    
-       
         if IS_LEADERBOARD_OPEN : 
             LeaderBoard(screen).render()
         else: 
             pass
-        #Stats(screen).render(3)
-        
-        
+       
         global IS_STATS_OPEN
         if IS_STATS_OPEN : 
             Stats(screen).render(USER_ID)
@@ -2225,12 +1670,6 @@ class GameIntroNode(SceneStack):
         else: 
             pass
         
-        # print(pygame.mouse.get_pos())
-        
-        # Button
-        # screen.blit(self.button1.surface, (midWidth, midHeight))
-        # screen.blit(self.button2.surface, (midWidth, midHeight+40))
-        # screen.blit(self.button3.surface, (midWidth, midHeight+40*2))
         
 BALL_START_X= 512
 BALL_START_Y= 400
@@ -2280,17 +1719,11 @@ MINIGAME_HOME_VOICE = pygame.mixer.Sound("assets/button/voice/returnMinigameHome
 class EasyModeNode(SceneStack):
     def __init__(self):
         SceneStack.__init__(self)
-        #self.character =  pygame.image.load("ibm_blockchain/assets/ship.png")
-        #self.character = pygame.transform.scale( self.character, (40,40) )
         pygame.mixer.init() 
         pygame.mixer.music.load("assets/background/music/Leafre.mp3") 
         pygame.mixer.music.play(-1,0.0)
         pygame.mixer.music.set_volume(0.2)
-        x,y = 200,400
         self.gravity = 1 
-        
-       
-       
         
     def ProcessInput(self, events, keyPress):
        self.keyPress = keyPress
@@ -2362,29 +1795,7 @@ class EasyModeNode(SceneStack):
        if keyPress[K_SPACE] and keyPress[K_LEFT] :
             MINI_PLAYER_Y -= math.sqrt(3*(MINI_PLAYER_X+15)+MINI_PLAYER_Y) 
             MINI_PLAYER_X -= 15     
-    #    if keyPress[K_l] and not IS_LEADERBOARD_OPEN:
-    #        IS_LEADERBOARD_OPEN = True      
-    #    if keyPress[K_l] and IS_LEADERBOARD_OPEN: 
-    #        IS_LEADERBOARD_OPEN = False 
-            
-              
-        
-       
-        
-    #    global EASY_PLAYER_X 
-    #    global EASY_PLAYER_Y
-        
-        
-    #    if keyPress[K_LEFT]:
-    #         EASY_PLAYER_X -= VELOCITY
-    #    if keyPress[K_RIGHT]:
-    #         EASY_PLAYER_X += VELOCITY
-    #    if keyPress[K_UP]:
-    #         EASY_PLAYER_Y -= VELOCITY
-    #    if keyPress[K_DOWN]:
-    #         EASY_PLAYER_Y += VELOCITY   
-                    
-                    
+                   
     def Update(self):
         #pass
         # Ball Coordinate Update
@@ -2395,19 +1806,9 @@ class EasyModeNode(SceneStack):
         BALL_START_X  = (BALL_START_X+VEL_DX)%1024
         BALL_START_Y  = (BALL_START_Y+VEL_DY)%800
    
-    
     def Render(self, screen):
-         # Field 
-        # field = pygame.image.load("ibm_blockchain/assets/field.png")
-        # field = pygame.transform.scale( field, (1024,800) )
-        # screen.blit(field,(0,0))
-        # mixer.init()
-        # mixer.music.load('ibm_blockchain/assets/FloralLife.mp3')
-        # mixer.music.play()
-        
         resetSurface(screen)
         
-         # global WIDTH, HEIGHT
         gameBackground = pygame.image.load("assets/background/minigameBackground.png")
         gameBackground = pygame.transform.scale(gameBackground,(1024,800))
         screen.blit(gameBackground,(0,0))
@@ -2416,33 +1817,11 @@ class EasyModeNode(SceneStack):
         npcTree = pygame.transform.scale(npcTree,(350,350))
         screen.blit(npcTree,(700,270))
         
-       
-        
-        # mini Platform 1 
-        # bottomPlatform = pygame.image.load("ibm_blockchain/assets/bottomPlatform.png")
-        # bottomPlatform = pygame.transform.scale(bottomPlatform,(1024,120))
-        # screen.blit(bottomPlatform,(0,680))
-        
-        # bottomRect = bottomPlatform.get_rect()
-        # bottomRect.center = 0,700  
-        # pygame.draw.rect(screen, GREEN, bottomRect,4)
-        
-        
-        # #Exit
-        # exitButton = pygame.image.load("ibm_blockchain/assets/exitPygameIcon.png")
-        # exitButton = pygame.transform.scale(exitButton,(40,40))
-        # exitButtonRect = exitButton.get_rect(topright=(1024-20, 20))
-        # pygame.draw.rect(screen, RED, exitButtonRect,4) 
-        # screen.blit(exitButton, exitButtonRect)
-        
-        
-        
         #Refresh 
         refreshButtonPath = "assets/button/homeIcon.png"
         refreshButton = pygame.image.load(refreshButtonPath)
         refreshButton = pygame.transform.scale(refreshButton,(40,40))
         refreshButtonRect = refreshButton.get_rect(topright=(1024-20, 20))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
         screen.blit(refreshButton, refreshButtonRect)
         
         #Refresh 
@@ -2450,28 +1829,13 @@ class EasyModeNode(SceneStack):
         returnButton = pygame.image.load(returnButtonPath)
         returnButton = pygame.transform.scale(returnButton,(40,40))
         returnButtonRect = returnButton.get_rect(topright=(1024-20-40, 20))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
         screen.blit(returnButton, returnButtonRect)
         
-        # # LeaderBoard 
-        # leaderBoardButtonPath = "ibm_blockchain/assets/Leaderboard.png"
-        # leaderBoardButton = pygame.image.load(leaderBoardButtonPath)
-        # leaderBoardButton = pygame.transform.scale(leaderBoardButton,(40,40))
-        # leaderBoardButtonRect = leaderBoardButton.get_rect(topright=(1024-20-40-40, 20))
-        # # pygame.draw.rect(screen, RED, leaderBoardButtonRect,4) 
-        # screen.blit(leaderBoardButton, leaderBoardButtonRect) 
-        
-        
-        
-        
+       
         global SCORE
-        # text = GAME_FONT.render(f'Score: {SCORE}', True, GREEN, BLUE)
-        # textRect = text.get_rect()
-        # textRect.center = (100,20)
         scoreBoard = ScoreBoard(screen, SCORE, 10, 10)
         scoreBoard.render()
-        #SCORE += SCORE_INCREMENT
-        #screen.blit(text, textRect)
+       
         
         global BALL_START_X
         global BALL_START_Y
@@ -2485,7 +1849,7 @@ class EasyModeNode(SceneStack):
         bottomPlatform = pygame.sprite.Group()
         miniTile1Path = "assets/miniplatform/tile1.png"
         miniTile2Path = "assets/miniplatform/tile2.png"
-        # miniPlatform = MiniPlatform(platformPath,0,680) 
+         
         
         # Bottom Platform
         for eachTileX in range(0,1048,50):
@@ -2493,14 +1857,12 @@ class EasyModeNode(SceneStack):
             bottomPlatform.add (MiniPlatform(miniTile2Path,eachTileX,730))
             bottomPlatform.add (MiniPlatform(miniTile2Path,eachTileX,780))
             
-            # bottomPlatform.add (MiniPlatform(platformPath,eachTileX,730) )
-            # bottomPlatform.add (MiniPlatform(platformPath,eachTileX,780) )
+          
         
         # MiniPlatform
         for eachTileX in range(250,350,50):
             bottomPlatform.add(MiniPlatform(miniTile1Path,eachTileX,620))
-            # bottomPlatform.add(MiniPlatform(miniTile1Path,300,620))
-            # bottomPlatform.add(MiniPlatform(miniTile1Path,350,620))
+           
         
         ## NPC Upper platform
         for eachTileX in range(650,1024,50):
@@ -2513,7 +1875,6 @@ class EasyModeNode(SceneStack):
         
         # Left Zig-Zag up 
         bottomPlatform.add(MiniPlatform(miniTile1Path,350,420))
-        #bottomPlatform.add(MiniPlatform(miniTile1Path,400,370))
         bottomPlatform.add(MiniPlatform(miniTile1Path,300,370))
         bottomPlatform.add(MiniPlatform(miniTile1Path,250,320))
         bottomPlatform.add(MiniPlatform(miniTile1Path,200,270))
@@ -2527,13 +1888,6 @@ class EasyModeNode(SceneStack):
             bottomPlatform.add(MiniPlatform(miniTile1Path,eachTileX,470))
             
             
-        # bottomPlatform.add(MiniPlatform(miniTile1Path,600,420))
-        # bottomPlatform.add(MiniPlatform(miniTile1Path,650,370))
-        # bottomPlatform.add(MiniPlatform(miniTile1Path,700,320))
-        # bottomPlatform.add(MiniPlatform(miniTile1Path,750,270))
-        # bottomPlatform.add(MiniPlatform(miniTile1Path,800,220))
-        # for eachTileX in range (850,1000,50):
-        #     bottomPlatform.add(MiniPlatform(miniTile1Path,eachTileX,220))
         
         unknownNPCPath = "assets/npc/leftdangerousNPC.png"
         unknownNPC = Npc (screen, "Juliet", 50, 145, 85, 85, unknownNPCPath)
@@ -2546,8 +1900,8 @@ class EasyModeNode(SceneStack):
         magicBlockPath = "assets/miniplatform/tile1.png"
         magicBlock = pygame.image.load(magicBlockPath)
         magicBlockRect = magicBlock.get_rect(topright=(650, 580))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
         screen.blit(magicBlock, magicBlockRect)
+        
         magicBlockPath = "assets/miniplatform/tile2.png"
         magicBlock = pygame.image.load(magicBlockPath)
         magicBlockRect2 = magicBlock.get_rect(topright=(650, 630))
@@ -2565,21 +1919,18 @@ class EasyModeNode(SceneStack):
         global VEL_DX
         global VEL_DY
         SHRIGEN_X  = (SHRIGEN_X+VEL_DX)%1024
-        # SHRIGEN_Y  = (SHRIGEN_Y+VEL_DY)%800
         
         shrigenRect = shrigen.get_rect(topright=(SHRIGEN_X, 390))
         shrigenRect2 = shrigen.get_rect(topright=(SHRIGEN_X, 320))
         shrigenRect3 = shrigen.get_rect(topright=(SHRIGEN_X, 250))
-        #pygame.draw.rect(screen, GREEN, shrigenRect,4)
+       
         screen.blit(shrigen, shrigenRect)
         screen.blit(shrigen, shrigenRect2)
         screen.blit(shrigen, shrigenRect3)
         
         global MINI_PLAYER_X 
         global MINI_PLAYER_Y
-        #MINI_PLAYER_Y -= 47
         
-         
         
         self.playerPath = "assets/character/right/right1 copy.png"
         self.player = MiniPlayer(self.playerPath, MINI_PLAYER_X, MINI_PLAYER_Y)
@@ -2589,25 +1940,15 @@ class EasyModeNode(SceneStack):
             MINI_PLAYER_X -= 10 
         
         if shrigenRect.colliderect(playerRect) or  shrigenRect2.colliderect(playerRect) or  shrigenRect3.colliderect(playerRect):
-            # MINI_PLAYER_X -= 10
             MINI_PLAYER_X +=50
         
         
-        
-        # Gravity Section
-        #playerSprite = pygame.sprite.Group()
-        #playerSprite.add(self.player)
-        
-      
         collidedPlatform = gravityCheck(self.player,bottomPlatform)
-        # print("gravity check = ",len(gravityCheck(self.player,bottomPlatform)))
+        
         
         if len(collidedPlatform) > 0 : 
-               #print("in!")
                MINI_PLAYER_Y = collidedPlatform[0].rect.topleft[1] - 47 
-               #print("IN =  ", collidedPlatform[0].rect)
         else:
-            
             MINI_PLAYER_Y += 9.8 + self.gravity 
             
         
@@ -2620,52 +1961,8 @@ class EasyModeNode(SceneStack):
         authorSignature = sign_font.render('Kyungtae Han', True, BLACK)
         screen.blit(authorSignature, (900, 750))
        
-        
-        
-        
-        
-        #print("going in = ")
-        # player.move(100,200)
-       
-        
-        
-      
-        
-        
-       
-        
-       
-        #print(pygame.mouse.get_pos())
-        
-        # easyNPC =  pygame.image.load("ibm_blockchain/assets/easynpc1.png")
-        # easyNPC = pygame.transform.scale( easyNPC, (100,100) )
-        # screen.blit(easyNPC,(850,600))  
-        # path = "ibm_blockchain/assets/easynpc1.png"
-        # easyNPC = Npc (screen, "Kelly",850, 600, 100, 100, path)
-        # easyNPC.render()
-        
-        # # global WIDTH, HEIGHT
-        # gameBackground = pygame.image.load("ibm_blockchain/assets/minigameBackground.png")
-        # gameBackground = pygame.transform.scale(gameBackground,(1024,800))
-        # screen.blit(gameBackground,(0,0))
-        
-        # # mini Platform 1 
-        # bottomPlatform = pygame.image.load("ibm_blockchain/assets/bottomPlatform.png")
-        # bottomPlatform = pygame.transform.scale(bottomPlatform,(1024,120))
-        # screen.blit(bottomPlatform,(0,680))
-        
-        # bottomRect = bottomPlatform.get_rect()
-        # bottomRect.center = 0,700  
-        # pygame.draw.rect(screen, GREEN, bottomRect,4)
-        
-        
-        # global WIDTH
-        # i = 0 
-        # while (i<WIDTH):
-        #    screen.blit(bottomCaveTile,(i,680)) 
-        #    screen.blit(bottomCaveTile,(i,700)) 
-        #    i+=90
            
+         
         matthewNPCPath = "assets/npc/matthewEllis.png"
         easyNPC = Npc (screen, "Dr. Matthew Ellis", 720, 485, 100, 100, matthewNPCPath)
         easyNPC.render()
@@ -2705,7 +2002,7 @@ class EasyModeNode(SceneStack):
                 IS_QUIZ_STARTED = False 
                 SCORE = 0
                 pass
-                # print("Dialogue")
+                
                 
             else:
                 quizStack[QUIZ_INDEX].render()
@@ -2750,7 +2047,6 @@ class EasyModeNode(SceneStack):
         
         
         miniPlayerRect = self.player.getMiniPlayerRect()
-        pygame.draw.rect(screen, RED, miniPlayerRect,4) 
         miniNPCRect = easyNPC.getNpcRect()
         
         
@@ -2759,28 +2055,17 @@ class EasyModeNode(SceneStack):
         
         hover_sound = pygame.mixer.Sound("assets/background/music/effect/CLICK_009.wav")
         
-        
-        
         global EASYMODE_NPC_INDEX, IS_SPACEBAR_PRESSED_2, IS_MATTHEWVOICE_PLAYED_STACK, matthewNPCDialogVoice  
         
-        # for event in self.events:
-        #     if miniNPCRect.colliderect(playerRect) and event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-        #         IS_SPACEBAR_PRESSED = True
         if miniNPCRect.colliderect(playerRect) and self.keyPress[K_SPACE]:
             IS_SPACEBAR_PRESSED_2 = True         
-        
-        # global MINI_PLAYER_X
-        # print("BEFORE COMING IN ", TOWN_NPC_DIALOG_INDEX)
+       
         if miniNPCRect.colliderect(miniPlayerRect) and IS_SPACEBAR_PRESSED_2 is True  and EASYMODE_NPC_INDEX>=0 :
-         
-         
             if IS_MATTHEWVOICE_PLAYED_STACK[EASYMODE_NPC_INDEX] : 
                 IS_MATTHEWVOICE_PLAYED_STACK[EASYMODE_NPC_INDEX] = False 
                 matthewNPCDialogVoice[EASYMODE_NPC_INDEX].play() 
                 matthewNPCDialogVoice[EASYMODE_NPC_INDEX].set_volume(1.0)
-            # portal_sound.play()
-            # PLAYER_X -= 1 
-            # PLAYER_Y -= 1
+            
             filePath = matthewNPCPath
             
             dialog1_txt = open('assets/npc/npcVoice/matthew/matthewDialog/matthewDialog1.txt','r')
@@ -2816,21 +2101,11 @@ class EasyModeNode(SceneStack):
                 raise Exception("theKingDialog5 exceeded 590 characters.", len(dialog5))
             
             
-            
-            
-            # dialog1 = "Hey there, have you come here from Dr. Emma Norling? Congratulations! You finally have reached here and completed the game! "
-            # dialog2 = """I'm Matthew Ellis, the lecturer in Machine Learning and  and member of the Machine Learning Group at the Department of Computer Science. I graduated with a MPhys in Theoretical Physics from the University of York in 2011, before staying at York to undertake a PhD in Physics under Prof. Roy Chantrell."""
-            # dialog3 = "After completing my PhD in 2015, I joined the group of Prof. Stefano Sanvito at Trinity College Dublin as a post-doctoral research fellow. In 2019, I joined the University of Sheffield as a post-doctoral research associate in the Bio-Inpsired Machine Learning group under Prof. Eleni Vasilaki developing machine learning models for neuromorphic computing in collaboration with the Department of Materials Science.   "
-            # dialog4 = "We are currently working with IBM on Watson Text-To-Speech, especially cooperating with AI Group Project. The University of Sheffield is planning to reach top 1-tier list as Stanford, MIT, and Harvard. "
-            # dialog5 = "This is what I've got to talk with you today. Do you want to go back to Dr. Emma Norling? (Automatically takes you to Dr. Emma Norling! If not, you can still leave with above exit button!)"
-            exitDialog = "It is said that you are not interested in our research with IBM. Talk to you later. (Emma is keeping push you behind.)"
-            
             dialogStack = [Dialog(screen, filePath, "Dr.Matthew Ellis", dialog1, True, False, True, False, False),
                            Dialog(screen, filePath, "Dr.Matthew Ellis", dialog2, True, True, True, False, False),
                            Dialog(screen, filePath, "Dr.Matthew Ellis", dialog3, True, True, True, False, False),
                            Dialog(screen, filePath, "Dr.Matthew Ellis", dialog4, True, True, True, False, False),
                            Dialog(screen, filePath, "Dr.Matthew Ellis", dialog5, True, True, False, True, True)
-                           
                         ]
             
             
@@ -2851,109 +2126,49 @@ class EasyModeNode(SceneStack):
                                 matthewNPCDialogVoice[EASYMODE_NPC_INDEX].stop()
                                 EASYMODE_NPC_INDEX= 0  
                                 IS_SPACEBAR_PRESSED_2 = False  
-                                #print(EASYMODE_NPC_INDEX)
                                 hover_sound.play()
                                 
                             if nextChatRect is not None and nextChatRect.collidepoint(pygame.mouse.get_pos()):
-                                #print("nextChatRect")
                                 hover_sound.play()
                                 matthewNPCDialogVoice[EASYMODE_NPC_INDEX].stop()
                                 EASYMODE_NPC_INDEX +=1 
                                 IS_MATTHEWVOICE_PLAYED_STACK[EASYMODE_NPC_INDEX] = True 
-                                #matthewNPCDialogVoice[EASYMODE_NPC_INDEX].stop()
-                                #print(EASYMODE_NPC_INDEX)
+                               
                             if prevChatRect is not None and prevChatRect.collidepoint(pygame.mouse.get_pos()):
-                                #print("prevChatRect")
+                                
                                 hover_sound.play()
                                 matthewNPCDialogVoice[EASYMODE_NPC_INDEX].stop()
                                 EASYMODE_NPC_INDEX -=1
                                 IS_MATTHEWVOICE_PLAYED_STACK[EASYMODE_NPC_INDEX] = True
-                                #print(EASYMODE_NPC_INDEX)
+                               
                                 
                             if yesChatRect is not None and yesChatRect.collidepoint(pygame.mouse.get_pos()):
-                                #print("yesChatRect")
                                 matthewNPCDialogVoice[EASYMODE_NPC_INDEX].stop()
                                 hover_sound.play()
-                                #print(EASYMODE_NPC_INDEX)
                                 portal_sound.play()
                                 MINI_PLAYER_X, MINI_PLAYER_Y = 0 ,630
                                 self.push(HomeNode())
                                 
                             if  noChatRect is not None and noChatRect.collidepoint(pygame.mouse.get_pos()):  
-                                #print("nochatrect")
                                 matthewNPCDialogVoice[EASYMODE_NPC_INDEX].stop()
                                 hover_sound.play()
-                                #print(EASYMODE_NPC_INDEX)
+                                
                                
                                 EASYMODE_NPC_INDEX= 0 
                                 IS_SPACEBAR_PRESSED_2 = False   
                         
-                    
-            
-            
-            # self.pop()
-            # self.push(GameIntroNode())
         else:    
             IS_SPACEBAR_PRESSED_2 = False    
             IS_MATTHEWVOICE_PLAYED_STACK[EASYMODE_NPC_INDEX] = True 
             matthewNPCDialogVoice[EASYMODE_NPC_INDEX].stop()
             EASYMODE_NPC_INDEX = 0
             
-            # IS_SPACEBAR_PRESSED = False         
+                 
         
         unknownNPCRect = unknownNPC.getNpcRect()
         unknownQuizNPC(screen, self.events, self.keyPress,unknownNPCPath ,unknownNPCRect,playerRect)
         
-        # global IS_QUIZ_STARTED,IS_HIGHSCORE_UPDATED
-        
-        # if IS_QUIZ_STARTED:
-            
-        #     quiz1_content = "Q1. There are 4 types of BlockChain networks."
-        #     quiz2_content = "Q2. Mutable records is a key element of BlockChain."
-        #     quiz3_content = "Q3. Consortium networks is a key element of BlockChain."
-        #     quiz = Quiz(screen, 80, 80, quiz1_content,True)
-            
-        #     global QUIZ_INDEX
-            
-        #     quizStack = [Quiz(screen, 80, 80, quiz1_content,True),Quiz(screen, 80, 80, quiz2_content,False),Quiz(screen, 80, 80, quiz3_content,True)]
-        
-        #     if QUIZ_INDEX is len(quizStack):
-        #         if not IS_HIGHSCORE_UPDATED:
-        #             Sqlite().updateHighScore(3,SCORE)
-        #             IS_HIGHSCORE_UPDATED = True 
-        #         IS_QUIZ_STARTED = False 
-        #         SCORE = 0
-        #         pass
-        #         # print("Dialogue")
-                
-        #     else:
-        #         quizStack[QUIZ_INDEX].render()
-        #         for event in self.events: 
-        #             if event.type == pygame.MOUSEBUTTONDOWN :
-        #                 mouse_x, mouse_y = pygame.mouse.get_pos()
-        #                 # Home Exit 
-        #                 if (92<=mouse_x<=525) and (268 <= mouse_y <= 585) : 
-        #                     # self.push(HomeNode()) 
-        #                     print(quiz.checkAnswer(True))
-        #                     if quizStack[QUIZ_INDEX].checkAnswer(True):
-                            
-        #                         SCORE += SCORE_INCREMENT
-        #                         QUIZ_INDEX +=1
-        #                         # quizStack[QUIZ_INDEX].render()
-        #                     else:
-        #                         QUIZ_INDEX+=1
-                        
-        #                 elif (542<=mouse_x<=969) and (264 <= mouse_y <= 585) : 
-        #                     # self.push(GameIntroNode()) 
-        #                     print(quiz.checkAnswer(False)) 
-        #                     if quizStack[QUIZ_INDEX].checkAnswer(False):
-                            
-        #                         SCORE += SCORE_INCREMENT 
-        #                         QUIZ_INDEX +=1
-        #                     else:
-        #                         QUIZ_INDEX+=1 
-                            
-                
+       
         
         # Name Tag
         pygame.draw.rect(screen, (51,51,51), pygame.Rect(660, 600, 230, 43), border_radius = 10 )
@@ -2971,7 +2186,7 @@ class EasyModeNode(SceneStack):
             LeaderBoard(screen).render()
         else: 
             pass
-        #Stats(screen).render(3)
+       
         
         
         global IS_STATS_OPEN
@@ -2991,13 +2206,7 @@ class EasyModeNode(SceneStack):
         else:
             self.graivty = 1 
              
-        # dx = 10
-        # dy = 10 
-        
-        # ball1 = Ball(512, 400, 20, screen, dx,dy)
-        # ball1.render()
-        # ball1.update()
-        #pygame.draw.rect(screen, RED, pygame.Rect(550, 470, 10, 10))
+       
 
 
 IS_ROGERVOICE_PLAYED = [True,True,True,True,True] 
@@ -3012,14 +2221,11 @@ IS_SPACEBAR_PRESSED_4 = False
 class MediumModeNode(SceneStack):
     def __init__(self):
         SceneStack.__init__(self)
-        #self.character =  pygame.image.load("ibm_blockchain/assets/ship.png")
-        #self.character = pygame.transform.scale( self.character, (40,40) )
         pygame.mixer.init() 
         pygame.mixer.music.load("assets/background/music/SnowyVillage.mp3") 
         pygame.mixer.music.play(-1,0.0)
         pygame.mixer.music.set_volume(0.2)
-       #x,y = 200,400
-        #VELOCITY = 8
+      
         
     def ProcessInput(self, events, keyPress):
         self.keyPress = keyPress
@@ -3032,7 +2238,6 @@ class MediumModeNode(SceneStack):
         for event in events: 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_y:
                 # Move to the next scene when the user pressed Enter
-                print("yes")
                 self.push(GameOverNode())
                 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
@@ -3044,7 +2249,6 @@ class MediumModeNode(SceneStack):
                 global RETURN_HOME_VOICE, MINIGAME_HOME_VOICE
                 # Home Exit 
                 if (964<=mouse_x<=1004) and (20 <= mouse_y <= 60) : 
-                    #RETURN_HOME_VOICE.play()
                     MINI_PLAYER_X = 0
                     MINI_PLAYER_Y = 630
                     self.push(HomeNode())  
@@ -3082,7 +2286,7 @@ class MediumModeNode(SceneStack):
                     
         if keyPress[K_SPACE] and keyPress[K_RIGHT] :
             MINI_PLAYER_Y -= 5 
-            # MINI_PLAYER_X += 15    
+           
     
     def Update(self):
         pass
@@ -3094,61 +2298,32 @@ class MediumModeNode(SceneStack):
         screen.blit(gameBackground,(0,0))
         
         global SCORE
-        # text = GAME_FONT.render(f'Score: {SCORE}', True, GREEN, BLUE)
-        # textRect = text.get_rect()
-        # textRect.center = (100,20)
-        # #SCORE += SCORE_INCREMENT
-        # screen.blit(text, textRect)
-        # scoreBoard = ScoreBoard(screen, SCORE, 10, 10)
-        # scoreBoard.render()
         
         global MINI_PLAYER_X 
         global MINI_PLAYER_Y
-        
-        
-        
-        
-        
-        
         
         self.playerPath = "assets/character/right/right1.png"
         self.player = MiniPlayer(self.playerPath, MINI_PLAYER_X, MINI_PLAYER_Y)
        
         
         bottomPlatform = pygame.sprite.Group()
-        #leftCornerPath = "ibm_blockchain/assets/miniplatform/winterTile/leftCorner.png"
+       
         middleTilePath = "assets/miniplatform/winterTile/middleTile.png"
-        #rightCornerPath = "ibm_blockchain/assets/miniplatform/winterTile/rightCorner.png"
-        #downTilePath = "ibm_blockchain/assets/miniplatform/winterTile/downTile.png"
         leftOverPath = "assets/miniplatform/winterTile/winterMiddleTile.png"
-        # miniPlatform = MiniPlatform(platformPath,0,680) 
         
         # Bottom Platform
         for eachTileX in range(0,1100,50):
-            
             bottomPlatform.add(MiniPlatform(middleTilePath,eachTileX,680))
             bottomPlatform.add (MiniPlatform(leftOverPath,eachTileX,730))
             bottomPlatform.add (MiniPlatform(leftOverPath,eachTileX,770))
            
-           
-            #bottomPlatform.add (MiniPlatform(downTilePath,eachTileX,800))
-        
-         ## NPC Upper platform
+        ## NPC Upper platform
         for eachTileX in range(650,1024,50):
             bottomPlatform.add(MiniPlatform(middleTilePath,eachTileX,580))
             bottomPlatform.add(MiniPlatform(leftOverPath,eachTileX,630))
                 
         bottomPlatform.draw(screen)
         
-        # collidedPlatform = gravityCheck(self.player,bottomPlatform)
-        # # print("gravity check = ",len(gravityCheck(self.player,bottomPlatform)))
-        
-        # if len(collidedPlatform) > 0 : 
-        #        print("in!")
-        #        MINI_PLAYER_Y = collidedPlatform[0].rect.top-47
-        #        print("IN =  ", collidedPlatform[0].rect)
-        # else:
-        #     MINI_PLAYER_Y += 9.8
         
         crystalPath = "assets/miniplatform/winterTile/object/Crystal.png"
         crystal = pygame.image.load(crystalPath)
@@ -3156,7 +2331,6 @@ class MediumModeNode(SceneStack):
         crystalRect = crystal.get_rect(topleft=(100, 580))
         crystalRect2 = crystal.get_rect(topleft=(900, 485))
         crystalRect3 = crystal.get_rect(topleft=(900, 585))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
         screen.blit(crystal, crystalRect)
         screen.blit(crystal,crystalRect3)
         
@@ -3166,7 +2340,6 @@ class MediumModeNode(SceneStack):
         snowman = pygame.image.load(snowmanPath)
         snowman = pygame.transform.scale(snowman,(100,50))
         snowmanRect = snowman.get_rect(topleft=(630, 535))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
         screen.blit(snowman, snowmanRect)
         
         
@@ -3175,7 +2348,6 @@ class MediumModeNode(SceneStack):
         igloo = pygame.image.load(iglooPath)
         igloo = pygame.transform.scale(igloo,(210,150))
         iglooRect = igloo.get_rect(topleft=(800, 435))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
         screen.blit(igloo, iglooRect)
         
         huskyPath = "assets/miniplatform/winterTile/object/sleepingHusky.png"
@@ -3189,7 +2361,6 @@ class MediumModeNode(SceneStack):
         sign = pygame.image.load(signPath)
         sign = pygame.transform.scale(sign,(100,100))
         signRect = sign.get_rect(topleft=(200, 580))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
         screen.blit(sign, signRect)
         
         self.player.update(self.keyPress)
@@ -3199,21 +2370,18 @@ class MediumModeNode(SceneStack):
         tree = pygame.image.load(treePath)
         tree = pygame.transform.scale(tree,(300,300))
         treeRect = tree.get_rect(topleft=(300, 385))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
         screen.blit(tree, treeRect)
         
         smallTreePath = "assets/miniplatform/winterTile/object/Tree_1.png"
         smallTree = pygame.image.load(smallTreePath)
         smallTree = pygame.transform.scale(smallTree,(100,100))
         smallTreeRect = smallTree.get_rect(topleft=(300, 580))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
         screen.blit(smallTree, smallTreeRect)
         
         smallTreePath = "assets/miniplatform/winterTile/object/Tree_1.png"
         smallTree = pygame.image.load(smallTreePath)
         smallTree = pygame.transform.scale(smallTree,(100,100))
         smallTreeRect = smallTree.get_rect(topleft=(500, 580))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
         screen.blit(smallTree, smallTreeRect)
         
         rudolfPath = "assets/miniplatform/winterTile/object/petRudolf.png"
@@ -3224,48 +2392,13 @@ class MediumModeNode(SceneStack):
         screen.blit(rudolf,rudolfRect)
         screen.blit(rudolf,rudolfRect2)
         
-        # cokeYetiPath = "ibm_blockchain/assets/miniplatform/winterTile/object/cokeYeti.png"
-        # cokeYeti = pygame.image.load(cokeYetiPath)
-        # cokeYeti = pygame.transform.scale(cokeYeti,(80,80))
-        # cokeYetiRect = cokeYeti.get_rect(topleft =(580,605))
-        # screen.blit(cokeYeti,cokeYetiRect)
-        
-        
-        
-        # crystalPath = "ibm_blockchain/assets/miniplatform/winterTile/object/Crystal.png"
-        # crystal = pygame.image.load(crystalPath)
-        # crystal = pygame.transform.scale(crystal,(100,100))
-        # crystalRect = crystal.get_rect(topleft=(100, 580))
-        # crystalRect2 = crystal.get_rect(topleft=(900, 485))
-        # # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
-        # screen.blit(crystal, crystalRect)
-        # screen.blit(crystal, crystalRect2)
-        
-        # snowmanPath = "ibm_blockchain/assets/miniplatform/winterTile/object/SnowMan.png"
-        # snowman = pygame.image.load(snowmanPath)
-        # snowman = pygame.transform.scale(snowman,(100,50))
-        # snowmanRect = snowman.get_rect(topleft=(630, 535))
-        # # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
-        # screen.blit(snowman, snowmanRect)
-        
-         # mini Platform 1 
-        # bottomPlatform = pygame.image.load("ibm_blockchain/assets/bottomPlatform.png")
-        # bottomPlatform = pygame.transform.scale(bottomPlatform,(1024,120))
-        # screen.blit(bottomPlatform,(0,680))
-        
-        # mediumNPC =  pygame.image.load("ibm_blockchain/assets/mediumNPC.png")
-        # mediumNPC = pygame.transform.scale( mediumNPC, (100,100) )
-        # screen.blit(mediumNPC,(850,600))  
-        
-        
-        
-        
+         
         mediumNPCPath = "assets/npc/rogerMoore.png"
         mediumNPC = Npc (screen, "Roger",700, 485, 100, 100, mediumNPCPath)
         mediumNPC.render()
         
         miniPlayerRect = self.player.getMiniPlayerRect()
-        pygame.draw.rect(screen, RED, miniPlayerRect,4) 
+        
         
         miniNPCRect = mediumNPC.getNpcRect()
         
@@ -3275,17 +2408,12 @@ class MediumModeNode(SceneStack):
        
         
         if miniPlayerRect.colliderect(crystalRect3):
-            # MINI_PLAYER_X -= 10
             automaticReSpawn.play(0)
             MINI_PLAYER_X = 0
             MINI_PLAYER_Y = 630
-             
-        
-        
-        
+              
         screen.blit(crystal, crystalRect2)
         
-        # pygame.mixer.init() 
         portal_sound = pygame.mixer.Sound("assets/background/music/effect/maplestory_portal.mp3") 
         
         hover_sound = pygame.mixer.Sound("assets/background/music/effect/CLICK_009.wav")
@@ -3297,17 +2425,11 @@ class MediumModeNode(SceneStack):
             IS_SPACEBAR_PRESSED_4 = True   
         
         
-        # global MINI_PLAYER_X
-        # print("BEFORE COMING IN ", TOWN_NPC_DIALOG_INDEX)
         if miniNPCRect.colliderect(miniPlayerRect) and IS_SPACEBAR_PRESSED_4 is True and MEDIUMMODE_NPC_INDEX>=0 :
             if IS_ROGERVOICE_PLAYED[MEDIUMMODE_NPC_INDEX] : 
                 IS_ROGERVOICE_PLAYED[MEDIUMMODE_NPC_INDEX] = False 
                 rogerNPCDialogVoice[MEDIUMMODE_NPC_INDEX].play()
             
-            
-            # portal_sound.play()
-            # PLAYER_X -= 1 
-            # PLAYER_Y -= 1
             filePath = mediumNPCPath
             
             dialog1_txt = open('assets/npc/npcVoice/roger/rogerDialog/rogerDialog1.txt','r')
@@ -3343,16 +2465,6 @@ class MediumModeNode(SceneStack):
                 raise Exception("theKingDialog5 exceeded 590 characters.", len(dialog5))
             
             
-            
-            
-            
-            # dialog1 = "Hey there, have you come here from Dr. Emma Norling? Congratulations! You finally have reached here and completed the game! "
-            # dialog2 = """I'm Roger Moore, the Professor of Spoken Language Processing and Member of the Speech and Hearing (SpandH) research group at the Department of Computer Science. I have gained over 40 years’ experience in Speech Technology R&D and, although an engineer by training, much of my research has been based on insights from human speech perception and production."""
-            # dialog3 = "Since 2004, I have been Professor of Spoken Language Processing at the University of Sheffield, and also holds Visiting Chairs at Bristol Robotics Laboratory and University College London Psychology & Language Sciences.  I was President of the European/International Speech Communication Association from 1997 to 2001, General Chair for INTERSPEECH-2009 and ISCA Distinguished Lecturer during 2014-15.      "
-            # dialog4 = "We are currently working with IBM on Watson Text-To-Speech, especially cooperating with AI Group Project. The University of Sheffield is planning to reach top 1-tier list as Stanford, MIT, and Harvard. "
-            # dialog5 = "This is what I've got to talk with you today. Do you want to go back to Dr. Emma Norling? (Automatically takes you to Dr. Emma Norling! If not, you can still leave with above exit button!)"
-            # exitDialog = "It is said that you are not interested in our research with IBM. Talk to you later. (Emma is keeping push you behind.)"
-            
             dialogStack = [Dialog(screen, filePath, "Dr. Roger Moore", dialog1, True, False, True, False, False),
                            Dialog(screen, filePath, "Dr. Roger Moore", dialog2, True, True, True, False, False),
                            Dialog(screen, filePath, "Dr. Roger Moore", dialog3, True, True, True, False, False),
@@ -3360,7 +2472,6 @@ class MediumModeNode(SceneStack):
                            Dialog(screen, filePath, "Dr. Roger Moore", dialog5, True, True, False, True, True)
                            
                         ]
-            
             
             dialogStack[MEDIUMMODE_NPC_INDEX].render()
             endChatRect =  dialogStack[MEDIUMMODE_NPC_INDEX].drawEndChatButton()
@@ -3379,30 +2490,25 @@ class MediumModeNode(SceneStack):
                                 rogerNPCDialogVoice[MEDIUMMODE_NPC_INDEX].stop()
                                 IS_SPACEBAR_PRESSED_4 = False 
                                 MEDIUMMODE_NPC_INDEX = -1  
-                                #print(MEDIUMMODE_NPC_INDEX)
                                 hover_sound.play()
                                 
                             if nextChatRect is not None and nextChatRect.collidepoint(pygame.mouse.get_pos()):
-                                #print("nextChatRect")
                                 hover_sound.play()
                                 rogerNPCDialogVoice[MEDIUMMODE_NPC_INDEX].stop()
                                 MEDIUMMODE_NPC_INDEX +=1 
                                 IS_ROGERVOICE_PLAYED[MEDIUMMODE_NPC_INDEX] = True 
                                
-                                print(MEDIUMMODE_NPC_INDEX)
+                               
                             if prevChatRect is not None and prevChatRect.collidepoint(pygame.mouse.get_pos()):
-                                #print("prevChatRect")
                                 rogerNPCDialogVoice[MEDIUMMODE_NPC_INDEX].stop()
                                 hover_sound.play()
                                 MEDIUMMODE_NPC_INDEX -=1
                                 IS_ROGERVOICE_PLAYED[MEDIUMMODE_NPC_INDEX] = True 
-                                #print(MEDIUMMODE_NPC_INDEX)
+                               
                                 
                             if yesChatRect is not None and yesChatRect.collidepoint(pygame.mouse.get_pos()):
                                 rogerNPCDialogVoice[MEDIUMMODE_NPC_INDEX].stop()
-                                #print("yesChatRect")
                                 hover_sound.play()
-                                #print(MEDIUMMODE_NPC_INDEX)
                                 portal_sound.play()
                                 MINI_PLAYER_X, MINI_PLAYER_Y = 0 ,630
                                 self.push(SecretPortalMediumNode())
@@ -3410,16 +2516,9 @@ class MediumModeNode(SceneStack):
                             if  noChatRect is not None and noChatRect.collidepoint(pygame.mouse.get_pos()):  
                                 rogerNPCDialogVoice[MEDIUMMODE_NPC_INDEX].stop()
                                 IS_SPACEBAR_PRESSED_4 = False 
-                                #print("nochatrect")
                                 hover_sound.play()
-                                #print(MEDIUMMODE_NPC_INDEX)
                                 MEDIUMMODE_NPC_INDEX= -1  
                         
-                    
-            
-            
-            # self.pop()
-            # self.push(GameIntroNode())
         else:    
             IS_ROGERVOICE_PLAYED[MEDIUMMODE_NPC_INDEX] = True 
             IS_SPACEBAR_PRESSED_4 = False 
@@ -3432,7 +2531,6 @@ class MediumModeNode(SceneStack):
         refreshButton = pygame.image.load(refreshButtonPath)
         refreshButton = pygame.transform.scale(refreshButton,(40,40))
         refreshButtonRect = refreshButton.get_rect(topright=(1024-20, 20))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
         screen.blit(refreshButton, refreshButtonRect)
         
          #Refresh 
@@ -3440,45 +2538,11 @@ class MediumModeNode(SceneStack):
         returnButton = pygame.image.load(returnButtonPath)
         returnButton = pygame.transform.scale(returnButton,(40,40))
         returnButtonRect = returnButton.get_rect(topright=(1024-20-40, 20))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
         screen.blit(returnButton, returnButtonRect)
         
-        #  # LeaderBoard 
-        # leaderBoardButtonPath = "ibm_blockchain/assets/Leaderboard.png"
-        # leaderBoardButton = pygame.image.load(leaderBoardButtonPath)
-        # leaderBoardButton = pygame.transform.scale(leaderBoardButton,(40,40))
-        # leaderBoardButtonRect = leaderBoardButton.get_rect(topright=(1024-20-40-40, 20))
-        # # pygame.draw.rect(screen, RED, leaderBoardButtonRect,4) 
-        # screen.blit(leaderBoardButton, leaderBoardButtonRect)
-        
-        
-        # bottomPlatform = pygame.sprite.Group()
-        # leftCornerPath = "ibm_blockchain/assets/miniplatform/winterTile/leftCorner.png"
-        # middleTilePath = "ibm_blockchain/assets/miniplatform/winterTile/middleTile.png"
-        # rightCornerPath = "ibm_blockchain/assets/miniplatform/winterTile/rightCorner.png"
-        # downTilePath = "ibm_blockchain/assets/miniplatform/winterTile/downTile.png"
-        # leftOverPath = "ibm_blockchain/assets/miniplatform/winterTile/winterMiddleTile.png"
-        # # miniPlatform = MiniPlatform(platformPath,0,680) 
-        
-        # # Bottom Platform
-        # for eachTileX in range(0,1100,50):
-            
-        #     bottomPlatform.add(MiniPlatform(middleTilePath,eachTileX,680))
-        #     bottomPlatform.add (MiniPlatform(leftOverPath,eachTileX,730))
-        #     bottomPlatform.add (MiniPlatform(leftOverPath,eachTileX,770))
-           
-           
-        #     #bottomPlatform.add (MiniPlatform(downTilePath,eachTileX,800))
-        
-        #  ## NPC Upper platform
-        # for eachTileX in range(650,1024,50):
-        #     bottomPlatform.add(MiniPlatform(middleTilePath,eachTileX,580))
-        #     bottomPlatform.add(MiniPlatform(leftOverPath,eachTileX,630))
-                
-        # bottomPlatform.draw(screen)
         
         collidedPlatform = gravityCheck(self.player,bottomPlatform)
-        # print("gravity check = ",len(gravityCheck(self.player,bottomPlatform)))
+       
         
         if len(collidedPlatform) > 0 : 
                print("in!")
@@ -3487,28 +2551,7 @@ class MediumModeNode(SceneStack):
         else:
             MINI_PLAYER_Y += 9.8
         
-        
-        # iglooPath = "ibm_blockchain/assets/miniplatform/winterTile/object/Igloo.png"
-        # igloo = pygame.image.load(iglooPath)
-        # igloo = pygame.transform.scale(igloo,(210,150))
-        # iglooRect = igloo.get_rect(topleft=(800, 435))
-        # # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
-        # screen.blit(igloo, iglooRect)
-        
-        # signPath = "ibm_blockchain/assets/miniplatform/winterTile/object/Sign_2.png"
-        # sign = pygame.image.load(signPath)
-        # sign = pygame.transform.scale(sign,(100,100))
-        # signRect = sign.get_rect(topleft=(200, 580))
-        # # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
-        # screen.blit(sign, signRect)
-        
-        # treePath = "ibm_blockchain/assets/miniplatform/winterTile/object/Tree_1.png"
-        # tree = pygame.image.load(treePath)
-        # tree = pygame.transform.scale(tree,(300,300))
-        # treeRect = tree.get_rect(topleft=(300, 385))
-        # # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
-        # screen.blit(tree, treeRect)
-        
+         
         sign_directory = "assets/font/Satisfy-Regular.ttf"
         sign_font = pygame.font.Font(sign_directory, 20)
         authorSignature = sign_font.render('Kyungtae Han', True, BLACK)
@@ -3522,10 +2565,7 @@ class MediumModeNode(SceneStack):
         answer1_content = "Dr. Roger Moore"
         answer1 =  ANSWER_FONT.render(answer1_content, True, LIGHT_GREEN)
         screen.blit(answer1,(680, 620))
-        
-       
-        
-        
+         
         global USER_ID 
         global IS_LEADERBOARD_OPEN    
        
@@ -3533,9 +2573,7 @@ class MediumModeNode(SceneStack):
             LeaderBoard(screen).render()
         else: 
             pass
-        #Stats(screen).render(3)
-        
-        
+       
         global IS_STATS_OPEN
         if IS_STATS_OPEN : 
             Stats(screen).render(USER_ID)
@@ -3554,8 +2592,6 @@ MEDIUM_HIDDEN_WELCOME_VOICE = pygame.mixer.Sound("assets/npc/npcVoice/roger/medi
 class SecretPortalMediumNode(SceneStack):
     def __init__(self):
         SceneStack.__init__(self)
-        #self.character =  pygame.image.load("ibm_blockchain/assets/ship.png")
-        #self.character = pygame.transform.scale( self.character, (40,40) )
         pygame.mixer.init() 
         pygame.mixer.music.load("assets/background/music/SnowyVillage.mp3") 
         pygame.mixer.music.play(-1,0.0)
@@ -3564,8 +2600,7 @@ class SecretPortalMediumNode(SceneStack):
         global MEDIUM_HIDDEN_WELCOME_VOICE 
         MEDIUM_HIDDEN_WELCOME_VOICE.play()
         MEDIUM_HIDDEN_WELCOME_VOICE.set_volume(1.0)
-        x,y = 200,400
-        VELOCITY = 8
+     
         
     def ProcessInput(self, events, pressed_keys):
         self.keyPress = pressed_keys
@@ -3578,7 +2613,6 @@ class SecretPortalMediumNode(SceneStack):
         for event in events: 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_y:
                 # Move to the next scene when the user pressed Enter
-                print("yes")
                 self.push(GameOverNode())
             
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
@@ -3605,18 +2639,17 @@ class SecretPortalMediumNode(SceneStack):
                 if not IS_ACHIEVEMENT_OPEN:
                     IS_ACHIEVEMENT_OPEN = True 
                     OPEN_ACHIEVEMENT_VOICE.play()  
-                    #OPEN_STATS_VOICE.play()
+                  
                 else: 
                     IS_ACHIEVEMENT_OPEN = False 
                     CLOSE_ACHIEVEMENT_VOICE.play()   
-                    #CLOSE_STATS_VOICE.play()     
+                      
                 
             if event.type == pygame.MOUSEBUTTONDOWN :
                 mouse_x, mouse_y = pygame.mouse.get_pos()
                 global RETURN_HOME_VOICE, MINIGAME_HOME_VOICE
                 # Home Exit 
                 if (964<=mouse_x<=1004) and (20 <= mouse_y <= 60) : 
-                    #RETURN_HOME_VOICE.play()
                     MINI_PLAYER_X = 0
                     MINI_PLAYER_Y = 630
                     self.push(HomeNode())  
@@ -3636,11 +2669,6 @@ class SecretPortalMediumNode(SceneStack):
         screen.blit(gameBackground,(0,0))
         
         global SCORE
-        # text = GAME_FONT.render(f'Score: {SCORE}', True, GREEN, BLUE)
-        # textRect = text.get_rect()
-        # textRect.center = (100,20)
-        # #SCORE += SCORE_INCREMENT
-        # screen.blit(text, textRect)
         scoreBoard = ScoreBoard(screen, SCORE, 10, 10)
         scoreBoard.render()
         
@@ -3655,14 +2683,12 @@ class SecretPortalMediumNode(SceneStack):
         unknownNPC.render()
         miniNPCRect = unknownNPC.getNpcRect()
         
-        # self.player.update(self.keyPress)
-        # self.player.draw(screen)
+       
         
         bottomPlatform = pygame.sprite.Group()
-        #leftCornerPath = "ibm_blockchain/assets/miniplatform/winterTile/leftCorner.png"
+       
         middleTilePath = "assets/miniplatform/winterTile/middleTile.png"
-        #rightCornerPath = "ibm_blockchain/assets/miniplatform/winterTile/rightCorner.png"
-        #downTilePath = "ibm_blockchain/assets/miniplatform/winterTile/downTile.png"
+        
         leftOverPath = "assets/miniplatform/winterTile/winterMiddleTile.png"
         iceBoxPath = "assets/miniplatform/winterTile/object/IceBox.png"
         crateBoxPath = "assets/miniplatform/winterTile/object/Crate.png"
@@ -3677,7 +2703,6 @@ class SecretPortalMediumNode(SceneStack):
         # Spawn Platform
         for eachTileX in range (0,200,50):
             bottomPlatform.add(MiniPlatform(middleTilePath, eachTileX,530))
-            
             bottomPlatform.add(MiniPlatform(middleTilePath, eachTileX,180))
             
         
@@ -3721,10 +2746,9 @@ class SecretPortalMediumNode(SceneStack):
         global VEL_DX
         global VEL_DY
         SHRIGEN_X  = (SHRIGEN_X-VEL_DX)%1024
-        # SHRIGEN_Y  = (SHRIGEN_Y+VEL_DY)%800
+       
         
         miniPlayerRect = self.player.getMiniPlayerRect()
-        pygame.draw.rect(screen, RED, miniPlayerRect,4) 
         
         
         shrigenRect = shrigen.get_rect(topright=(SHRIGEN_X, 480))
@@ -3741,8 +2765,7 @@ class SecretPortalMediumNode(SceneStack):
         crystalRect2 = crystal.get_rect(topleft=(900, 485))
         crystalRect3 = crystal.get_rect(topleft=(900, 585))
         crystalRect4 = crystal.get_rect(topleft=(900, 430))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
-        # screen.blit(crystal, crystalRect)
+        
         screen.blit(crystal,crystalRect3) 
         screen.blit(crystal,crystalRect4) 
        
@@ -3762,116 +2785,13 @@ class SecretPortalMediumNode(SceneStack):
         if shrigenRect.colliderect(miniPlayerRect):
             # MINI_PLAYER_X -= 10
             MINI_PLAYER_X -=10
-        
-        
-         # mini Platform 1 
-        # bottomPlatform = pygame.image.load("ibm_blockchain/assets/bottomPlatform.png")
-        # bottomPlatform = pygame.transform.scale(bottomPlatform,(1024,120))
-        # screen.blit(bottomPlatform,(0,680))
-        
-        # mediumNPC =  pygame.image.load("ibm_blockchain/assets/mediumNPC.png")
-        # mediumNPC = pygame.transform.scale( mediumNPC, (100,100) )
-        # screen.blit(mediumNPC,(850,600))  
-        
-        # mediumNPCPath = "ibm_blockchain/assets/rogerMoore.png"
-        # mediumNPC = Npc (screen, "Roger",850, 587, 100, 100, mediumNPCPath)
-        # mediumNPC.render()
-        
-       
-       
-        # miniNPCRect = mediumNPC.getNpcRect()
-        
-        
-        pygame.mixer.init() 
-        portal_sound = pygame.mixer.Sound("assets/background/music/effect/maplestory_portal.mp3") 
-        
-        hover_sound = pygame.mixer.Sound("assets/background/music/effect/CLICK_009.wav")
-       
-        # global MEDIUMMODE_NPC_INDEX
-        # # global MINI_PLAYER_X
-        # # print("BEFORE COMING IN ", TOWN_NPC_DIALOG_INDEX)
-        # if miniNPCRect.colliderect(miniPlayerRect) and MEDIUMMODE_NPC_INDEX>=0 :
-         
-        #     # portal_sound.play()
-        #     # PLAYER_X -= 1 
-        #     # PLAYER_Y -= 1
-        #     filePath = unknownNPCPath
-            
-        #     dialog1 = "Hey there, have you come here from Dr. Emma Norling? Congratulations! You finally have reached here and completed the game! "
-        #     dialog2 = """I'm Roger Moore, the Professor of Spoken Language Processing and Member of the Speech and Hearing (SpandH) research group at the Department of Computer Science. I have gained over 40 years’ experience in Speech Technology R&D and, although an engineer by training, much of my research has been based on insights from human speech perception and production."""
-        #     dialog3 = "Since 2004, I have been Professor of Spoken Language Processing at the University of Sheffield, and also holds Visiting Chairs at Bristol Robotics Laboratory and University College London Psychology & Language Sciences.  I was President of the European/International Speech Communication Association from 1997 to 2001, General Chair for INTERSPEECH-2009 and ISCA Distinguished Lecturer during 2014-15.      "
-        #     dialog4 = "We are currently working with IBM on Watson Text-To-Speech, especially cooperating with AI Group Project. The University of Sheffield is planning to reach top 1-tier list as Stanford, MIT, and Harvard. "
-        #     dialog5 = "This is what I've got to talk with you today. Do you want to go back to Dr. Emma Norling? (Automatically takes you to Dr. Emma Norling! If not, you can still leave with above exit button!)"
-        #     exitDialog = "It is said that you are not interested in our research with IBM. Talk to you later. (Emma is keeping push you behind.)"
-            
-        #     dialogStack = [Dialog(screen, filePath, "Dr. Roger Moore", dialog1, True, True, True, False, False),
-        #                    Dialog(screen, filePath, "Dr. Roger Moore", dialog2, True, True, True, False, False),
-        #                    Dialog(screen, filePath, "Dr. Roger Moore", dialog3, True, True, True, False, False),
-        #                    Dialog(screen, filePath, "Dr. Roger Moore", dialog4, True, True, True, False, False),
-        #                    Dialog(screen, filePath, "Dr. Roger Moore", dialog5, True, True, False, True, True)
-                           
-        #                 ]
-            
-            
-        #     dialogStack[MEDIUMMODE_NPC_INDEX].render()
-        #     endChatRect =  dialogStack[MEDIUMMODE_NPC_INDEX].drawEndChatButton()
-        #     nextChatRect = dialogStack[MEDIUMMODE_NPC_INDEX].drawNextButton()
-        #     prevChatRect = dialogStack[MEDIUMMODE_NPC_INDEX].drawPrevButton()
-        #     yesChatRect = dialogStack[MEDIUMMODE_NPC_INDEX].drawYesButton()
-        #     noChatRect = dialogStack[MEDIUMMODE_NPC_INDEX].drawNoButton()
-        #     dialogStack[MEDIUMMODE_NPC_INDEX].drawNPCFigure()
-        #     dialogStack[MEDIUMMODE_NPC_INDEX].drawDialogText()
-            
-        #     for event in self.events:
-        #             if event.type == pygame.MOUSEBUTTONDOWN :
-                           
-                           
-        #                     if endChatRect is not None and endChatRect.collidepoint(pygame.mouse.get_pos()):
-        #                         MEDIUMMODE_NPC_INDEX = -1  
-        #                         print(MEDIUMMODE_NPC_INDEX)
-        #                         hover_sound.play()
-        #                         MINI_PLAYER_X -=10
-        #                     if nextChatRect is not None and nextChatRect.collidepoint(pygame.mouse.get_pos()):
-        #                         print("nextChatRect")
-        #                         hover_sound.play()
-        #                         MEDIUMMODE_NPC_INDEX +=1 
-        #                         print(MEDIUMMODE_NPC_INDEX)
-        #                     if prevChatRect is not None and prevChatRect.collidepoint(pygame.mouse.get_pos()):
-        #                         print("prevChatRect")
-        #                         hover_sound.play()
-        #                         MEDIUMMODE_NPC_INDEX -=1
-        #                         print(MEDIUMMODE_NPC_INDEX)
-                                
-        #                     if yesChatRect is not None and yesChatRect.collidepoint(pygame.mouse.get_pos()):
-        #                         print("yesChatRect")
-        #                         hover_sound.play()
-        #                         print(MEDIUMMODE_NPC_INDEX)
-        #                         portal_sound.play()
-        #                         MINI_PLAYER_X, MINI_PLAYER_Y = 0 ,630
-        #                         self.push(HomeNode())
-                                
-        #                     if  noChatRect is not None and noChatRect.collidepoint(pygame.mouse.get_pos()):  
-        #                         print("nochatrect")
-        #                         hover_sound.play()
-        #                         print(MEDIUMMODE_NPC_INDEX)
-        #                         MINI_PLAYER_X -=10
-        #                         MEDIUMMODE_NPC_INDEX= -1  
-                        
-                    
-            
-            
-        #     # self.pop()
-        #     # self.push(GameIntroNode())
-        # else:    
-        #     MEDIUMMODE_NPC_INDEX = 0
-        
+           
         
          #Refresh 
         refreshButtonPath = "assets/button/homeIcon.png"
         refreshButton = pygame.image.load(refreshButtonPath)
         refreshButton = pygame.transform.scale(refreshButton,(40,40))
         refreshButtonRect = refreshButton.get_rect(topright=(1024-20, 20))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
         screen.blit(refreshButton, refreshButtonRect)
         
          #Refresh 
@@ -3879,41 +2799,15 @@ class SecretPortalMediumNode(SceneStack):
         returnButton = pygame.image.load(returnButtonPath)
         returnButton = pygame.transform.scale(returnButton,(40,40))
         returnButtonRect = returnButton.get_rect(topright=(1024-20-40, 20))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
         screen.blit(returnButton, returnButtonRect)
         
-        #  # LeaderBoard 
-        # leaderBoardButtonPath = "ibm_blockchain/assets/Leaderboard.png"
-        # leaderBoardButton = pygame.image.load(leaderBoardButtonPath)
-        # leaderBoardButton = pygame.transform.scale(leaderBoardButton,(40,40))
-        # leaderBoardButtonRect = leaderBoardButton.get_rect(topright=(1024-20-40-40, 20))
-        # # pygame.draw.rect(screen, RED, leaderBoardButtonRect,4) 
-        # screen.blit(leaderBoardButton, leaderBoardButtonRect)
-        
-        
-        # bottomPlatform = pygame.sprite.Group()
-        # leftCornerPath = "ibm_blockchain/assets/miniplatform/winterTile/leftCorner.png"
-        # middleTilePath = "ibm_blockchain/assets/miniplatform/winterTile/middleTile.png"
-        # rightCornerPath = "ibm_blockchain/assets/miniplatform/winterTile/rightCorner.png"
-        # downTilePath = "ibm_blockchain/assets/miniplatform/winterTile/downTile.png"
-        # miniPlatform = MiniPlatform(platformPath,0,680) 
-        
-       
-        # for eachTileX in range(0,1100,50):
-        #     bottomPlatform.add (MiniPlatform(middleTilePath,eachTileX,750) )
-        #     bottomPlatform.add (MiniPlatform(downTilePath,eachTileX,800))
-        #     bottomPlatform.add (MiniPlatform(downTilePath,eachTileX,810))
-        #     #bottomPlatform.add (MiniPlatform(downTilePath,eachTileX,800))
-           
             
-        # bottomPlatform.draw(screen)
+       
         collidedPlatform = gravityCheck(self.player,bottomPlatform)
-        # print("gravity check = ",len(gravityCheck(self.player,bottomPlatform)))
+        
         
         if len(collidedPlatform) > 0 : 
-               print("in!")
                MINI_PLAYER_Y = collidedPlatform[0].rect.top-47
-               print("IN =  ", collidedPlatform[0].rect)
         else:
             MINI_PLAYER_Y += 9.8
             
@@ -3951,7 +2845,7 @@ class SecretPortalMediumNode(SceneStack):
                 IS_QUIZ_STARTED = False 
                 SCORE = 0
                 pass
-                # print("Dialogue")
+               
                 
             else:
                 quizStack[QUIZ_INDEX].render()
@@ -3964,23 +2858,18 @@ class SecretPortalMediumNode(SceneStack):
                         mouse_x, mouse_y = pygame.mouse.get_pos()
                         # Home Exit 
                         if (92<=mouse_x<=525) and (268 <= mouse_y <= 585) : 
-                            # self.push(HomeNode()) 
-                            print(quiz.checkAnswer(True))
-                           
                             if quizStack[QUIZ_INDEX].checkAnswer(True):
                                 quizVoice[QUIZ_INDEX].stop()
                                 ANSWER_CORRECT_VOICE.play()
                                 SCORE += SCORE_INCREMENT*2
                                 QUIZ_INDEX +=1
-                                # quizStack[QUIZ_INDEX].render()
+                                
                             else:
                                 quizVoice[QUIZ_INDEX].stop()
                                 ANSWER_WRONG_VOICE.play()
                                 QUIZ_INDEX+=1
                         
                         elif (542<=mouse_x<=969) and (264 <= mouse_y <= 585) : 
-                            # self.push(GameIntroNode()) 
-                            print(quiz.checkAnswer(False)) 
                             if quizStack[QUIZ_INDEX].checkAnswer(False):
                                 quizVoice[QUIZ_INDEX].stop()
                                 ANSWER_CORRECT_VOICE.play()
@@ -3992,62 +2881,17 @@ class SecretPortalMediumNode(SceneStack):
                                 QUIZ_INDEX+=1 
                             
         
-        
-        
-        
-        
         unknownNPCRect = unknownNPC.getNpcRect()
         unknownQuizNPC(screen, self.events, self.keyPress,unknownNPCPath ,unknownNPCRect,miniPlayerRect)
         
-        # global IS_QUIZ_STARTED
-        # if IS_QUIZ_STARTED:
-            
-        #     quiz1_content = "Q1. Which of the following is IBM BlockChain?"
-        #     quiz2_content = "Q2. Which of the following is IBM BlockChain?"
-        #     quiz = Quiz(screen, 80, 80, quiz1_content,True)
-            
-        #     global QUIZ_INDEX
-            
-        #     quizStack = [Quiz(screen, 80, 80, quiz1_content,True),Quiz(screen, 80, 80, quiz2_content,True)]
-        
-        #     if QUIZ_INDEX is len(quizStack):
-        #         IS_QUIZ_STARTED = False 
-        #         pass
-        #         # print("Dialogue")
-                
-        #     else:
-        #         quizStack[QUIZ_INDEX].render()
-        #         for event in self.events: 
-        #             if event.type == pygame.MOUSEBUTTONDOWN :
-        #                 mouse_x, mouse_y = pygame.mouse.get_pos()
-        #                 # Home Exit 
-        #                 if (92<=mouse_x<=525) and (268 <= mouse_y <= 585) : 
-        #                     # self.push(HomeNode()) 
-        #                     print(quiz.checkAnswer(True))
-        #                     if quiz.checkAnswer(True):
-                            
-        #                         SCORE += SCORE_INCREMENT
-        #                         QUIZ_INDEX +=1
-        #                         # quizStack[QUIZ_INDEX].render()
-                        
-        #                 if (542<=mouse_x<=969) and (264 <= mouse_y <= 585) : 
-        #                     # self.push(GameIntroNode()) 
-        #                     print(quiz.checkAnswer(False)) 
-        #                     if quiz.checkAnswer(False):
-                            
-        #                         SCORE += SCORE_INCREMENT 
-        #                         QUIZ_INDEX +=1
-        
         global USER_ID 
+        
         global IS_LEADERBOARD_OPEN    
-       
         if IS_LEADERBOARD_OPEN : 
             LeaderBoard(screen).render()
         else: 
             pass
-        #Stats(screen).render(3)
-        
-        
+       
         global IS_STATS_OPEN
         if IS_STATS_OPEN : 
             Stats(screen).render(USER_ID)
@@ -4065,15 +2909,7 @@ class SecretPortalMediumNode(SceneStack):
         authorSignature = sign_font.render('Kyungtae Han', True, BLACK)
         screen.blit(authorSignature, (900, 750))
         
-        #  # Name Tag
-        # pygame.draw.rect(screen, (51,51,51), pygame.Rect(760, 687, 250, 43), border_radius = 10 )
-        
-        # LIGHT_GREEN = (234,230,70)
-        # ANSWER_FONT = pygame.font.Font(FONT_DIRECTORY, 12)
-        # answer1_content = "Dr. Roger Moore"
-        # answer1 =  ANSWER_FONT.render(answer1_content, True, LIGHT_GREEN)
-        # screen.blit(answer1,(790, 707))
-
+      
 
 IS_KINGVOICE_PLAYED = [True,True,True,True,True] 
 kingNPCDialogVoice = [pygame.mixer.Sound("assets/npc/npcVoice/theKing/theKingDialog1.wav"),
@@ -4086,10 +2922,6 @@ IS_SPACEBAR_PRESSED_3 = False
 class HardModeNode(SceneStack):
     def __init__(self):
         SceneStack.__init__(self)
-        #self.character =  pygame.image.load("ibm_blockchain/assets/ship.png")
-        #self.character = pygame.transform.scale( self.character, (40,40) )
-        #x,y = 200,400
-        #VELOCITY = 8
         pygame.mixer.init() 
         pygame.mixer.music.load("assets/background/music/QueensGarden.mp3") 
         pygame.mixer.music.play(-1,0.0)
@@ -4104,7 +2936,6 @@ class HardModeNode(SceneStack):
         for event in events: 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_y:
                 # Move to the next scene when the user pressed Enter
-                print("yes")
                 self.push(GameOverNode())
             if event.type == pygame.KEYDOWN and event.key == K_1:
                 if not IS_LEADERBOARD_OPEN:
@@ -4126,11 +2957,11 @@ class HardModeNode(SceneStack):
                 if not IS_ACHIEVEMENT_OPEN:
                     IS_ACHIEVEMENT_OPEN = True  
                     OPEN_ACHIEVEMENT_VOICE.play() 
-                    #OPEN_STATS_VOICE.play()
+                  
                 else: 
                     IS_ACHIEVEMENT_OPEN = False 
                     CLOSE_ACHIEVEMENT_VOICE.play()   
-                    #CLOSE_STATS_VOICE.play()     
+                    
             
                 
             if event.type == pygame.MOUSEBUTTONDOWN :
@@ -4138,7 +2969,6 @@ class HardModeNode(SceneStack):
                 global RETURN_HOME_VOICE, MINIGAME_HOME_VOICE
                 # Home Exit 
                 if (964<=mouse_x<=1004) and (20 <= mouse_y <= 60) : 
-                   # RETURN_HOME_VOICE.play()
                     MINI_PLAYER_X = 0
                     MINI_PLAYER_Y = 630
                     self.push(HomeNode()) 
@@ -4153,11 +2983,8 @@ class HardModeNode(SceneStack):
         pass
     
     def Render(self, screen):
-         # Field 
-        # field = pygame.image.load("ibm_blockchain/assets/field.png")
-        # field = pygame.transform.scale( field, (1024,800) )
-        # screen.blit(field,(0,0))
         screen.fill(BLACK)
+       
         gameBackground = pygame.image.load("assets/miniplatform/hardmode/background.png")
         gameBackground = pygame.transform.scale(gameBackground,(1024,800))
         screen.blit(gameBackground,(0,0))
@@ -4168,15 +2995,7 @@ class HardModeNode(SceneStack):
         screen.blit(bottomPlatform,(0,680))
         
         global SCORE
-        # text = GAME_FONT.render(f'Score: {SCORE}', True, GREEN, BLUE)
-        # textRect = text.get_rect()
-        # textRect.center = (100,20)
-        # #SCORE += SCORE_INCREMENT
-        # screen.blit(text, textRect)
-        
-        
-        
-          
+      
         path = "assets/npc/unknownStar.png"
         hardNPC = Npc (screen, "Unknown Star",900, 588, 100, 100, path)
         hardNPC.render()
@@ -4189,7 +3008,6 @@ class HardModeNode(SceneStack):
         refreshButton = pygame.image.load(refreshButtonPath)
         refreshButton = pygame.transform.scale(refreshButton,(40,40))
         refreshButtonRect = refreshButton.get_rect(topright=(1024-20, 20))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
         screen.blit(refreshButton, refreshButtonRect)
         
          #Refresh 
@@ -4197,16 +3015,9 @@ class HardModeNode(SceneStack):
         returnButton = pygame.image.load(returnButtonPath)
         returnButton = pygame.transform.scale(returnButton,(40,40))
         returnButtonRect = returnButton.get_rect(topright=(1024-20-40, 20))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
         screen.blit(returnButton, returnButtonRect)
         
-        # # LeaderBoard 
-        # leaderBoardButtonPath = "ibm_blockchain/assets/Leaderboard.png"
-        # leaderBoardButton = pygame.image.load(leaderBoardButtonPath)
-        # leaderBoardButton = pygame.transform.scale(leaderBoardButton,(40,40))
-        # leaderBoardButtonRect = leaderBoardButton.get_rect(topright=(1024-20-40-40, 20))
-        # # pygame.draw.rect(screen, RED, leaderBoardButtonRect,4) 
-        # screen.blit(leaderBoardButton, leaderBoardButtonRect)
+      
         
         global MINI_PLAYER_X 
         global MINI_PLAYER_Y
@@ -4234,14 +3045,13 @@ class HardModeNode(SceneStack):
             IS_SPACEBAR_PRESSED_3 = True    
         
         
-        # global MINI_PLAYER_X
-        # print("BEFORE COMING IN ", TOWN_NPC_DIALOG_INDEX)
+       
         if hardNPCRect.colliderect(playerRect) and IS_SPACEBAR_PRESSED_3 is True and HARDMODE_NPC_INDEX>=0 :
             if IS_KINGVOICE_PLAYED[HARDMODE_NPC_INDEX] : 
                 IS_KINGVOICE_PLAYED[HARDMODE_NPC_INDEX] = False 
                 kingNPCDialogVoice[HARDMODE_NPC_INDEX].play()
             
-            #sys.path.append("production/blockchain_house/ibm_blockchain/assets/npc/npcVoice/theKing/theKingDialog")
+           
             
             theKingDialog1_txt = open('assets/npc/npcVoice/theKing/theKingDialog/theKingDialog1.txt','r')
             theKingDialog1 = theKingDialog1_txt.read()
@@ -4278,17 +3088,13 @@ class HardModeNode(SceneStack):
             unknownFilePath = "assets/npc/rightdangerousNPC.png"
             theKingFilePath = "assets/npc/theKing.png"
             
-            #dialog1 = "Hey there, have you come here from Dr. Emma Norling? Congratulations! You finally have reached here and completed the game! "
+            
             dialog1 = theKingDialog1
-            #dialog2 = """(Spy keeping silence and then start talking...) Is anybody crossing nearby? No? OK. It's time to take off my mask and serve my duty !!!! """
             dialog2 = theKingDialog2 
-            #dialog3 = "I'm the King of this IBM BlockChain World, and my duty is to send you to Secret Hidden Map of IBM BlockChain. Are you ready to be there?"
             dialog3 = theKingDialog3 
-            #dialog4 = "We, University of Sheffield, are currently working with IBM on Watson Text-To-Speech, especially cooperating with AI Group Project.  "
             dialog4 = theKingDialog4
-            #dialog5 = "(Murmuring to you...) I'm gonna hide again. Are you ready to go to Hard Mode of IBM BlockChain Hidden Map? (Click Yes to start.)"
             dialog5 = theKingDialog5 
-            exitDialog = "It is said that you are not interested in our research with IBM. Talk to you later. (Emma is keeping push you behind.)"
+           
             
             dialogStack = [Dialog(screen, unknownFilePath, "The Unknown", dialog1, True, False, True, False, False),
                            Dialog(screen, unknownFilePath, "The Unknown", dialog2, True, True, True, False, False),
@@ -4311,35 +3117,27 @@ class HardModeNode(SceneStack):
         
             for event in self.events:
                         if event.type == pygame.MOUSEBUTTONDOWN :
-                            
-                            
                                 if endChatRect is not None and endChatRect.collidepoint(pygame.mouse.get_pos()):
                                     kingNPCDialogVoice[HARDMODE_NPC_INDEX].stop()
                                     HARDMODE_NPC_INDEX= 0 
-                                    #print(EASYMODE_NPC_INDEX)
                                     hover_sound.play()
                                     IS_SPACEBAR_PRESSED_3 = False  
-                                    #MINI_PLAYER_X -=10
+                                   
                                 if nextChatRect is not None and nextChatRect.collidepoint(pygame.mouse.get_pos()):
-                                    #print("nextChatRect")
                                     hover_sound.play()
                                     kingNPCDialogVoice[HARDMODE_NPC_INDEX].stop()
                                     HARDMODE_NPC_INDEX +=1 
                                     IS_KINGVOICE_PLAYED[HARDMODE_NPC_INDEX] = True
-                                    #print(EASYMODE_NPC_INDEX)
+                                    
                                 if prevChatRect is not None and prevChatRect.collidepoint(pygame.mouse.get_pos()):
-                                    #print("prevChatRect")
                                     hover_sound.play()
                                     kingNPCDialogVoice[HARDMODE_NPC_INDEX].stop()
                                     HARDMODE_NPC_INDEX -=1
                                     IS_KINGVOICE_PLAYED[HARDMODE_NPC_INDEX] = True
-                                    #print(EASYMODE_NPC_INDEX)
                                     
                                 if yesChatRect is not None and yesChatRect.collidepoint(pygame.mouse.get_pos()):
-                                    #print("yesChatRect")
                                     kingNPCDialogVoice[HARDMODE_NPC_INDEX].stop()
                                     hover_sound.play()
-                                    #print(EASYMODE_NPC_INDEX)
                                     portal_sound.play()
                                     IS_SPACEBAR_PRESSED_3 = False  
                                     MINI_PLAYER_X, MINI_PLAYER_Y = 0 ,630
@@ -4347,18 +3145,11 @@ class HardModeNode(SceneStack):
                                     
                                 if  noChatRect is not None and noChatRect.collidepoint(pygame.mouse.get_pos()):  
                                     kingNPCDialogVoice[HARDMODE_NPC_INDEX].stop()
-                                    #print("nochatrect")
                                     hover_sound.play()
-                                    #print(EASYMODE_NPC_INDEX)
-                                    #MINI_PLAYER_X -=10
                                     HARDMODE_NPC_INDEX= 0 
                                     IS_SPACEBAR_PRESSED_3 = False  
                             
                     
-            
-            
-            # self.pop()
-            # self.push(GameIntroNode())
         else:    
             IS_SPACEBAR_PRESSED_3 = False  
             IS_KINGVOICE_PLAYED[HARDMODE_NPC_INDEX] = True 
@@ -4367,13 +3158,12 @@ class HardModeNode(SceneStack):
         
         
         global USER_ID    
+        
         global IS_LEADERBOARD_OPEN    
-       
         if IS_LEADERBOARD_OPEN : 
             LeaderBoard(screen).render()
         else: 
             pass
-        #Stats(screen).render(3)
         
         
         global IS_STATS_OPEN
@@ -4393,176 +3183,14 @@ class HardModeNode(SceneStack):
         sign_font = pygame.font.Font(sign_directory, 20)
         authorSignature = sign_font.render('Kyungtae Han', True, BLACK)
         screen.blit(authorSignature, (900, 750))
-        # hardNPC =  pygame.image.load("ibm_blockchain/assets/hardnpc.png")
-        # hardNPC = pygame.transform.scale( hardNPC, (250,200) )
-        # screen.blit(hardNPC,(750,500)) 
-        # quiz1_content = "Q1. Which of the following is IBM BlockChain?"
-        # quiz2_content = "Q2. Which of the following is IBM BlockChain?"
-        # quiz = Quiz(screen, 80, 80, quiz1_content,True)
-        
-        # global QUIZ_INDEX
-        # quizStack = [Quiz(screen, 80, 80, quiz1_content,True),Quiz(screen, 80, 80, quiz2_content,True)]
        
-        # if QUIZ_INDEX is len(quizStack):
-        #     pass
-        #     # print("Dialogue")
             
-        # else:
-        #     quizStack[QUIZ_INDEX].render()
-        #     for event in self.events: 
-        #         if event.type == pygame.MOUSEBUTTONDOWN :
-        #             mouse_x, mouse_y = pygame.mouse.get_pos()
-        #             # Home Exit 
-        #             if (92<=mouse_x<=525) and (268 <= mouse_y <= 585) : 
-        #                 # self.push(HomeNode()) 
-        #                 print(quiz.checkAnswer(True))
-        #                 if quiz.checkAnswer(True):
-                        
-        #                     SCORE += SCORE_INCREMENT
-        #                     QUIZ_INDEX +=1
-        #                     # quizStack[QUIZ_INDEX].render()
-                    
-        #             if (542<=mouse_x<=969) and (264 <= mouse_y <= 585) : 
-        #                 # self.push(GameIntroNode()) 
-        #                 print(quiz.checkAnswer(False)) 
-        #                 if quiz.checkAnswer(False):
-                        
-        #                     SCORE += SCORE_INCREMENT 
-        #                     QUIZ_INDEX +=1
-                            # quizStack[QUIZ_INDEX].render()
-            
-# class SecretPortalHardNode(SceneStack):
-#     def __init__(self):
-#         SceneStack.__init__(self)
-#         self.character =  pygame.image.load("ibm_blockchain/assets/ship.png")
-#         self.character = pygame.transform.scale( self.character, (40,40) )
-#         x,y = 200,400
-#         VELOCITY = 8
-#         pygame.mixer.init() 
-#         pygame.mixer.music.load("ibm_blockchain/assets/QueensGarden.mp3") 
-#         pygame.mixer.music.play(-1,0.0)
-        
-#     def ProcessInput(self, events, pressed_keys):
-#         self.keyPress = pressed_keys
-#         for event in events: 
-#             if event.type == pygame.KEYDOWN and event.key == pygame.K_y:
-#                 # Move to the next scene when the user pressed Enter
-#                 print("yes")
-#                 self.push(GameOverNode())
-                
-#             if event.type == pygame.MOUSEBUTTONDOWN :
-#                 mouse_x, mouse_y = pygame.mouse.get_pos()
-#                 # Home Exit 
-#                 if (964<=mouse_x<=1004) and (20 <= mouse_y <= 60) : 
-#                     self.push(HomeNode()) 
-#                 if (924<=mouse_x<=964) and (20 <= mouse_y <= 60) : 
-#                     self.push(GameIntroNode())   
-                    
-    
-#     def Update(self):
-#         pass
-    
-#     def Render(self, screen):
-#          # Field 
-#         # field = pygame.image.load("ibm_blockchain/assets/field.png")
-#         # field = pygame.transform.scale( field, (1024,800) )
-#         # screen.blit(field,(0,0))
-#         screen.fill(BLACK)
-#         gameBackground = pygame.image.load("ibm_blockchain/assets/miniplatform/hardmode/background.png")
-#         gameBackground = pygame.transform.scale(gameBackground,(1024,800))
-#         screen.blit(gameBackground,(0,0))
-        
-#          # mini Platform 1 
-#         # bottomPlatform = pygame.image.load("ibm_blockchain/assets/bottomPlatform.png")
-#         # bottomPlatform = pygame.transform.scale(bottomPlatform,(1024,120))
-#         # screen.blit(bottomPlatform,(0,680))
-        
-#         global SCORE
-#         text = GAME_FONT.render(f'Score: {SCORE}', True, GREEN, BLUE)
-#         textRect = text.get_rect()
-#         textRect.center = (100,20)
-#         #SCORE += SCORE_INCREMENT
-#         screen.blit(text, textRect)
-        
-        
-        
-          
-#         # path = "ibm_blockchain/assets/npc/unknownStar.png"
-#         # hardNPC = Npc (screen, "Unknown Star",900, 588, 100, 100, path)
-#         # hardNPC.render()
-        
-#          #Refresh 
-#         refreshButtonPath = "ibm_blockchain/assets/homeIcon.png"
-#         refreshButton = pygame.image.load(refreshButtonPath)
-#         refreshButton = pygame.transform.scale(refreshButton,(40,40))
-#         refreshButtonRect = refreshButton.get_rect(topright=(1024-20, 20))
-#         # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
-#         screen.blit(refreshButton, refreshButtonRect)
-        
-#          #Refresh 
-#         returnButtonPath = "ibm_blockchain/assets/goBackHomeScreen.png"
-#         returnButton = pygame.image.load(returnButtonPath)
-#         returnButton = pygame.transform.scale(returnButton,(40,40))
-#         returnButtonRect = returnButton.get_rect(topright=(1024-20-40, 20))
-#         # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
-#         screen.blit(returnButton, returnButtonRect)
-        
-#         # LeaderBoard 
-#         leaderBoardButtonPath = "ibm_blockchain/assets/Leaderboard.png"
-#         leaderBoardButton = pygame.image.load(leaderBoardButtonPath)
-#         leaderBoardButton = pygame.transform.scale(leaderBoardButton,(40,40))
-#         leaderBoardButtonRect = leaderBoardButton.get_rect(topright=(1024-20-40-40, 20))
-#         # pygame.draw.rect(screen, RED, leaderBoardButtonRect,4) 
-#         screen.blit(leaderBoardButton, leaderBoardButtonRect)
-        
-        
-     
-        
-#         bottomPlatform = pygame.sprite.Group()
-#         autumnTilePath = "ibm_blockchain/assets/miniplatform/winterTile/middleTile.png"
-       
-        
-#          # Bottom Platform
-#         for eachTileX in range(0,1100,50):
-#             bottomPlatform.add(MiniPlatform(autumnTilePath,eachTileX,680))
-#             bottomPlatform.add (MiniPlatform(autumnTilePath,eachTileX,730))
-#             bottomPlatform.add (MiniPlatform(autumnTilePath,eachTileX,770))
-        
-#         bottomPlatform.draw(screen)
-        
-#         global MINI_PLAYER_X, MINI_PLAYER_Y
-#         self.playerPath = "ibm_blockchain/assets/character/right/right1.png"
-#         self.player = MiniPlayer(self.playerPath, MINI_PLAYER_X, MINI_PLAYER_Y)
-      
-        
-        
-#         collidedPlatform = gravityCheck(self.player,bottomPlatform)
-#         # print("gravity check = ",len(gravityCheck(self.player,bottomPlatform)))
-        
-#         if len(collidedPlatform) > 0 : 
-#                print("in!")
-#                MINI_PLAYER_Y = collidedPlatform[0].rect.top-47
-#                print("IN =  ", collidedPlatform[0].rect)
-#         else:
-#             MINI_PLAYER_Y += 9.8
-        
-        
-       
-        
-#         # hardNPC =  pygame.image.load("ibm_blockchain/assets/hardnpc.png")
-#         # hardNPC = pygame.transform.scale( hardNPC, (250,200) )
-#         # screen.blit(hardNPC,(750,500)) 
-#         self.player.update(self.keyPress)
-#         self.player.draw(screen)
-
 
 HARD_HIDDEN_WELCOME_VOICE = pygame.mixer.Sound("assets/npc/npcVoice/theKing/hardHiddenWelcome.wav")
 
 class SecretPortalHardNode1(SceneStack):
     def __init__(self):
         SceneStack.__init__(self)
-        #self.character =  pygame.image.load("ibm_blockchain/assets/ship.png")
-        #self.character = pygame.transform.scale( self.character, (40,40) )
         pygame.mixer.init() 
         pygame.mixer.music.load("assets/background/music/QueensGarden.mp3") 
         pygame.mixer.music.play(-1,0.0)
@@ -4572,8 +3200,7 @@ class SecretPortalHardNode1(SceneStack):
         HARD_HIDDEN_WELCOME_VOICE.play()
         HARD_HIDDEN_WELCOME_VOICE.set_volume(1.0)
         
-        #x,y = 200,400
-        #VELOCITY = 8
+       
         
     def ProcessInput(self, events, pressed_keys):
         self.keyPress = pressed_keys
@@ -4586,11 +3213,9 @@ class SecretPortalHardNode1(SceneStack):
         for event in events: 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_y:
                 # Move to the next scene when the user pressed Enter
-                print("yes")
                 self.push(GameOverNode())
             
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                
                 MINI_PLAYER_Y -= 30     
             
             if event.type == pygame.KEYDOWN and event.key == K_1:
@@ -4613,18 +3238,18 @@ class SecretPortalHardNode1(SceneStack):
                 if not IS_ACHIEVEMENT_OPEN:
                     IS_ACHIEVEMENT_OPEN = True 
                     OPEN_ACHIEVEMENT_VOICE.play()  
-                    #OPEN_STATS_VOICE.play()
+                    
                 else: 
                     IS_ACHIEVEMENT_OPEN = False 
                     CLOSE_ACHIEVEMENT_VOICE.play()   
-                    #CLOSE_STATS_VOICE.play()     
+                   
                 
             if event.type == pygame.MOUSEBUTTONDOWN :
                 mouse_x, mouse_y = pygame.mouse.get_pos()
                 global RETURN_HOME_VOICE, MINIGAME_HOME_VOICE
                 # Home Exit 
                 if (964<=mouse_x<=1004) and (20 <= mouse_y <= 60) :
-                    #RETURN_HOME_VOICE.play() 
+                    
                     MINI_PLAYER_X = 0
                     MINI_PLAYER_Y = 630
                     self.push(HomeNode())  
@@ -4644,11 +3269,6 @@ class SecretPortalHardNode1(SceneStack):
         screen.blit(gameBackground,(0,0))
         
         global SCORE
-        # text = GAME_FONT.render(f'Score: {SCORE}', True, GREEN, BLUE)
-        # textRect = text.get_rect()
-        # textRect.center = (100,20)
-        # #SCORE += SCORE_INCREMENT
-        # screen.blit(text, textRect)
         scoreBoard = ScoreBoard(screen, SCORE, 10, 10)
         scoreBoard.render()
         
@@ -4661,10 +3281,7 @@ class SecretPortalHardNode1(SceneStack):
         unknownNPCPath = "assets/npc/leftdangerousNPC.png"
         unknownNPC = Npc (screen, "Juliet", 100, 90, 100, 100, unknownNPCPath)
         unknownNPC.render()
-        
-        # self.player.update(self.keyPress)
-        # self.player.draw(screen)
-        
+         
         bottomPlatform = pygame.sprite.Group()
         autumnTile1Path = "assets/miniplatform/hardmode/autumnTile1.png"
         autumnTile2Path = "assets/miniplatform/hardmode/autumnTile2.png"
@@ -4688,12 +3305,6 @@ class SecretPortalHardNode1(SceneStack):
         bottomPlatform.add(MiniPlatform(crateBoxPath,350,630))
         
         
-        # for eachTileX in range (0,200,50):
-        #     bottomPlatform.add(MiniPlatform(autumnTile1Path, eachTileX,430))
-            
-            # bottomPlatform.add(MiniPlatform(autumnTile1Path, eachTileX,180))
-            
-        
         # Opposite Side Spawn Platform     
         for eachTileX in range (750,1100,50):
             bottomPlatform.add(MiniPlatform(autumnTile1Path, eachTileX,530))
@@ -4702,45 +3313,12 @@ class SecretPortalHardNode1(SceneStack):
         
         bottomPlatform.add(MiniPlatform(crateBoxPath,700,580))
         bottomPlatform.add(MiniPlatform(crateBoxPath,650,630))
-        
         bottomPlatform.add(MiniPlatform(crateBoxPath,600,530))
-        # bottomPlatform.add(MiniPlatform(crateBoxPath,500,530))
         bottomPlatform.add(MiniPlatform(crateBoxPath,400,530))
-        
         bottomPlatform.add(MiniPlatform(crateBoxPath,600,330))
-        # bottomPlatform.add(MiniPlatform(crateBoxPath,500,530))
         bottomPlatform.add(MiniPlatform(crateBoxPath,400,330))
-        
         bottomPlatform.add(MiniPlatform(crateBoxPath,600,180))
-        # bottomPlatform.add(MiniPlatform(crateBoxPath,500,530))
         bottomPlatform.add(MiniPlatform(crateBoxPath,400,180))
-        
-        
-        
-        # Upper Opposite Side     
-        # for eachTileX in range (750,1100,50):
-        #     bottomPlatform.add(MiniPlatform(autumnTile1Path, eachTileX,330))
-        
-        # # Jump Section to Opposite Side Spawn Platform 
-        # bottomPlatform.add(MiniPlatform(iceBoxPath,550,580))
-        # bottomPlatform.add(MiniPlatform(iceBoxPath,550,630))
-        
-        # bottomPlatform.add(MiniPlatform(iceBoxPath,500,630))
-        
-        # bottomPlatform.add(MiniPlatform(crateBoxPath,710,630))
-        
-        # # CrateBox on spawn Platform Opposite Side 
-        # bottomPlatform.add(MiniPlatform(crateBoxPath,650,480))
-        # bottomPlatform.add(MiniPlatform(crateBoxPath,675,430))
-        # bottomPlatform.add(MiniPlatform(crateBoxPath,690,380))
-        
-        
-        
-        
-        # bottomPlatform.add(MiniPlatform(crateBoxPath,700,260))
-        # bottomPlatform.add(MiniPlatform(crateBoxPath,550,260))
-        # bottomPlatform.add(MiniPlatform(crateBoxPath,400,260))
-        # bottomPlatform.add(MiniPlatform(crateBoxPath,250,260))
         
            
         bottomPlatform.draw(screen)
@@ -4754,19 +3332,17 @@ class SecretPortalHardNode1(SceneStack):
         global VEL_DY
         velDx = 30
         SHRIGEN_X  = (SHRIGEN_X-velDx)%1024
-        # SHRIGEN_Y  = (SHRIGEN_Y+VEL_DY)%800
-        
+       
         miniPlayerRect = self.player.getMiniPlayerRect()
-        #pygame.draw.rect(screen, RED, miniPlayerRect,4) 
+      
         
         
         shrigenRect = shrigen.get_rect(topright=(SHRIGEN_X, 480))
         shrigenRect2 = shrigen.get_rect(topright=(SHRIGEN_X, 280))
         shrigenRect3 = shrigen.get_rect(topright= (SHRIGEN_X,130))
-        #pygame.draw.rect(screen, GREEN, shrigenRect,4)
+       
         screen.blit(shrigen, shrigenRect)
         screen.blit(shrigen, shrigenRect2)
-        #screen.blit(shrigen,shrigenRect3)
        
        
         crystalPath = "assets/miniplatform/winterTile/object/Crystal.png"
@@ -4776,8 +3352,7 @@ class SecretPortalHardNode1(SceneStack):
         crystalRect2 = crystal.get_rect(topleft=(900, 485))
         crystalRect3 = crystal.get_rect(topleft=(900, 585))
         crystalRect4 = crystal.get_rect(topleft=(900, 430))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
-        # screen.blit(crystal, crystalRect)
+        
         screen.blit(crystal,crystalRect3) 
         screen.blit(crystal,crystalRect4) 
        
@@ -4811,7 +3386,6 @@ class SecretPortalHardNode1(SceneStack):
        
         
         if miniPlayerRect.colliderect(crystalRect3)  or miniPlayerRect.colliderect(crystalRect4):
-            # MINI_PLAYER_X -= 10
             automaticReSpawn.play(0)
             MINI_PLAYER_X = 100
             MINI_PLAYER_Y = 240
@@ -4821,165 +3395,43 @@ class SecretPortalHardNode1(SceneStack):
             MINI_PLAYER_X = 512
             MINI_PLAYER_Y = 400
                 
-        #or shrigenRect3.colliderect(miniPlayerRect)
+       
         if shrigenRect.colliderect(miniPlayerRect) or shrigenRect3.colliderect(miniPlayerRect):
-            # MINI_PLAYER_X -= 10
             MINI_PLAYER_X -= 20 
         
         
-         # mini Platform 1 
-        # bottomPlatform = pygame.image.load("ibm_blockchain/assets/bottomPlatform.png")
-        # bottomPlatform = pygame.transform.scale(bottomPlatform,(1024,120))
-        # screen.blit(bottomPlatform,(0,680))
-        
-        # mediumNPC =  pygame.image.load("ibm_blockchain/assets/mediumNPC.png")
-        # mediumNPC = pygame.transform.scale( mediumNPC, (100,100) )
-        # screen.blit(mediumNPC,(850,600))  
-        
-        # mediumNPCPath = "ibm_blockchain/assets/rogerMoore.png"
-        # mediumNPC = Npc (screen, "Roger",850, 587, 100, 100, mediumNPCPath)
-        # mediumNPC.render()
-        
-       
-       
-        # miniNPCRect = mediumNPC.getNpcRect()
+      
         
         
         pygame.mixer.init() 
-        #portal_sound = pygame.mixer.Sound("ibm_blockchain/assets/maplestory_portal.mp3") 
         
-        #hover_sound = pygame.mixer.Sound("ibm_blockchain/assets/CLICK_009.wav")
+        # Author Signature 
         sign_directory = "assets/font/Satisfy-Regular.ttf"
         sign_font = pygame.font.Font(sign_directory, 20)
         authorSignature = sign_font.render('Kyungtae Han', True, BLACK)
         screen.blit(authorSignature, (900, 750))
-        # global MEDIUMMODE_NPC_INDEX
-        # # global MINI_PLAYER_X
-        # # print("BEFORE COMING IN ", TOWN_NPC_DIALOG_INDEX)
-        # if miniNPCRect.colliderect(miniPlayerRect) and MEDIUMMODE_NPC_INDEX>=0 :
-         
-        #     # portal_sound.play()
-        #     # PLAYER_X -= 1 
-        #     # PLAYER_Y -= 1
-        #     filePath = mediumNPCPath
-            
-        #     dialog1 = "Hey there, have you come here from Dr. Emma Norling? Congratulations! You finally have reached here and completed the game! "
-        #     dialog2 = """I'm Roger Moore, the Professor of Spoken Language Processing and Member of the Speech and Hearing (SpandH) research group at the Department of Computer Science. I have gained over 40 years’ experience in Speech Technology R&D and, although an engineer by training, much of my research has been based on insights from human speech perception and production."""
-        #     dialog3 = "Since 2004, I have been Professor of Spoken Language Processing at the University of Sheffield, and also holds Visiting Chairs at Bristol Robotics Laboratory and University College London Psychology & Language Sciences.  I was President of the European/International Speech Communication Association from 1997 to 2001, General Chair for INTERSPEECH-2009 and ISCA Distinguished Lecturer during 2014-15.      "
-        #     dialog4 = "We are currently working with IBM on Watson Text-To-Speech, especially cooperating with AI Group Project. The University of Sheffield is planning to reach top 1-tier list as Stanford, MIT, and Harvard. "
-        #     dialog5 = "This is what I've got to talk with you today. Do you want to go back to Dr. Emma Norling? (Automatically takes you to Dr. Emma Norling! If not, you can still leave with above exit button!)"
-        #     exitDialog = "It is said that you are not interested in our research with IBM. Talk to you later. (Emma is keeping push you behind.)"
-            
-        #     dialogStack = [Dialog(screen, filePath, "Dr. Roger Moore", dialog1, True, True, True, False, False),
-        #                    Dialog(screen, filePath, "Dr. Roger Moore", dialog2, True, True, True, False, False),
-        #                    Dialog(screen, filePath, "Dr. Roger Moore", dialog3, True, True, True, False, False),
-        #                    Dialog(screen, filePath, "Dr. Roger Moore", dialog4, True, True, True, False, False),
-        #                    Dialog(screen, filePath, "Dr. Roger Moore", dialog5, True, True, False, True, True)
-                           
-        #                 ]
-            
-            
-        #     dialogStack[MEDIUMMODE_NPC_INDEX].render()
-        #     endChatRect =  dialogStack[MEDIUMMODE_NPC_INDEX].drawEndChatButton()
-        #     nextChatRect = dialogStack[MEDIUMMODE_NPC_INDEX].drawNextButton()
-        #     prevChatRect = dialogStack[MEDIUMMODE_NPC_INDEX].drawPrevButton()
-        #     yesChatRect = dialogStack[MEDIUMMODE_NPC_INDEX].drawYesButton()
-        #     noChatRect = dialogStack[MEDIUMMODE_NPC_INDEX].drawNoButton()
-        #     dialogStack[MEDIUMMODE_NPC_INDEX].drawNPCFigure()
-        #     dialogStack[MEDIUMMODE_NPC_INDEX].drawDialogText()
-            
-        #     for event in self.events:
-        #             if event.type == pygame.MOUSEBUTTONDOWN :
-                           
-                           
-        #                     if endChatRect is not None and endChatRect.collidepoint(pygame.mouse.get_pos()):
-        #                         MEDIUMMODE_NPC_INDEX = -1  
-        #                         print(MEDIUMMODE_NPC_INDEX)
-        #                         hover_sound.play()
-        #                         MINI_PLAYER_X -=10
-        #                     if nextChatRect is not None and nextChatRect.collidepoint(pygame.mouse.get_pos()):
-        #                         print("nextChatRect")
-        #                         hover_sound.play()
-        #                         MEDIUMMODE_NPC_INDEX +=1 
-        #                         print(MEDIUMMODE_NPC_INDEX)
-        #                     if prevChatRect is not None and prevChatRect.collidepoint(pygame.mouse.get_pos()):
-        #                         print("prevChatRect")
-        #                         hover_sound.play()
-        #                         MEDIUMMODE_NPC_INDEX -=1
-        #                         print(MEDIUMMODE_NPC_INDEX)
-                                
-        #                     if yesChatRect is not None and yesChatRect.collidepoint(pygame.mouse.get_pos()):
-        #                         print("yesChatRect")
-        #                         hover_sound.play()
-        #                         print(MEDIUMMODE_NPC_INDEX)
-        #                         portal_sound.play()
-        #                         MINI_PLAYER_X, MINI_PLAYER_Y = 0 ,630
-        #                         self.push(HomeNode())
-                                
-        #                     if  noChatRect is not None and noChatRect.collidepoint(pygame.mouse.get_pos()):  
-        #                         print("nochatrect")
-        #                         hover_sound.play()
-        #                         print(MEDIUMMODE_NPC_INDEX)
-        #                         MINI_PLAYER_X -=10
-        #                         MEDIUMMODE_NPC_INDEX= -1  
-                        
-                    
-            
-            
-        #     # self.pop()
-        #     # self.push(GameIntroNode())
-        # else:    
-        #     MEDIUMMODE_NPC_INDEX = 0
+       
         
-        
-         #Refresh 
+        #Refresh 
         refreshButtonPath = "assets/button/homeIcon.png"
         refreshButton = pygame.image.load(refreshButtonPath)
         refreshButton = pygame.transform.scale(refreshButton,(40,40))
         refreshButtonRect = refreshButton.get_rect(topright=(1024-20, 20))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
         screen.blit(refreshButton, refreshButtonRect)
         
-         #Refresh 
+        #Refresh 
         returnButtonPath = "assets/button/goBackHomeScreen.png"
         returnButton = pygame.image.load(returnButtonPath)
         returnButton = pygame.transform.scale(returnButton,(40,40))
         returnButtonRect = returnButton.get_rect(topright=(1024-20-40, 20))
-        # pygame.draw.rect(screen, RED, refreshButtonRect,4) 
         screen.blit(returnButton, returnButtonRect)
         
-        #  # LeaderBoard 
-        # leaderBoardButtonPath = "ibm_blockchain/assets/Leaderboard.png"
-        # leaderBoardButton = pygame.image.load(leaderBoardButtonPath)
-        # leaderBoardButton = pygame.transform.scale(leaderBoardButton,(40,40))
-        # leaderBoardButtonRect = leaderBoardButton.get_rect(topright=(1024-20-40-40, 20))
-        # # pygame.draw.rect(screen, RED, leaderBoardButtonRect,4) 
-        # screen.blit(leaderBoardButton, leaderBoardButtonRect)
-        
-        
-        # bottomPlatform = pygame.sprite.Group()
-        # leftCornerPath = "ibm_blockchain/assets/miniplatform/winterTile/leftCorner.png"
-        # middleTilePath = "ibm_blockchain/assets/miniplatform/winterTile/middleTile.png"
-        # rightCornerPath = "ibm_blockchain/assets/miniplatform/winterTile/rightCorner.png"
-        # downTilePath = "ibm_blockchain/assets/miniplatform/winterTile/downTile.png"
-        # miniPlatform = MiniPlatform(platformPath,0,680) 
-        
-       
-        # for eachTileX in range(0,1100,50):
-        #     bottomPlatform.add (MiniPlatform(middleTilePath,eachTileX,750) )
-        #     bottomPlatform.add (MiniPlatform(downTilePath,eachTileX,800))
-        #     bottomPlatform.add (MiniPlatform(downTilePath,eachTileX,810))
-        #     #bottomPlatform.add (MiniPlatform(downTilePath,eachTileX,800))
-           
+     
             
-        # bottomPlatform.draw(screen)
         collidedPlatform = gravityCheck(self.player,bottomPlatform)
-        # print("gravity check = ",len(gravityCheck(self.player,bottomPlatform)))
         
         if len(collidedPlatform) > 0 : 
-               print("in!")
                MINI_PLAYER_Y = collidedPlatform[0].rect.top-47
-               print("IN =  ", collidedPlatform[0].rect)
         else:
             MINI_PLAYER_Y += 9.8
         
@@ -5020,7 +3472,7 @@ class SecretPortalHardNode1(SceneStack):
                 IS_QUIZ_STARTED = False 
                 SCORE = 0
                 pass
-                # print("Dialogue")
+                
                 
             else:
                 quizStack[QUIZ_INDEX].render()
@@ -5032,22 +3484,20 @@ class SecretPortalHardNode1(SceneStack):
                         mouse_x, mouse_y = pygame.mouse.get_pos()
                         # Home Exit 
                         if (92<=mouse_x<=525) and (268 <= mouse_y <= 585) : 
-                            # self.push(HomeNode()) 
-                            print(quiz.checkAnswer(True))
+                           
                             if quizStack[QUIZ_INDEX].checkAnswer(True):
                                 quizVoice[QUIZ_INDEX].stop()
                                 ANSWER_CORRECT_VOICE.play()
                                 SCORE += SCORE_INCREMENT*3
                                 QUIZ_INDEX +=1
-                                # quizStack[QUIZ_INDEX].render()
+                                
                             else:
                                 quizVoice[QUIZ_INDEX].stop()
                                 ANSWER_WRONG_VOICE.play()
                                 QUIZ_INDEX+=1
                         
                         elif (542<=mouse_x<=969) and (264 <= mouse_y <= 585) : 
-                            # self.push(GameIntroNode()) 
-                            print(quiz.checkAnswer(False)) 
+                           
                             if quizStack[QUIZ_INDEX].checkAnswer(False):
                                 quizVoice[QUIZ_INDEX].stop()
                                 ANSWER_CORRECT_VOICE.play()
@@ -5064,47 +3514,6 @@ class SecretPortalHardNode1(SceneStack):
         unknownNPCRect = unknownNPC.getNpcRect()
         unknownQuizNPC(screen, self.events, self.keyPress,unknownNPCPath ,unknownNPCRect,miniPlayerRect)
         
-        
-        
-        
-        # global IS_QUIZ_STARTED
-        # if IS_QUIZ_STARTED:
-            
-        #     quiz1_content = "Q1. Which of the following is IBM BlockChain?"
-        #     quiz2_content = "Q2. Which of the following is IBM BlockChain?"
-        #     quiz = Quiz(screen, 80, 80, quiz1_content,True)
-            
-        #     global QUIZ_INDEX
-            
-        #     quizStack = [Quiz(screen, 80, 80, quiz1_content,True),Quiz(screen, 80, 80, quiz2_content,True)]
-        
-        #     if QUIZ_INDEX is len(quizStack):
-        #         IS_QUIZ_STARTED = False 
-        #         pass
-        #         # print("Dialogue")
-                
-        #     else:
-        #         quizStack[QUIZ_INDEX].render()
-        #         for event in self.events: 
-        #             if event.type == pygame.MOUSEBUTTONDOWN :
-        #                 mouse_x, mouse_y = pygame.mouse.get_pos()
-        #                 # Home Exit 
-        #                 if (92<=mouse_x<=525) and (268 <= mouse_y <= 585) : 
-        #                     # self.push(HomeNode()) 
-        #                     print(quiz.checkAnswer(True))
-        #                     if quiz.checkAnswer(True):
-                            
-        #                         SCORE += SCORE_INCREMENT
-        #                         QUIZ_INDEX +=1
-        #                         # quizStack[QUIZ_INDEX].render()
-                        
-        #                 if (542<=mouse_x<=969) and (264 <= mouse_y <= 585) : 
-        #                     # self.push(GameIntroNode()) 
-        #                     print(quiz.checkAnswer(False)) 
-        #                     if quiz.checkAnswer(False):
-                            
-        #                         SCORE += SCORE_INCREMENT 
-        #                         QUIZ_INDEX +=1
         
         global USER_ID
         global IS_LEADERBOARD_OPEN    
@@ -5128,67 +3537,14 @@ class SecretPortalHardNode1(SceneStack):
         else: 
             pass      
         
-        #  # Name Tag
-        # pygame.draw.rect(screen, (51,51,51), pygame.Rect(760, 687, 250, 43), border_radius = 10 )
-        
-        # LIGHT_GREEN = (234,230,70)
-        # ANSWER_FONT = pygame.font.Font(FONT_DIRECTORY, 12)
-        # answer1_content = "Dr. Roger Moore"
-        # answer1 =  ANSWER_FONT.render(answer1_content, True, LIGHT_GREEN)
-        # screen.blit(answer1,(790, 707))
-  
-         
-# class GameWinNode(SceneStack):
-#     def __init__(self):
-#         SceneStack.__init__(self)
-#         pygame.mixer.init() 
-#         pygame.mixer.music.load("ibm_blockchain/assets/gameOverWin.mp3") 
-#         pygame.mixer.music.play(-1,0.0)
-        
-#     def ProcessInput(self, events, pressed_keys):
-#         pass
-#         # for event in events:
-#         #     if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-#         #         # Move to the next scene when the user pressed Enter
-#         #         self.SwitchToScene(GameScene())
-    
-#     def Update(self):
-#         pass
-    
-#     def Render(self, screen):
-#          # Field 
-#         # field = pygame.image.load("ibm_blockchain/assets/field.png")
-#         # field = pygame.transform.scale( field, (1024,800) )
-#         # screen.blit(field,(0,0))
-#         screen.fill(BLACK)
-        
-#         global SCORE
-#         text = GAME_FONT.render(f'Score: {SCORE}', True, GREEN, BLUE)
-#         textRect = text.get_rect()
-#         textRect.center = (100,20)
-#         #SCORE += SCORE_INCREMENT
-#         screen.blit(text, textRect)
+       
                 
 class GameOverNode(SceneStack):
     def __init__(self):
         SceneStack.__init__(self)
-       
         pygame.mixer.init() 
         pygame.mixer.music.load("assets/background/music/gameOverWin.mp3") 
         pygame.mixer.music.play(-1,0.0)
-        
-        # self.button1_x, self.button1_y = WIDTH // 2, HEIGHT // 4
-        # self.button2_x, self.button2_y = WIDTH // 2 - 30  , HEIGHT // 4 + 100
-        # self.button3_x, self.button3_y = WIDTH // 2 -20  , HEIGHT // 4 + 200
-        # x,y = 200,400
-        # VELOCITY = 8
-        # self.button1 = Button (
-        #          "EASY (x 1)",
-        #           (WIDTH/2-100, HEIGHT/2-100),
-        #           font = 50,
-        #           bg="navy",
-        #           feedback="OK"
-        # ) 
         
     def ProcessInput(self, events, pressed_keys):
         self.events = events 
@@ -5217,32 +3573,17 @@ class GameOverNode(SceneStack):
             if event.type == pygame.KEYDOWN and event.key == K_3: 
                 if not IS_ACHIEVEMENT_OPEN:
                     IS_ACHIEVEMENT_OPEN = True   
-                    #OPEN_STATS_VOICE.play()
+                   
                 else: 
                     IS_ACHIEVEMENT_OPEN = False    
-                    #CLOSE_STATS_VOICE.play()     
+                     
                 
-            # if event.type == pygame.MOUSEBUTTONDOWN:
-            #     print("clicked")
-            #     global DIALOG_COUNT 
-            #     DIALOG_COUNT +=1 
-            #     print(DIALOG_COUNT)
-            
-            # Dialog.hearClick(pygame.mouse.get_pos())
            
-        # if pressed_keys[K_s] and not IS_LEADERBOARD_OPEN:
-        #    IS_LEADERBOARD_OPEN = True      
-        # else: 
-        #    IS_LEADERBOARD_OPEN = False     
-                
-        
-        #print(pygame.mouse.get_pos())
     
     def Update(self):
         pass
     
     def Render(self, screen):
-        
         resetSurface(screen)
         
         GAME_FONT2 = pygame.font.Font(FONT_DIRECTORY, 60)
@@ -5267,26 +3608,20 @@ class GameOverNode(SceneStack):
         text = GAME_FONT.render(f'Score: {SCORE}', True, GREEN, BLUE)
         textRect = text.get_rect()
         textRect.center = (100,20)
-        #SCORE += SCORE_INCREMENT
         screen.blit(text, textRect)  
         
         
         global IS_LEADERBOARD_OPEN    
-       
         if IS_LEADERBOARD_OPEN : 
             LeaderBoard(screen).render()
         else: 
             pass
-        #Stats(screen).render(3)
-        
-        
+       
         global IS_STATS_OPEN
         if IS_STATS_OPEN : 
             Stats(screen).render(1)
         else: 
             pass
-        
-        #filePath = "ibm_blockchain/assets/easynpc1.png"
         
         global IS_ACHIEVEMENT_OPEN
         if IS_ACHIEVEMENT_OPEN : 
@@ -5294,81 +3629,13 @@ class GameOverNode(SceneStack):
         else: 
             pass
         
-         
-        
-        # dialogStack = [Dialog(screen, filePath, "Kevin", "I'm hungry", True, True, True, True, True)]
-        
-        # global TOWN_NPC_DIALOG_INDEX
-        # dialogStack[TOWN_NPC_DIALOG_INDEX].render()
-        # endChatRect =  dialogStack[TOWN_NPC_DIALOG_INDEX].drawEndChatButton()
-        # nextChatRect = dialogStack[TOWN_NPC_DIALOG_INDEX].drawNextButton()
-        # prevChatRect = dialogStack[TOWN_NPC_DIALOG_INDEX].drawPrevButton()
-        # yesChatRect = dialogStack[TOWN_NPC_DIALOG_INDEX].drawYesButton()
-        # noChatRect = dialogStack[TOWN_NPC_DIALOG_INDEX].drawNoButton()
-
-        # for event in self.events:
-        #     if event.type == pygame.MOUSEBUTTONDOWN:
-        #         if endChatRect.collidepoint(pygame.mouse.get_pos()):
-        #             print("yes")
-        #             global DIALOG_COUNT 
-        #             DIALOG_COUNT +=1 
-        #             print(DIALOG_COUNT)
-        #         if nextChatRect.collidepoint(pygame.mouse.get_pos()):
-        #             print("nextChatRect")
-        #         if prevChatRect.collidepoint(pygame.mouse.get_pos()):
-        #             print("prevChatRect")
-        #         if yesChatRect.collidepoint(pygame.mouse.get_pos()):
-        #             print("yesChatRect")
-        #         if noChatRect.collidepoint(pygame.mouse.get_pos()):  
-        #             print("nochatrect")  
-                
-                    #TOWN_NPC_DIALOG_INDEX +=1
-        
-        #dialogStack[0].hearClick()
-        
-        # quiz1_content = "Q1. Which of the following is IBM BlockChain?"
-        # quiz = Quiz(screen, 80, 80, quiz1_content,True)
-        # quiz.render()
-        # for event in self.events: 
-        #     if event.type == pygame.MOUSEBUTTONDOWN :
-        #         mouse_x, mouse_y = pygame.mouse.get_pos()
-        #         # Home Exit 
-        #         if (92<=mouse_x<=525) and (268 <= mouse_y <= 585) : 
-        #             # self.push(HomeNode()) 
-        #             print(quiz.checkAnswer(True))
-                
-        #         if (542<=mouse_x<=969) and (264 <= mouse_y <= 585) : 
-        #             # self.push(GameIntroNode()) 
-        #             print(quiz.checkAnswer(False))  
-        
-        
-        
-        # print(pygame.mouse.get_pos())
-        
-        # Button
-        #screen.blit(self.button1.surface, (self.button1_x, self.button1_y))
 
 ################################################ Scene End ################################################
 
 
 
-# from assets.npc.npcVoice.emma.emmaVoiceGenerator import generateEmmaVoice
-
-# from assets.npc.npcVoice.matthew.matthewVoiceGenerator import generateMatthewVoice 
-
-# from assets.npc.npcVoice.theKing.kingVoiceGenerator import generateTheKingVoice
-
-# print(sys.path)
-# print("before = ",os.getcwd())
-# os.chdir("../../../..")
-# print("after = ",os.getcwd())
-
-
 def BlockchainHouse(width, height, fps, starting_scene):
-    # generateEmmaVoice()
-    # generateMatthewVoice()
-    # generateTheKingVoice()
-    
+    print("Your Current Directory after generating NPC Voice is = ",os.getcwd())
     
     pygame.init()
     gameScreen = pygame.display.set_mode((width,height))
@@ -5377,12 +3644,6 @@ def BlockchainHouse(width, height, fps, starting_scene):
     
     active_scene = starting_scene
     
-    # pygame.mixer.init() 
-    # pygame.mixer.music.load("ibm_blockchain/assets/FloralLife.mp3") 
-    # pygame.mixer.music.play(-1,0.0)
-
-
-
     while active_scene != None:
         pressed_keys = pygame.key.get_pressed()
         
@@ -5407,212 +3668,23 @@ def BlockchainHouse(width, height, fps, starting_scene):
                      filtered_events.clear()
                 filtered_events.append(event)
         
-        # dialogbox = Dialog(512, 400, 1000, 250, "Kev")
-        # dialogbox.render()
-        
-         
-        # gameScreen.fill(BLACK)
-        # ball1 = Ball(x, y, 20, gameScreen, dx,dy)
-        # ball1.render()
-        # ball1.update()
-       
-        # x  = (x+dx)%1024
-        # y  = (y+dy)%800
         
         active_scene.ProcessInput(filtered_events, pressed_keys)
         active_scene.Update()
         active_scene.Render(gameScreen)
-        # print(PLAYER_X, PLAYER_Y)
-        
+    
         active_scene = active_scene.next
-        
-        
         
         pygame.display.flip()
         clock.tick(fps)
 
-#print(__package__)
 
-#BlockchainHouse(WIDTH, HEIGHT, FPS, HomeNode())
-
+BlockchainHouse(WIDTH, HEIGHT, FPS, HomeNode())
 
 
 
-# def drawField(gameScreen):
-#    field = pygame.image.load("./ibm-blockchain/assets/field.png")
-#    field = pygame.transform.scale( field, (WIDTH,HEIGHT) )
-#    gameScreen.blit(field,(0,0))
-   
-   
-# def drawStatue(gameScreen): 
-#    statue = pygame.image.load("./ibm-blockchain/assets/statue.png")
-#    statue = pygame.transform.scale( statue, (100,100) ) 
-#    gameScreen.blit(statue,(350,500))
-#    gameScreen.blit(statue,(600,500))
 
 
-# def drawRiver(gameScreen):
-#     river = pygame.image.load("./ibm-blockchain/assets/river.png")
-#     river = pygame.transform.scale(river,(100,100))
-    
-#     i = 600
-#     STEP = 100
-#     while(i<=1100) : 
-#        gameScreen.blit(river,(i,600))
-#        rect = river.get_rect()
-#        rect.center = i+50,600+50
-#        pygame.draw.rect(gameScreen, GREEN, rect,4)
-#     #    print(rect)
-#        gameScreen.blit(river,(i,700))
-#        i+=STEP
-       
-#     j = 350
-#     while(j>=-50) :
-#        gameScreen.blit(river,(j,600))
-#        gameScreen.blit(river,(j,700))
-#        j-=STEP
-
-# def drawTree(gameScreen):   
-#   tree = pygame.image.load("./ibm-blockchain/assets/tree.png")
-#   tree = pygame.transform.scale( tree, (100,100) )  
-     
-#   STEP = 100
-#   i = 100 
-#   while (i<500):
-#     gameScreen.blit(tree,(0,i))
-#     rect = tree.get_rect()
-#     rect.center = 0+50,i+50
-#     gameScreen.blit(tree,(100,i))
-#     gameScreen.blit(tree,(200,i))
-#     gameScreen.blit(tree,(300,i))
-    
-#     gameScreen.blit(tree,(630,i))
-#     gameScreen.blit(tree,(730,i))
-#     gameScreen.blit(tree,(830,i))
-#     gameScreen.blit(tree,(930,i))
-     
-#     rect = tree.get_rect()
-#    #  print(rect)
-#     rect.center = i+50,600+50 
-#     pygame.draw.rect(gameScreen, RED, rect,4)
-#     i+=STEP
-
-# def drawFence(gameScreen):
-#    fence = pygame.image.load("./ibm-blockchain/assets/fence.png")
-#    fence = pygame.transform.scale( fence, (20,20) )  
-   
-#    STEP = 100
-#    i = 0               
-#    while(i<500): 
-#       gameScreen.blit(fence,(300,470)) 
-#       i+=STEP 
-
-# def drawChar():
-#    x = 350
-#    y = 400
-#    character =  pygame.image.load("./ibm-blockchain/assets/ship.png")
-#    character = pygame.transform.scale( character, (40,40) )
-#    gameScreen.blit(character,(x,y))   
-   
-   
-   
-#    keyPress = pygame.key.get_pressed()
-#    # Changing the coordinates of the player
-#    if keyPress[K_LEFT]:
-#         x -= 8
-#    if keyPress[K_RIGHT]:
-#         x += 8
-#    if keyPress[K_UP]:
-#         y -= 8
-#    if keyPress[K_DOWN]:
-#         y += 8           
-
-
-# def startMainGame():
-
-#     character =  pygame.image.load("./ibm-blockchain/assets/ship.png")
-#     character = pygame.transform.scale( character, (40,40) )
-#     x,y = 200,400
-#     VELOCITY = 8
-
-
-                
-#     # Main Console                        
-#     while not EXIT:
-        
-#         # Grass Field
-#         drawField()
-        
-#         # Entrance Statues
-#         drawStatue()
-        
-#         # River
-#         drawRiver()
-        
-#         # Tree
-#         drawTree()
-        
-#         # Fence
-#         drawFence()
-        
-#         npcDesk = pygame.image.load("./ibm-blockchain/assets/npcDesk.png")
-#         npcDesk = pygame.transform.scale(npcDesk,(235,100))
-#         gameScreen.blit(npcDesk,(400,200))
-        
-#         npc = pygame.image.load("./ibm-blockchain/assets/char1.png")
-#         npc = pygame.transform.scale(npc,(50,50))
-#         gameScreen.blit(npc,(500,200))
-        
-        
-#         sampleRect = Rect(512, 400, 100,100)
-#         pygame.draw.rect(gameScreen, GREEN, sampleRect,4)
-         
-#         # Character
-#         gameScreen.blit(character,(x,y))   
-        
-        
-#         for event in pygame.event.get():
-#             if event.type == pygame.QUIT:
-#                 EXIT = True 
-        
-#         keyPress = pygame.key.get_pressed()
-    
-#     # Changing the coordinates of the player
-#         if keyPress[K_LEFT]:
-#             x -= VELOCITY
-#         if keyPress[K_RIGHT]:
-#             x += VELOCITY
-#         if keyPress[K_UP]:
-#             y -= VELOCITY
-#         if keyPress[K_DOWN]:
-#             y += VELOCITY  
-        
-            
-#         rect = character.get_rect()
-#         rect.center = x+10,y+10 
-#         pygame.draw.rect(gameScreen, RED, rect,4)        
-        
-#         if rect.colliderect(sampleRect):
-#             print("Collided")
-            
-            
-#             x-=20
-#             y-=20
-            
-#             # tkinterRoot = Tk()
-#             # my_gui = Minigame1(tkinterRoot)
-#             # tkinterRoot.mainloop()
-
-            
-#             # root = Tk()
-#             # my_gui = Minigame1(root)
-#             # root.mainloop()
-
-        
-        
-        
-#         pygame.display.flip()
-        
         
         
 

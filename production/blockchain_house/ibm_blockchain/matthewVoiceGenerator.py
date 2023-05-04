@@ -6,9 +6,11 @@ import json
 from ibm_watson import TextToSpeechV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
-
-# os.chdir("assets/npc/npcVoice/matthew")
-os.chdir("production/blockchain_house/ibm_blockchain/assets/npc/npcVoice/matthew")
+#os.chdir("../matthew")
+os.chdir("matthew")
+print("In the Matthew Voice Generator, your current directory is",os.getcwd())
+#os.chdir("npcVoice/matthew")
+#os.chdir("production/blockchain_house/ibm_blockchain/assets/npc/npcVoice/matthew")
 
 
 dialog1Voice_exist = os.path.isfile("matthewDialog1.wav")
@@ -54,7 +56,8 @@ def generateMatthewVoice():
         watsonGenerator("matthewDialog/matthewDialog4.txt", "matthewDialog4.wav")
     if not dialog5Voice_exist: 
         watsonGenerator("matthewDialog/matthewDialog5.txt", "matthewDialog5.wav")
-
+    
+   
 
 
 # print(os.getcwd())

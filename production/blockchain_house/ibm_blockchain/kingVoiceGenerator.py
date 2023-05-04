@@ -7,7 +7,12 @@ from ibm_watson import TextToSpeechV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
 
-os.chdir("production/blockchain_house/ibm_blockchain/assets/npc/npcVoice/theKing")
+# os.chdir("production/blockchain_house/ibm_blockchain/assets/npc/npcVoice/theKing")
+#os.chdir("theKing")
+os.chdir("../theKing")
+print("In the King Voice Generator, your current directory is",os.getcwd())
+
+
 hardHiddenMapVoice_exist = os.path.isfile("hardHiddenWelcome.wav")
 hardModeMapVoice_exist = os.path.isfile("hardWelcome.wav")
 
@@ -42,7 +47,8 @@ def watsonGenerator(textFilePath, fileName):
 
 
 def generateTheKingVoice():
-    
+    print("In the King Voice Generator, your current directory is",os.getcwd())
+
     if not theKingDialog1Voice_exist: 
         watsonGenerator("theKingDialog/theKingDialog1.txt", "theKingDialog1.wav")
 
@@ -58,17 +64,15 @@ def generateTheKingVoice():
     if not theKingDialog5Voice_exist: 
         watsonGenerator("theKingDialog/theKingDialog5.txt", "theKingDialog5.wav")
         
-        
-        
-
     if not hardHiddenMapVoice_exist: 
         watsonGenerator("theKingDialog/hardHiddenWelcome.txt", "hardHiddenWelcome.wav")
 
     if not hardModeMapVoice_exist: 
         watsonGenerator("theKingDialog/hardWelcome.txt", "hardWelcome.wav")
+    
         
 
-generateTheKingVoice()
 
 
-print(os.getcwd())
+
+

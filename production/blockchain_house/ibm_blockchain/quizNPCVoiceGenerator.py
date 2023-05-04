@@ -6,9 +6,15 @@ import json
 from ibm_watson import TextToSpeechV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
-print(os.getcwd())
 
-os.chdir("assets/npc/npcVoice/emma")
+os.chdir("../quizNPC")
+print("In the quizNPC Voice Generator, your current directory is",os.getcwd())
+
+dialog1Voice_exist = os.path.isfile("quizNPCDialog1.wav")
+dialog2Voice_exist = os.path.isfile("quizNPCDialog2.wav")
+dialog3Voice_exist = os.path.isfile("quizNPCDialog3.wav")
+dialog4Voice_exist = os.path.isfile("quizNPCDialog4.wav")
+dialog5Voice_exist = os.path.isfile("quizNPCDialog5.wav")
 
 emmaIntroVoice_exist = os.path.isfile("emmaIntroVoice.wav")
 emmaDialog2Voice_exist = os.path.isfile("emmaDialog2Voice.wav")
@@ -37,22 +43,26 @@ def watsonGenerator(textFilePath, fileName):
                 accept='audio/wav'        
             ).get_result().content) 
     
-def generateEmmaVoice():
-    if not emmaIntroVoice_exist: 
-        watsonGenerator("emmaDialog/emmaIntroVoice.txt", "emmaIntroVoice.wav")
+def generateQuizNPCVoice():
+    
+    print("In the quizNPC Voice Generator, your current directory is",os.getcwd())
+    
+    if not dialog1Voice_exist: 
+        watsonGenerator("quizNPCDialog/quizNPCDialog1.txt", "quizNPCDialog1.wav")
 
-    if not emmaDialog2Voice_exist: 
-        watsonGenerator("emmaDialog/emmaDialog2.txt", "emmaDialog2Voice.wav")
+    if not dialog2Voice_exist: 
+        watsonGenerator("quizNPCDialog/quizNPCDialog2.txt", "quizNPCDialog2.wav")
         
-    if not emmaDialog3Voice_exist: 
-        watsonGenerator("emmaDialog/emmaDialog3.txt", "emmaDialog3Voice.wav")
+    if not dialog3Voice_exist: 
+        watsonGenerator("quizNPCDialog/quizNPCDialog3.txt", "quizNPCDialog3.wav")
 
-    if not emmaDialog4Voice_exist: 
-        watsonGenerator("emmaDialog/emmaDialog4.txt", "emmaDialog4Voice.wav")
-    if not emmaDialog5Voice_exist: 
-        watsonGenerator("emmaDialog/emmaDialog5.txt", "emmaDialog5Voice.wav")
+    if not dialog4Voice_exist: 
+        watsonGenerator("quizNPCDialog/quizNPCDialog4.txt", "quizNPCDialog4.wav")
+    
+    if not dialog5Voice_exist: 
+        watsonGenerator("quizNPCDialog/quizNPCDialog5.txt", "quizNPCDialog5.wav")
+    
+    
 
 
 
-print(os.getcwd())
-print(emmaIntroVoice_exist)

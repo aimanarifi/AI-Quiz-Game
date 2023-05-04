@@ -7,7 +7,9 @@ from ibm_watson import TextToSpeechV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
 
-os.chdir("production/blockchain_house/ibm_blockchain/assets/npc/npcVoice/roger")
+# os.chdir("production/blockchain_house/ibm_blockchain/assets/npc/npcVoice/roger")
+os.chdir("../roger")
+print("In the Roger Voice Generator, your current directory is",os.getcwd())
 
 dialog1Voice_exist = os.path.isfile("rogerDialog1.wav")
 dialog2Voice_exist = os.path.isfile("rogerDialog2.wav")
@@ -53,6 +55,8 @@ def generateRogerVoice():
    
     if not dialog5Voice_exist: 
         watsonGenerator("rogerDialog/rogerDialog5.txt", "rogerDialog5.wav")
+    
+  
 
 generateRogerVoice()
 

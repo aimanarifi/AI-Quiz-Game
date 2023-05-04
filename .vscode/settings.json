@@ -2,5 +2,9 @@
     "python.analysis.extraPaths": [
         "./production/blockchain_house/ibm_blockchain/assets/npc/npcVoice",
         "./production/blockchain_house/ibm_blockchain/assets/npc/npcVoice/emma"
-    ]
+    ],
+    "python.autoComplete.extraPaths": [
+
+    ],
+    "python.defaultInterpreterPath": "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3"
 }
