@@ -4,48 +4,52 @@ from Window import pygame
 from Pages import MainPage, LevelOnePage
 from Levels import LevelOne
 
+# initialise all classes needed
 mainPage = MainPage()
-levelOnePage = LevelOnePage()
 levelOne = LevelOne()
+levelOnePage = LevelOnePage()
 
 
 def startGame():
+    """
+    This is where the game start, it should be called from the outside world.
+    """
     while True:
         if not levelOne.gameIsOn:
             getMainPageEvents()
             mainPage.showBackground()
             mainPage.showWelcomeTextLine()
-
         elif levelOne.gameIsOn:
             getLevelOnePageEvents(levelOne.plane)
             levelOnePage.showBackground()
-
             if levelOnePage.needTOShowWelcomeText:
-                if levelOnePage.welcomeTextStartTime == 0:
-                    levelOnePage.welcomeTextStartTime = time.time()
-                levelOnePage.welcomeTextEndTime = time.time()
-                levelOnePage.welcomeTextLastTime = levelOnePage.welcomeTextEndTime - levelOnePage.welcomeTextStartTime
-                if levelOnePage.welcomeTextLastTime <= 10:
+                if levelOnePage.welcome_textStartTime == 0:
+                    levelOnePage.welcome_textStartTime = time.time()
+                levelOnePage.welcome_textEndTime = time.time()
+                levelOnePage.welcome_textLastTime = levelOnePage.welcome_textEndTime - levelOnePage.welcome_textStartTime
+                if levelOnePage.welcome_textLastTime <= 10:
                     levelOnePage.showWelcomeText()
                 else:
                     levelOnePage.needTOShowWelcomeText = False
                     levelOnePage.needTOShowInstructionText = True
             elif levelOnePage.needTOShowInstructionText:
-                if levelOnePage.instructionTextStartTime == 0:
-                    levelOnePage.instructionTextStartTime = time.time()
-                levelOnePage.instructionTextEndTime = time.time()
-                levelOnePage.instructionTextLastTime = levelOnePage.instructionTextEndTime - levelOnePage.instructionTextStartTime
-                if levelOnePage.instructionTextLastTime <= 6:
+                if levelOnePage.instruction_textStartTime == 0:
+                    levelOnePage.instruction_textStartTime = time.time()
+                levelOnePage.instruction_textEndTime = time.time()
+                levelOnePage.instruction_textLastTime = levelOnePage.instruction_textEndTime - levelOnePage.instruction_textStartTime
+                if levelOnePage.instruction_textLastTime <= 6:
                     levelOnePage.showInstructionText()
                 else:
                     levelOnePage.needTOShowInstructionText = False
-
             levelOne.loadStuff(levelOnePage)
 
         pygame.display.update()
 
 
 def getLevelOnePageEvents(plane):
+    """
+    This function will get all events for the level one page
+    """
     events = pygame.event.get()
     for event in events:
         if event.type == pygame.QUIT:
@@ -67,6 +71,9 @@ def getLevelOnePageEvents(plane):
 
 
 def getMainPageEvents():
+    """
+    This function will get all events for the main page
+    """
     events = pygame.event.get()
     for event in events:
         if event.type == pygame.QUIT:

@@ -3,10 +3,14 @@ from NPC_TEXT import TextMainPage, TextLevelOnePage, text_box_position_x, text_b
 
 
 class MainPage:
+    """
+    This class is used to design the main page, including a background image, text and a button.
+    It provides two methods which will be called by its object to show all the things.
+    """
     def __init__(self):
         self.image_background = pygame.image.load('images/mainBackground.jpg')
         self.textMainPage = TextMainPage()
-        self.button = pygame.Rect(580, 500, 210, 50)
+        self.button = pygame.Rect(545, 500, 210, 40)
         pygame.draw.rect(window, (0, 255, 0), self.button)
         self.text = font.render("Click here to start!", True, (255, 255, 255))
         self.text_rect = self.text.get_rect(center=self.button.center)
@@ -24,25 +28,28 @@ class MainPage:
 
 
 class LevelOnePage:
+    """
+    This class is used to design the level one page, including a background image and text.
+    Some text only needs to be displayed temporarily and then disappear automatically. I created variables for start, end, and duration to
+    track the time changes and achieve this functionality.
+    It provides several methods to show all the things.
+    """
     def __init__(self):
         self.image_background = pygame.image.load('images/LevelOneBackground.jpg')
         self.textLevelOnePage = TextLevelOnePage()
         self.needTOShowWelcomeText = True
-        self.welcomeTextStartTime = 0
-        self.welcomeTextEndTime = 0
-        self.welcomeTextLastTime = 0
+        self.welcome_textStartTime = 0
+        self.welcome_textEndTime = 0
+        self.welcome_textLastTime = 0
         self.needTOShowInstructionText = False
-        self.instructionTextStartTime = 0
-        self.instructionTextEndTime = 0
-        self.instructionTextLastTime = 0
+        self.instruction_textStartTime = 0
+        self.instruction_textEndTime = 0
+        self.instruction_textLastTime = 0
         self.needTOShowEndText = True
-        self.endTextStartTime = 0
-        self.endTextEndTime = 0
-        self.endTextLastTime = 0
+        self.end_textStartTime = 0
+        self.end_textEndTime = 0
+        self.end_textLastTime = 0
         self.needToShowExitText = False
-        self.exitTextStartTime = 0
-        self.exitTextEndTime = 0
-        self.exitTextLastTime = 0
 
     def showBackground(self):
         window.blit(self.image_background, (0, 0))
@@ -64,5 +71,5 @@ class LevelOnePage:
         window.blit(self.textLevelOnePage.end_textLine4, (text_box_position_x - 60, text_box_position_y + 50))
 
     def showExitText(self):
-        window.blit(self.textLevelOnePage.exit_textLine1, (text_box_position_x + 18, text_box_position_y))
-        window.blit(self.textLevelOnePage.exit_textLine2, (text_box_position_x + 18, text_box_position_y + 50))
+        window.blit(self.textLevelOnePage.exit_textLine1, (text_box_position_x + 24, text_box_position_y + 45))
+        window.blit(self.textLevelOnePage.exit_textLine2, (text_box_position_x + 24, text_box_position_y + 95))

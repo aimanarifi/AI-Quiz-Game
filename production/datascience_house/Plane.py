@@ -11,12 +11,12 @@ class Plane:
         self.velocity2 = -3  # velocity size (one direction)
         self.all_bullets = []
 
-    # 飞机性能升级, 速度提升
+    # Upgrading spacecraft performance to increase speed.
     def move_speed_improve(self):
         self.velocity1 = 5.5
         self.velocity2 = -5.5
 
-    # 飞机性能升级, 子弹自动追踪敌人
+    # Upgrading spacecraft performance to enable bullets to automatically track enemies.
     @staticmethod
     def auto_track(bullet, enemies):
         distances = []
@@ -24,7 +24,7 @@ class Plane:
             distance = math.sqrt(((bullet.position_x + 5) - (enemy.position_x + 15)) ** 2 + (
                     bullet.position_y - enemy.position_y) ** 2)
             distances.append(distance)
-        distance_min = min(distances)  # 与子弹距离最近的敌人(欧氏距离)
+        distance_min = min(distances)  # The nearest enemy to the bullet (Euclidean distance).
         indices = [i for i, d in enumerate(distances) if d == distance_min]
         enemy = enemies[indices[0]]
         bullet_level_distance_enemy = bullet.position_x - enemy.position_x
@@ -112,13 +112,13 @@ class Plane:
         elif abs(bullet_vertical_distance_enemy) <= 50:
             bullet.speed_y = 0.8
 
-        # 如果子弹在敌人左侧或右侧
+        # If the bullet is on the left or right of the enemy.
         if bullet_level_distance_enemy < 0:
             bullet.position_x += bullet.speed_x
         elif bullet_level_distance_enemy > 0:
             bullet.position_x -= bullet.speed_x
 
-        # 如果子弹在敌人的上侧或下侧
+        # If the bullet is above or below the enemy.
         if bullet_vertical_distance_enemy < 0:
             bullet.position_y += bullet.speed_y
         elif bullet_vertical_distance_enemy > 0:

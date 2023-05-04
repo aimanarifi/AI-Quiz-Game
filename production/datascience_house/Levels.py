@@ -5,7 +5,7 @@ from Window import pygame, window
 from Plane import Plane, math
 from Enemy import Enemy
 
-image_plane = pygame.image.load('images/Plane.jpg')  # now correct
+image_plane = pygame.image.load('images/Plane.jpg')
 image_bullet = pygame.image.load('images/weapon.jpg')
 image_enemy = pygame.image.load('images/enemy.jpg')
 image_exit = pygame.image.load('images/exit.png')
@@ -14,6 +14,10 @@ sound_hit = pygame.mixer.Sound('music/hit.mp3')
 
 
 class LevelOne:
+    """
+    This class is used to design the level one for this game, including the game status, plane and enemy.
+    It will call some functions to show the plane, enemy, bullet as well as their attributes.
+    """
     def __init__(self):
         self.image_level_one_background = pygame.image.load('images/LevelOneBackground.jpg')
         pygame.mixer.music.load('music/LevelOneFight.mp3')
@@ -37,11 +41,11 @@ class LevelOne:
         else:
             if not self.enemies:
                 if levelOnePage.needTOShowEndText:
-                    if levelOnePage.endTextStartTime == 0:
-                        levelOnePage.endTextStartTime = time.time()
-                    levelOnePage.endTextEndTime = time.time()
-                    levelOnePage.endTextLastTime = levelOnePage.endTextEndTime - levelOnePage.endTextStartTime
-                    if levelOnePage.endTextLastTime <= 12:
+                    if levelOnePage.end_textStartTime == 0:
+                        levelOnePage.end_textStartTime = time.time()
+                    levelOnePage.end_textEndTime = time.time()
+                    levelOnePage.end_textLastTime = levelOnePage.end_textEndTime - levelOnePage.end_textStartTime
+                    if levelOnePage.end_textLastTime <= 12:
                         levelOnePage.showEndText()
                     else:
                         levelOnePage.needTOShowEndText = False
@@ -51,30 +55,34 @@ class LevelOne:
                     window.blit(image_exit, (1100, 100))
                     self.finish(levelOnePage)
 
-        # 显示所有敌人
         showEnemyLevelOne(self.enemies)
 
         hit_judge(self.plane, self.enemies)
 
     def finish(self, levelOnePage):
+        """
+        This function will end the level one.
+        It will reset all the variables related to level one page, to make sure the player can restart it.
+        """
         if self.plane.position_x >= 1010 and 28 <= self.plane.position_y <= 172:
             self.gameIsOn = False
+            self.plane.position_x, self.plane.position_y = 0, 675
+            self.plane.speed_x, self.plane.speed_y = 0, 0
+            self.allEnemies = 30
+            self.enemiesPresent = 0
             levelOnePage.needTOShowWelcomeText = True
-            levelOnePage.welcomeTextStartTime = 0
-            levelOnePage.welcomeTextEndTime = 0
-            levelOnePage.welcomeTextLastTime = 0
+            levelOnePage.welcome_textStartTime = 0
+            levelOnePage.welcome_textEndTime = 0
+            levelOnePage.welcome_textLastTime = 0
             levelOnePage.needTOShowInstructionText = False
-            levelOnePage.instructionTextStartTime = 0
-            levelOnePage.instructionTextEndTime = 0
-            levelOnePage.instructionTextLastTime = 0
+            levelOnePage.instruction_textStartTime = 0
+            levelOnePage.instruction_textEndTime = 0
+            levelOnePage.instruction_textLastTime = 0
             levelOnePage.needTOShowEndText = True
-            levelOnePage.endTextStartTime = 0
-            levelOnePage.endTextEndTime = 0
-            levelOnePage.endTextLastTime = 0
+            levelOnePage.end_textStartTime = 0
+            levelOnePage.end_textEndTime = 0
+            levelOnePage.end_textLastTime = 0
             levelOnePage.needToShowExitText = False
-            levelOnePage.exitTextStartTime = 0
-            levelOnePage.exitEndTime = 0
-            levelOnePage.exitLastTime = 0
 
 
 class LevelTwo:
@@ -129,6 +137,7 @@ def showPlane_setPlaneMoveRange(plane):
     window.blit(image_plane, (plane.position_x, plane.position_y))
     plane.position_x += plane.speed_x
     plane.position_y += plane.speed_y
+    # Setting the range of movement for the spacecraft.
     if plane.position_x > 1205:
         plane.position_x = 1205
     elif plane.position_x < 0:
@@ -140,13 +149,13 @@ def showPlane_setPlaneMoveRange(plane):
 
 
 def hit_judge(plane, enemies):
-    # 判断子弹是否击中敌人
+    # To determine whether a bullet has hit an enemy.
     for bullet in plane.all_bullets:
         for enemy in enemies:
             distance_bullet_enemy = math.sqrt(((bullet.position_x + 5) - (enemy.position_x + 16.5)) ** 2 + (
                     bullet.position_y - enemy.position_y) ** 2)
-            # 如果命中, 敌人和子弹同时消失
-            if distance_bullet_enemy < 16:
+            # If hit, both the enemy and the bullet disappear simultaneously.
+            if distance_bullet_enemy < 17:
                 sound_hit.play()
                 enemies.remove(enemy)
                 plane.all_bullets.remove(bullet)

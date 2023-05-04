@@ -33,14 +33,14 @@ class TextLevelOnePage:
 
 class TextLevelTwoPage:
     def __init__(self):
-        self.text_box_position_x = 290
-        self.text_box_position_y = 270
-        self.text_color = (0, 0, 0)
-        self.font = pygame.font.Font(None, 35)
-        self.textLine1 = self.font.render("Hello there! You've worked hard all the way!", True, self.text_color)
-        self.textLine2 = self.font.render("I am a Scorpio constellation interstellar navigator", True, self.text_color)
-        self.textLine3 = self.font.render("and in charge of navigating through this constellation.", True, self.text_color)
-        s = "You need my permission to enter the Scorpio constellation. According to regulations, you need to answer a few questions. Do you have the courage to accept the challenge? There are 10 questions in total, and if you answer 7 correctly, you win! Good luck!"
+        self.welcome_textLine1 = font.render("Hello there! You've worked hard all the way!", True, text_color)
+        self.welcome_textLine2 = font.render("I am a Scorpio constellation interstellar navigator", True, text_color)
+        self.welcome_textLine3 = font.render("and in charge of navigating through this constellation.", True, text_color)
+        self.welcome_textLine4 = font.render("You need my permission to enter the Scorpio constellation.", True, text_color)
+        self.welcome_textLine5 = font.render("According to regulations, you need to answer a few questions.", True, text_color)
+        self.welcome_textLine6 = font.render("Do you have the courage to accept the challenge?", True, text_color)
+        self.introduction_textLine1 = font.render("There are 10 questions in total.", True, text_color)
+        self.introduction_textLine2 = font.render("If you answer 7 correctly, you win! Good luck!", True, text_color)
 
 
 class TextLevelThreePage:
