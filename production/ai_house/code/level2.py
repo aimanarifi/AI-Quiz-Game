@@ -5,7 +5,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__),'../../../'))
 
 import pygame
 from production.ai_house.code.settings2 import *
-import ai_house.code.pong_minigame as pong
+import production.ai_house.code.pong_minigame as pong
 from production.ai_house.code.player2 import Player
 from production.ai_house.code.sprites2 import Generic1,Generic2, Generic3, Generic4, NPC, Interaction
 from pytmx.util_pygame import load_pygame

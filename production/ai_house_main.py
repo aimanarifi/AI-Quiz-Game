@@ -8,8 +8,8 @@ from production.ai_house.code.main2 import Game
 
 
 pygame.init()
-# pygame.display.set_caption('Cloud house: Currently running directly from cloudhouse main')
+
 
 
 game = Game()
-game.run()
+# game.run()

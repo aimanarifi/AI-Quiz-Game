@@ -1,6 +1,7 @@
 import statistics
 
 import pygame
+from pygame import mixer
 import os
 import sys
 
@@ -9,6 +10,8 @@ print(sys.path)
 from production.general import statistics
 from production.cloud_house import cloud_house
 from production.player_house.code.main import Game
+from production.ai_house_main import game
+
 from production.datascience_house import minigame
 
 #import production
@@ -174,10 +177,23 @@ class Level:
         self.all_sprites.layered_draw(self.player)
         self.all_sprites.update(dt)
 
+        
+
         while self.player.run_stats_status == True:
             print("running stats page")
             statistics.run()  # stuck in loop
             self.player.run_stats_status = False  # only runs when exits the run loop
+
+        while self.player.run_ai_status == True:
+            if self.player.run_ai_status == True:
+                mixer.music.load('ai_house\sounds\Sleepless-City-Synthwave-Retrowave-Music.mp3')
+                mixer.music.play(-1)
+            print("running ai page")
+            game.run()
+            self.player.run_ai_status = False
+            if self.player.run_ai_status == False:
+                mixer.music.pause()
+            
 
         while self.player.run_cloud_status == True:
             print("running cloud page")

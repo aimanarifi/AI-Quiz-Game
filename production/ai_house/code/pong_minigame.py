@@ -7,6 +7,7 @@ from production.general.quiz import Quiz
 
 
 
+
 pygame.init()
     
 screen_width = 1280
@@ -19,6 +20,8 @@ screen_height = 720
 pygame.display.set_caption('AI House')
 
 
+
+
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 #define background image
@@ -27,8 +30,7 @@ bg_img = pygame.transform.scale(bg_img,(screen_width,screen_height))
 
 
 # Background Sound
-mixer.music.load('ai_house\sounds\Sleepless-City-Synthwave-Retrowave-Music.mp3')
-mixer.music.play(-1)
+
 
 
 #define game variables

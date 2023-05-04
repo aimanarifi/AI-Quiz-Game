@@ -4,7 +4,6 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__),'../../../'))
 
 import pygame, sys
-#from settings5 import *
 from production.ai_house.code.level2 import Level
 from production.ai_house.code.settings2 import *
 
