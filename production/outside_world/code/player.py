@@ -67,6 +67,7 @@ class Player(pygame.sprite.Sprite):
         self.run_cloud_status = False
         self.run_data_sci_status = False
         self.run_ai_status = False
+        self.run_cyber_status = False
 
         # self.font = pygame.font.Font('graphics/font/PeaberryBase.ttf', 24)
         # self.banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),6.7)
@@ -113,6 +114,9 @@ class Player(pygame.sprite.Sprite):
 
                 if collided_interaction_sprite[0].name == 'AI_House':
                     self.run_ai_status = True
+
+                if collided_interaction_sprite[0].name == 'CS_House':
+                    self.run_cyber_status = True
 
                 if collided_interaction_sprite[0].name == 'Player_House':
                     self.run_player_house_status = True
