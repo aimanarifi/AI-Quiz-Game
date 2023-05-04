@@ -12,3 +12,6 @@ NPC_TEXT class: Designing the text and its display format for different pages in
 
 Music: The game will play different music in each level, and sound effects will occur at specific times (such as hitting enemies, winning
 or losing).
+
+AI feature: Some intelligent elements have been added to certain aspects of this game, such as the ability to automatically track enemy bullets
+and adjust the difficulty level based on the player's performance in answering questions.
