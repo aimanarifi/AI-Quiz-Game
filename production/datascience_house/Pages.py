@@ -1,9 +1,11 @@
 """
 Last modified: 03/05/2023
 Written by Zhongjie Huang
+
 """
-from Window import window, pygame
-from NPC_TEXT import TextMainPage, TextLevelOnePage, text_box_position_x, text_box_position_y, font
+import pygame
+from production.datascience_house.Window import window
+from production.datascience_house.NPC_TEXT import TextMainPage, TextLevelOnePage, text_box_position_x, text_box_position_y, font
 
 
 class MainPage:
@@ -12,7 +14,7 @@ class MainPage:
     It provides two methods which will be called by its object to show all the things.
     """
     def __init__(self):
-        self.image_background = pygame.image.load('images/mainBackground.jpg')
+        self.image_background = pygame.image.load('datascience_house/images/mainBackground.jpg')
         self.textMainPage = TextMainPage()
         self.button = pygame.Rect(545, 500, 210, 40)
         pygame.draw.rect(window, (0, 255, 0), self.button)
@@ -39,7 +41,7 @@ class LevelOnePage:
     It provides several methods to show all the things.
     """
     def __init__(self):
-        self.image_background = pygame.image.load('images/LevelOneBackground.jpg')
+        self.image_background = pygame.image.load('datascience_house/images/LevelOneBackground.jpg')
         self.textLevelOnePage = TextLevelOnePage()
         self.needTOShowWelcomeText = True
         self.welcome_textStartTime = 0

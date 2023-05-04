@@ -2,7 +2,8 @@
 Last modified: 03/05/2023
 Written by Zhongjie Huang
 """
-from Window import pygame
+import pygame
+import production.datascience_house.Window 
 
 text_box_position_x = 290
 text_box_position_y = 270

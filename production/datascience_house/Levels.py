@@ -4,17 +4,18 @@ Written by Zhongjie Huang
 """
 import random
 import time
+import pygame, math
 
-from Window import pygame, window
-from Plane import Plane, math
-from Enemy import Enemy
+from production.datascience_house.Window import  window
+from production.datascience_house.Plane import Plane
+from production.datascience_house.Enemy import Enemy
 
-image_plane = pygame.image.load('images/Plane.jpg')
-image_bullet = pygame.image.load('images/weapon.jpg')
-image_enemy = pygame.image.load('images/enemy.jpg')
-image_exit = pygame.image.load('images/exit.png')
+image_plane = pygame.image.load('datascience_house/images/Plane.jpg')
+image_bullet = pygame.image.load('datascience_house/images/weapon.jpg')
+image_enemy = pygame.image.load('datascience_house/images/enemy.jpg')
+image_exit = pygame.image.load('datascience_house/images/exit.png')
 
-sound_hit = pygame.mixer.Sound('music/hit.mp3')
+sound_hit = pygame.mixer.Sound('datascience_house/music/hit.mp3')
 
 
 class LevelOne:
@@ -23,9 +24,8 @@ class LevelOne:
     It will call some functions to show the plane, enemy, bullet as well as their attributes.
     """
     def __init__(self):
-        self.image_level_one_background = pygame.image.load('images/LevelOneBackground.jpg')
-        pygame.mixer.music.load('music/LevelOneFight.mp3')
-        pygame.mixer.music.play(-1)
+        self.image_level_one_background = pygame.image.load('datascience_house/images/LevelOneBackground.jpg')
+        
         self.enemies = []
         self.allEnemies = 30
         self.enemiesPresent = 0
@@ -91,8 +91,8 @@ class LevelOne:
 
 class LevelTwo:
     def __init__(self):
-        self.image_level_two_background = pygame.image.load('images/LevelTwoBackground.jpg')
-        pygame.mixer.music.load('music/LevelTwoFight.mp3')
+        self.image_level_two_background = pygame.image.load('datascience_house/images/LevelTwoBackground.jpg')
+        pygame.mixer.music.load('datascience_house/music/LevelTwoFight.mp3')
         pygame.mixer.music.play(-1)
         self.enemies = []
         self.allEnemies = 60
@@ -115,8 +115,8 @@ class LevelTwo:
 
 class LevelThree:
     def __init__(self):
-        self.image_level_three_background = pygame.image.load('images/LevelThreeBackground.jpg')
-        pygame.mixer.music.load('music/LevelThreeFight.mp3')
+        self.image_level_three_background = pygame.image.load('datascience_house/images/LevelThreeBackground.jpg')
+        pygame.mixer.music.load('datascience_house/music/LevelThreeFight.mp3')
         pygame.mixer.music.play(-1)
         self.enemies = []
         self.allEnemies = 90
