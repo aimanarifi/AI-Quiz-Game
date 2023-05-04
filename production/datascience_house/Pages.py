@@ -1,3 +1,7 @@
+"""
+Last modified: 03/05/2023
+Written by Zhongjie Huang
+"""
 from Window import window, pygame
 from NPC_TEXT import TextMainPage, TextLevelOnePage, text_box_position_x, text_box_position_y, font
 

@@ -1,3 +1,7 @@
+"""
+Last modified: 01/05/2023
+Written by Zhongjie Huang
+"""
 import pygame
 
 pygame.init()

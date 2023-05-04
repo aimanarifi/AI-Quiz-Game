@@ -1,3 +1,7 @@
+"""
+Last modified: 03/05/2023
+Written by Zhongjie Huang
+"""
 from Window import pygame
 
 text_box_position_x = 290
