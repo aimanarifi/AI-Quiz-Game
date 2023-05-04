@@ -6,7 +6,7 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 # Dub
 from pydub import AudioSegment
 from pydub.playback import play
-
+import pygame
 
 """
  textFilePath : String
@@ -37,16 +37,57 @@ def runIBMTextToSpeech(textFilePath, apiKey, filename , aiVoice ):
                     accept='audio/wav'        
                 ).get_result().content) 
     
-    
 # Parameter: (textFilePath, yourAPIKey, filename, voiceType)    
 
-apiKey = ""
-runIBMTextToSpeech("sampleText.txt",apiKey,"closeAchievement.wav",'en-US_AllisonExpressive')    
+#apiKey = ""
+#runIBMTextToSpeech("sampleText.txt",apiKey,"closeAchievement.wav",'en-US_AllisonExpressive')    
+
+class Text2Speech():
+      
+    def __init__(self, key: str, url: str):
+        """
+        General text 2 epssh object
+        """
+        self.AUDIO_FILE_PATH = "graphics/audio/text2speech.wav"
+
+        self.api_key = key
+        self.url = url
+        self.authenticator = IAMAuthenticator(self.api_key)
+        self.t2s_agent = TextToSpeechV1( authenticator=self.authenticator)
+        self.t2s_agent.set_service_url(self.url)
+        
+        self.is_synthesizing = False
     
+    def synthesize_by_str(self, text: str):
+        """
+        synthesize the speech. it will overwrite the content of the audio file
+        """
+        with open(self.AUDIO_FILE_PATH, 'wb') as audio_file:
+            self.is_synthesizing = True
+            audio_file.write(
+                self.t2s_agent.synthesize(
+                text,
+                accept='audio/wav'
+                ).get_result().content)
+
+        self.is_synthesizing = True
     
+    def synthesize_by_file(self, text_file_path):
+
+        watsonTextFile = open(text_file_path,"r")
+        watsonText = watsonTextFile.read()
+        watsonTextFile.close()
+
+        self.synthesize_by_str(watsonText)
+
+    def play(self, channel_number: int):
+        """
+        play the audio using pygame mixer,
+        you may want to specify the mixer channel so it doesnt clash with other audio 
+        """
+        pygame.mixer.Channel(channel_number).play(pygame.mixer.Sound(self.AUDIO_FILE_PATH))
     
-    
-    
+            
     
 # song = AudioSegment.from_wav('closeAchievement.wav')
 # play(song)

@@ -13,6 +13,7 @@ import pygame
 import production.general.db.DatabaseService as DB
 import production.general.quiz as quiz
 from production.cloud_house import level_builder
+from production.general.watson import Text2Speech
 
 def score_screen():
     """
@@ -79,7 +80,9 @@ def display_level_page(level: level_builder.Level):
     global levels, level_counter, initial_time
     global next_button_surf, next_button_rect
     global button_text_surf, button_text_rect
-    
+    global watson
+
+
     #diplay bg stuff
     pygame.draw.rect(screen,(25,36,40),bg)
     screen.blit(bg_banner, bg_banner.get_rect(center=bg.center))
@@ -114,6 +117,7 @@ def run_level(level: level_builder.Level):
     global screen, bg, bg_banner, clock, in_between_sublevel
     global next_button_surf, next_button_rect
     global button_text_rect
+    global watson
 
     mouse_hold = False
     on_click = False
@@ -177,6 +181,7 @@ def run_level(level: level_builder.Level):
                 elif tile.locked and on_click and tile.rect.collidepoint(pygame.mouse.get_pos()):
 
                     locked_tile = tile
+                    watson.play(2)
                     level.quiz.run()
 
                     if level.quiz.get_score():
@@ -205,7 +210,12 @@ def setup(**setting):
     # but hasn/t proceed to the next sublevel, this is used to pause some rendering during that phase
     global in_between_sublevel
     global FONTS
-    
+    global watson
+
+    T2S_API_KEY = 'uOUrfG5RxGWbvGGhDTtpCO41uGBpUaihUbnb6Hx2Xu6o'
+    T2S_URL = 'https://api.eu-gb.text-to-speech.watson.cloud.ibm.com/instances/39bd2aae-af32-48c2-8c04-20131d0adde1'
+    T2S_AUDIO_FILE_PATH = 'graphics/audio/text2speech.wav'
+    watson = Text2Speech.Text2Speech(T2S_API_KEY,T2S_URL)
 
     #graphics objects
     screen = pygame.display.get_surface()
@@ -230,7 +240,7 @@ def setup(**setting):
     difficulty = setting["difficulty"]
     player_stats = setting["player_stats"]
     levels = level_builder.get_levels( 3*(difficulty-1)+1,3*(difficulty-1)+3)
-    quizzes = [quiz.Quiz(f"Question {i}", ["A","B","C","D"],"B") for i in range(len(levels))]
+    quizzes = [quiz.Quiz(f"Question {i}: One of the challenges of a multi-cloud approach is that different cloud solutions run in different software environments. Organizations want to build applications that can easily move across a wide range of these environments without creating integration difficulties. Which of the following helps mitigate such challenges?", ["Use private and public cloud in your business", "Use VMware services", "Use Container technologies","All of them"],"Use Container technologies") for i in range(len(levels))]
     score = 0
     in_between_sublevel = False
 
@@ -248,11 +258,13 @@ def run(diff: int = 0, user=None):
     global player_stats, score 
     global levels, level_counter
     global initial_time
+    global watson
 
     level_counter = 0
     initial_time = pygame.time.get_ticks()/1000
     for level in levels:
-        level_counter += 1    
+        level_counter += 1
+        watson.synthesize_by_str(level.quiz.question.raw_text)
         run_level(level)
 
     MAX_SCORE = 20000
