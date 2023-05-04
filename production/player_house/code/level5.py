@@ -41,7 +41,7 @@ class Level:
             Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
         
 
-        # layers that should not be traversed over / should force collision (bush, rocks)
+        # layers that should not be traversed over / should force collision (decor, Border)
         for layer in ['Decor', 'Border']:
             for x, y, surf in tmx_data.get_layer_by_name(layer).tiles():
                 Generic((x * TILE_SIZE, y * TILE_SIZE), surf, [self.all_sprites, self.collision_sprites])

@@ -1,3 +1,9 @@
+"""
+Last modified: 03/05/2023
+Written by Zhongjie Huang
+"""
+
+
 class Enemy:
     def __init__(self, position_x, position_y, speed_x, speed_y):
         self.position_x = position_x
