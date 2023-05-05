@@ -57,6 +57,9 @@ class Player(pygame.sprite.Sprite):
         # overlay
         self.chest_banner_status = False
 
+        #chest screen
+        self.chest_screen_status = False
+
     def animate(self, dt):
         self.frame_index += 6 * dt
 
@@ -86,15 +89,18 @@ class Player(pygame.sprite.Sprite):
         else:
             self.direction.x = 0
 
-        if keys[pygame.K_x]:
-            collided_interaction_sprite = pygame.sprite.spritecollide(self, self.interaction_sprites, False)
-            print(collided_interaction_sprite)
-            if collided_interaction_sprite:
-                if collided_interaction_sprite[0].name == 'Treausure chest':
-                    self.chest_banner_status = True
-            else:
-                self.chest_banner_status = False
-    
+        # if keys[pygame.K_x]:
+        #     collided_interaction_sprite = pygame.sprite.spritecollide(self, self.interaction_sprites, False)
+        #     print(collided_interaction_sprite)
+        #     if collided_interaction_sprite:
+        #         if collided_interaction_sprite[0].name == 'Treausure chest':
+        #             self.chest_screen_status = True
+                    
+        #     else:
+        #         self.chest_screen_status = False
+
+        if self.chest_banner_status == True and keys[pygame.K_x] == True:
+            self.chest_screen_status = True
         
         collided_interaction_sprite = pygame.sprite.spritecollide(self, self.interaction_sprites, False)
         print(collided_interaction_sprite)

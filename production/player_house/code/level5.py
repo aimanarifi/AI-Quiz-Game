@@ -7,6 +7,7 @@ import pygame
 from production.player_house.code.settings5 import *
 from production.player_house.code.player5 import Player
 from production.player_house.code.sprites5 import Generic, Chest, Interaction
+from production.player_house.code import chest_screen
 from pytmx.util_pygame import load_pygame
 
 
@@ -59,6 +60,11 @@ class Level:
         self.all_sprites.layered_draw(self.player)
         self.all_sprites.update(dt)
         pygame.transform.scale(self.display_surface, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        while self.player.chest_screen_status == True:
+            print("Chest page")
+            chest_screen.run()
+            self.player.chest_screen_status = False
+
 
 
 class CameraGroup(pygame.sprite.Group):
