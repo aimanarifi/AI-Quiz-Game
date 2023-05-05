@@ -4,9 +4,9 @@ Written by Zhongjie Huang
 """
 import time
 
-from Window import pygame
-from Pages import MainPage, LevelOnePage
-from Levels import LevelOne
+from production.datascience_house.Window import pygame
+from production.datascience_house.Pages import MainPage, LevelOnePage
+from production.datascience_house.Levels import LevelOne
 
 # initialise all classes needed
 mainPage = MainPage()
