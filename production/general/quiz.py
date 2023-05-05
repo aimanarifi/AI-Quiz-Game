@@ -9,6 +9,7 @@ Last modified: 14/4/2023
 
 import pygame
 from typing import Optional
+from production.general.watson import Text2Speech
 pygame.init()
 
 class MultilineText():
@@ -190,6 +191,14 @@ class Quiz:
         """
         Initialize essential graphics objects
         """
+        global T2S_API_KEY, T2S_URL, T2S_AUDIO_FILE_PATH, watson
+
+        T2S_API_KEY = 'uOUrfG5RxGWbvGGhDTtpCO41uGBpUaihUbnb6Hx2Xu6o'
+        T2S_URL = 'https://api.eu-gb.text-to-speech.watson.cloud.ibm.com/instances/39bd2aae-af32-48c2-8c04-20131d0adde1'
+        T2S_AUDIO_FILE_PATH = 'graphics/audio/text2speech.wav'
+        watson = Text2Speech.Text2Speech(T2S_API_KEY,T2S_URL)
+        watson.synthesize_by_str(self.question.raw_text)
+
         #set the background
         self.screen = pygame.display.get_surface()
         self.background = pygame.transform.scale_by(pygame.image.load("graphics/art/bg_1.png"),2)
@@ -228,7 +237,11 @@ class Quiz:
 
         #play BGM
         pygame.mixer.init()
+        pygame.mixer.Channel(2).set_volume(0.1)
+        pygame.mixer.Channel(2).play(pygame.mixer.Sound(T2S_AUDIO_FILE_PATH))
+        pygame.mixer.Channel(0).set_volume(0.1)
         pygame.mixer.Channel(0).play(pygame.mixer.Sound('graphics/audio/quiz_bgm.wav'),-1)
+        
 
     def run(self):
 
@@ -282,7 +295,8 @@ class Quiz:
                     self.is_submitted = True
                     self.button_txt = self.button_font.render("Continue", False, 'White')
                     self.button_txt_rect = self.button_txt.get_rect(center=self.submit_button_rect.center)
-    
+
+                    pygame.mixer.Channel(2).set_volume(0)
                     if self.selected_option.is_answer:
                         pygame.mixer.Channel(0).play(pygame.mixer.Sound('graphics/audio/quiz_correct.wav'))
                     else:
@@ -326,9 +340,3 @@ if __name__ == "__main__":
 
     #get score
     #print(q1.get_score())
-
-
-
-
-    
-

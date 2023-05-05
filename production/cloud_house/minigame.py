@@ -79,7 +79,7 @@ def display_level_page(level: level_builder.Level):
     global levels, level_counter, initial_time
     global next_button_surf, next_button_rect
     global button_text_surf, button_text_rect
-    
+
     #diplay bg stuff
     pygame.draw.rect(screen,(25,36,40),bg)
     screen.blit(bg_banner, bg_banner.get_rect(center=bg.center))
@@ -205,7 +205,6 @@ def setup(**setting):
     # but hasn/t proceed to the next sublevel, this is used to pause some rendering during that phase
     global in_between_sublevel
     global FONTS
-    
 
     #graphics objects
     screen = pygame.display.get_surface()
@@ -230,7 +229,7 @@ def setup(**setting):
     difficulty = setting["difficulty"]
     player_stats = setting["player_stats"]
     levels = level_builder.get_levels( 3*(difficulty-1)+1,3*(difficulty-1)+3)
-    quizzes = [quiz.Quiz(f"Question {i}", ["A","B","C","D"],"B") for i in range(len(levels))]
+    quizzes = [quiz.Quiz(f"Question {i}: This is sample question This is sample question This is sample question This is sample question This is sample question This is sample question", ["AAAA", "BBBB", "CCCC","DDDD"],"BBBB") for i in range(len(levels))]
     score = 0
     in_between_sublevel = False
 
@@ -252,7 +251,7 @@ def run(diff: int = 0, user=None):
     level_counter = 0
     initial_time = pygame.time.get_ticks()/1000
     for level in levels:
-        level_counter += 1    
+        level_counter += 1
         run_level(level)
 
     MAX_SCORE = 20000

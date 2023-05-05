@@ -144,7 +144,7 @@ tiles_2 = [('3branch',3,3,False,False,1,1),('turn',3,0,True,True,1,2),
 tiles_3 = [('turn',3,0,True,True,0,1),('straight',0,1,False,True,0,2),
            ('turn',3,3,False,True,0,3),('turn',0,0,False,True,1,0),
            ('4branch',0,0,False,True,1,1),('turn',1,1,False,False,1,2),
-           ('3branch',3,2,False,True,1,3),('turn',3,3,False,True,1,4),
+           ('turn',0,1,False,True,1,3),('turn',3,3,False,True,1,4),
            ('straight',0,0,False,True,2,0),('turn',3,0,False,True,2,2),
            ('straight',0,1,False,True,2,3),('turn',2,2,False,True,2,4),
            ('turn',3,1,False,True,3,0),('output',1,1,True,False,3,1),
@@ -154,7 +154,7 @@ tiles_3 = [('turn',3,0,True,True,0,1),('straight',0,1,False,True,0,2),
 
 tiles_4 = [('input',2,2,True,False,0,0),('turn',1,1,False,True,1,0),
            ('3branch',0,0,False,True,1,1),('straight',1,1,False,True,1,2),
-           ('turn',3,3,False,True,1,3),('straight',0,0,True,True,2,3),
+           ('turn',3,3,False,True,1,3),('straight',1,0,True,True,2,3),
            ('turn',2,2,False,True,3,3),('turn',0,0,False,True,3,2),
            ('output',0,0,True,False,4,2)]
 
