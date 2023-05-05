@@ -5,9 +5,10 @@ sys.path.append(os.path.join(os.path.dirname(__file__),'../../../'))
 
 import pygame
 from production.ai_house.code.settings2 import *
-import production.ai_house.code.pong_minigame as pong
+
+import  production.ai_house.code.pong_minigame as pong
 from production.ai_house.code.player2 import Player
-from production.ai_house.code.sprites2 import Generic1,Generic2, Generic3, Generic4, NPC, Interaction
+from production.ai_house.code.sprites2 import Generic, NPC, Interaction
 from pytmx.util_pygame import load_pygame
 
 
@@ -36,24 +37,24 @@ class Level:
         # )
 
 
-        for x, y, surf in tmx_data.get_layer_by_name('Floor').tiles():
-            Generic1((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
+        # for x, y, surf in tmx_data.get_layer_by_name('Floor').tiles():
+        #     Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
 
-        for x, y, surf in tmx_data.get_layer_by_name('LPad').tiles():
-            Generic2((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
+        # for x, y, surf in tmx_data.get_layer_by_name('LPad').tiles():
+        #     Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
         
-        for x, y, surf in tmx_data.get_layer_by_name('Main').tiles():
-            Generic3((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
+        # for x, y, surf in tmx_data.get_layer_by_name('Main').tiles():
+        #     Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
         
-        # for layer in ['Floor', 'LPad', 'Main', 'Railings']:
-        #     for x, y, surf in tmx_data.get_layer_by_name(layer).tiles():
-        #         Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
+        for layer in ['Floor', 'LPad', 'Main', 'Railings']:
+            for x, y, surf in tmx_data.get_layer_by_name(layer).tiles():
+                Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
         
 
         # layers that should not be traversed over / should force collision (walls, railings)
-        for layer in ['Walls']:
-            for x, y, surf in tmx_data.get_layer_by_name(layer).tiles():
-                Generic4((x * TILE_SIZE, y * TILE_SIZE), surf, [self.all_sprites, self.collision_sprites])
+       
+        for x, y, surf in tmx_data.get_layer_by_name('Walls').tiles():
+            Generic((x * TILE_SIZE, y * TILE_SIZE), surf, [self.all_sprites, self.collision_sprites])
         
         
         for x, y, surf in tmx_data.get_layer_by_name('NPC').tiles():
@@ -63,15 +64,18 @@ class Level:
         
 
     def run(self, dt):
-        
         # self.display_surface.fill('black')
         self.all_sprites.layered_draw(self.player)
         self.all_sprites.update(dt)
         pygame.transform.scale(self.display_surface, (SCREEN_WIDTH, SCREEN_HEIGHT))
-        while self.player.run_mg_status == True:
-            print("running ai mini page")
-            pong.run()
-            self.player.run_mg_status == False
+        if self.player.run_mg_status == True:
+            print("running ai mini game")
+            pong.run(0,0)
+       
+        
+            
+            
+
            
 
 
@@ -85,7 +89,7 @@ class CameraGroup(pygame.sprite.Group):
         self.half_h = self.display_surface.get_size()[1] // 2
 
         # zoom
-        self.zoom_scale = 2
+        self.zoom_scale = 1.5
         self.internal_surf_size = (SCREEN_WIDTH, SCREEN_HEIGHT)
         self.internal_surf = pygame.Surface(self.internal_surf_size, pygame.SRCALPHA)
         self.internal_rect = self.internal_surf.get_rect(center=(self.half_w, self.half_h))
@@ -96,7 +100,7 @@ class CameraGroup(pygame.sprite.Group):
 
         self.banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),4)
         self.big_banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),4.15)
-        self.biggest_banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),4.3)
+        self.biggest_banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),(8,4.3))
         self.smallest_font = pygame.font.Font('graphics/font/Gameplaya.ttf', 14)
         self.small_font = pygame.font.Font('graphics/font/Gameplaya.ttf', 15)
         self.medium_font = pygame.font.Font('graphics/font/Gameplaya.ttf', 18)
@@ -131,9 +135,9 @@ class CameraGroup(pygame.sprite.Group):
 
 
         if player.npc_banner_status:
-            self.display_surface.blit(self.biggest_banner_image, (1280*(1/2) - self.biggest_banner_image.get_width()/2, 720*(4/5)))
+            self.display_surface.blit(self.banner_image, (1280*(1/2) - self.banner_image.get_width()/2, 720*(4/5)))
             self.display_surface.blit(self.npc_text_surf, (1280*(1/2) - self.npc_text_surf.get_width()/2, 720*(4/5)
-                                                          + self.biggest_banner_image.get_height()/2 - 10))
+                                                          + self.banner_image.get_height()/2 - 10))
 
             if player.npc_banner_status2:
                 self.display_surface.blit(self.biggest_banner_image, (1280*(1/2) - self.biggest_banner_image.get_width()/2, 720*(4/5)))

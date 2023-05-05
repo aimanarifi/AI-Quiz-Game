@@ -4,6 +4,10 @@ import sys, os
 from pygame import mixer
 sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
 from production.general.quiz import Quiz 
+# from production.ai_house.code.main2 import Game 
+# from production.ai_house.code.level2 import Level
+# from production.ai_house_main import *
+
 
 
 
@@ -23,10 +27,13 @@ pygame.display.set_caption('AI House')
 
 
 screen = pygame.display.set_mode((screen_width, screen_height))
+end = False
 
 #define background image
 bg_img = pygame.image.load('ai_house/images/game_bg.jpg')
 bg_img = pygame.transform.scale(bg_img,(screen_width,screen_height))
+
+exp = 0
 
 
 # Background Sound
@@ -48,11 +55,36 @@ white = (255, 255, 255)
 #define font
 font = pygame.font.Font('graphics/font/Gameplaya.ttf', 20)
 
-
-def miniquiz():
+def miniquiz(player_score, cpu_score):
+    global quiz_index, exp
     mixer.music.pause()
-    quiz = Quiz(f"Question {1}", ["A","B","C","D"],"B")
-    quiz.run()
+    quiz1 = Quiz("Question 1. Which of the following Narrow AI systems would you want to include when building the Broad AI system for a self-driving car?", ["Long-term weather patterns","Information from the Global Positioning System (GPS)","Entertainment trends","International news"],"Information from the Global Positioning System (GPS)")
+    # quiz2 = Quiz("Question 2. ", ["A","B","C","D"],"C")
+    # quiz3 = Quiz("Question 3. ", ["A","B","C","D"],"D")
+    
+    # quizzes = [quiz1,quiz2,quiz3]
+    quiz1.run()
+    if quiz1.selected_option.is_answer:
+        exp += 10
+    mixer.music.play()
+    run(player_score, cpu_score)
+
+    loop = True
+    while loop:
+        for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    loop = False
+                    print("b")
+    
+
+    # for quiz_index in range(len(quizzes)):
+    #     quizzes[quiz_index].run()
+    #     quiz_index += 1
+    #     run(player_score, cpu_score)
+    #     mixer.music.unpause()
+    
+    
+
 
     
 
@@ -146,22 +178,24 @@ class ball():
  #create paddles
 
 
-def run():
+def run(player_score, cpu_score):
+    quiz_index = 0
     live_ball = False
-    cpu_score = 0
-    player_score = 0
     winner = 0
     speed_increase = 0
+    
     #create game loop
     run = True
     
     while run:
+        
         screen.blit(bg_img,(0,0))
         fpsClock.tick(fps) 
         draw_board()
         draw_text('CPU: ' + str(cpu_score), font, white, 20, 15)
         draw_text('P1: ' + str(player_score), font, white, screen_width - 100, 15)
         draw_text('BALL SPEED: ' + str(abs(pong.speed_x)), font, white, screen_width // 2 - 100 , 15)
+        draw_text('EXP: ' + str(exp), font, white, screen_width // 2 + 200  , 15)
         
         #draw paddles
         player_paddle.draw()
@@ -171,7 +205,7 @@ def run():
         
 
         if live_ball == True:
-            speed_increase += 1
+            speed_increase += 0.5
             winner = pong.move()
             if winner == 0:
                 #draw ball
@@ -197,7 +231,8 @@ def run():
             if winner == 1:
                 draw_text('YOU SCORED!', font, white, 520, screen_height // 2 -100)
                 draw_text('CLICK ANYWHERE TO START', font, white,(screen_width //2)-200 , screen_height // 2 -50)
-                miniquiz()
+                miniquiz(player_score, cpu_score)
+                
             if winner == -1:
                 draw_text('CPU SCORED!', font, white, 520, screen_height // 2 -100)
                 draw_text('CLICK ANYWHERE TO START', font, white, (screen_width //2)-200 , screen_height // 2 -50)
@@ -206,10 +241,14 @@ def run():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            if event.type == pygame.MOUSEBUTTONDOWN and live_ball == False:
+                pygame.quit()
+            if (event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN) and live_ball == False:
                 live_ball = True
                 pong.reset(screen_width - 60, screen_height // 2 + 50)
-        
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                run = False
+                print("a")
+                
 
 
         if speed_increase > 500:
@@ -226,8 +265,9 @@ def run():
            
 
             
-        pygame.display.flip()
-    pygame.quit()
+        pygame.display.update()
+    # pygame.quit()
+
 
 player_paddle = paddle(screen_width - 40, screen_height // 2)
 cpu_paddle = paddle(20, screen_height // 2)

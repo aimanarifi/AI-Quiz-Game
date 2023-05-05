@@ -103,6 +103,11 @@ class Player(pygame.sprite.Sprite):
                     
         if self.npc_banner_status2 == True and keys[pygame.K_RETURN] == True:
             self.run_mg_status = True
+
+        if keys[pygame.K_ESCAPE]:
+            self.run_mg_status = False
+            self.run_ai_status = True
+
                    
 
                     
