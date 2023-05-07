@@ -193,11 +193,11 @@ class Quiz:
         """
         global T2S_API_KEY, T2S_URL, T2S_AUDIO_FILE_PATH, watson
 
-        T2S_API_KEY = 'uOUrfG5RxGWbvGGhDTtpCO41uGBpUaihUbnb6Hx2Xu6o'
-        T2S_URL = 'https://api.eu-gb.text-to-speech.watson.cloud.ibm.com/instances/39bd2aae-af32-48c2-8c04-20131d0adde1'
-        T2S_AUDIO_FILE_PATH = 'graphics/audio/text2speech.wav'
-        watson = Text2Speech.Text2Speech(T2S_API_KEY,T2S_URL)
-        watson.synthesize_by_str(self.question.raw_text)
+        # T2S_API_KEY = 'uOUrfG5RxGWbvGGhDTtpCO41uGBpUaihUbnb6Hx2Xu6o'
+        # T2S_URL = 'https://api.eu-gb.text-to-speech.watson.cloud.ibm.com/instances/39bd2aae-af32-48c2-8c04-20131d0adde1'
+        # T2S_AUDIO_FILE_PATH = 'graphics/audio/text2speech.wav'
+        # watson = Text2Speech.Text2Speech(T2S_API_KEY,T2S_URL)
+        # watson.synthesize_by_str(self.question.raw_text)
 
         #set the background
         self.screen = pygame.display.get_surface()
@@ -237,8 +237,8 @@ class Quiz:
 
         #play BGM
         pygame.mixer.init()
-        pygame.mixer.Channel(2).set_volume(0.1)
-        pygame.mixer.Channel(2).play(pygame.mixer.Sound(T2S_AUDIO_FILE_PATH))
+        # pygame.mixer.Channel(2).set_volume(0.1)
+        # pygame.mixer.Channel(2).play(pygame.mixer.Sound(T2S_AUDIO_FILE_PATH))
         pygame.mixer.Channel(0).set_volume(0.1)
         pygame.mixer.Channel(0).play(pygame.mixer.Sound('graphics/audio/quiz_bgm.wav'),-1)
         
