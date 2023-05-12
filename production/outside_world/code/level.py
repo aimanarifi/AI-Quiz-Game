@@ -11,7 +11,7 @@ from production.general import statistics
 from production.cloud_house import cloud_house
 from production.player_house.code.main import Game
 from production.ai_house_main import game
-from production.datascience_house import minigame
+from production.datascience_house import Minigame
 from production.cybersecurity_house import minigame_cyber
 
 #import production
@@ -209,7 +209,7 @@ class Level:
         while self.player.run_data_sci_status == True:
             print("running data science house")
             self.display_surface.fill('black')
-            minigame.startGame()
+            Minigame.startGame()
             self.player.run_data_sci_status = False
 
         while self.player.run_cyber_status == True:
