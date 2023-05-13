@@ -1,11 +1,9 @@
-import json
+
 from ibm_watson import TextToSpeechV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
 
 # Dub
-from pydub import AudioSegment
-from pydub.playback import play
 import pygame
 
 """
@@ -70,7 +68,7 @@ class Text2Speech():
                 accept='audio/wav'
                 ).get_result().content)
 
-        self.is_synthesizing = True
+        self.is_synthesizing = False
     
     def synthesize_by_file(self, text_file_path):
 

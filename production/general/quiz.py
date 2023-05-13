@@ -2,15 +2,23 @@
 AI Group Project Team 7 Spring22/23
 
 Desc: This module contains Quiz and Quiz.Option classes that is used for the general quiz template
+*you must run this from production folder
+
 Created by: Muhammad Kamaludin
 Modified by:
 Last modified: 14/4/2023
 """
 
+import sys, os
+if __name__ == "__main__":  
+    sys.path.append(os.path.join(os.path.dirname(__file__),'../../'))
+
 import pygame
+import asyncio
 from typing import Optional
+from production.general.loading_screen import loading_screen
 from production.general.watson import Text2Speech
-pygame.init()
+
 
 class MultilineText():
 
@@ -98,7 +106,7 @@ class MultilineText():
             self.wrapper_surf.blit(txt_surf, txt_rect)
 
 class Quiz:
-
+    pygame.init()
     #Essential graphics object
     screen = None
     background,background_rect = None, None
@@ -191,13 +199,12 @@ class Quiz:
         """
         Initialize essential graphics objects
         """
-        global T2S_API_KEY, T2S_URL, T2S_AUDIO_FILE_PATH, watson
 
-        # T2S_API_KEY = 'uOUrfG5RxGWbvGGhDTtpCO41uGBpUaihUbnb6Hx2Xu6o'
-        # T2S_URL = 'https://api.eu-gb.text-to-speech.watson.cloud.ibm.com/instances/39bd2aae-af32-48c2-8c04-20131d0adde1'
-        # T2S_AUDIO_FILE_PATH = 'graphics/audio/text2speech.wav'
-        # watson = Text2Speech.Text2Speech(T2S_API_KEY,T2S_URL)
-        # watson.synthesize_by_str(self.question.raw_text)
+
+        T2S_AUDIO_FILE_PATH = 'graphics/audio/text2speech.wav'
+
+        #display the loading screen while synthesizing speech from the quiz prompt simultaneously
+        asyncio.run(loading_screen(self.convert_question_to_speech))
 
         #set the background
         self.screen = pygame.display.get_surface()
@@ -237,8 +244,8 @@ class Quiz:
 
         #play BGM
         pygame.mixer.init()
-        # pygame.mixer.Channel(2).set_volume(0.1)
-        # pygame.mixer.Channel(2).play(pygame.mixer.Sound(T2S_AUDIO_FILE_PATH))
+        #pygame.mixer.Channel(2).set_volume(0.1)
+        #pygame.mixer.Channel(2).play(pygame.mixer.Sound(T2S_AUDIO_FILE_PATH))
         pygame.mixer.Channel(0).set_volume(0.1)
         pygame.mixer.Channel(0).play(pygame.mixer.Sound('graphics/audio/quiz_bgm.wav'),-1)
         
@@ -324,8 +331,20 @@ class Quiz:
         self.is_submitted = False
         self.selected_option = None
 
+
+    async def convert_question_to_speech(self):
+
+        await asyncio.sleep(1)
+
+        #T2S_API_KEY = 'uOUrfG5RxGWbvGGhDTtpCO41uGBpUaihUbnb6Hx2Xu6o'
+        #T2S_URL = 'https://api.eu-gb.text-to-speech.watson.cloud.ibm.com/instances/39bd2aae-af32-48c2-8c04-20131d0adde1'
+        #watson = Text2Speech.Text2Speech(T2S_API_KEY,T2S_URL)
+        #watson.synthesize_by_str(self.question.raw_text)
+
+
 if __name__ == "__main__":
 
+    pygame.init()
     screen = pygame.display.set_mode((1280,720))
     pygame.display.set_caption("Quiz page")
 
