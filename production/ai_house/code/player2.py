@@ -7,6 +7,7 @@ import pygame
 from os import walk
 import os
 from production.player_house.code.settings5 import *
+import  production.ai_house.code.pong_minigame as pong
 
 
 def get_images(folder_dir):
@@ -57,6 +58,7 @@ class Player(pygame.sprite.Sprite):
         # overlay
         self.npc_banner_status = False
         self.npc_banner_status2 = False
+        self.intro_text_status = False
 
         # mini-game / stats / house
         self.run_mg_status = False
@@ -100,9 +102,17 @@ class Player(pygame.sprite.Sprite):
                         self.npc_banner_status2 = True
                 else:
                     self.npc_banner_status = False
+        
+        if self.pos == [400,400]:
+            self.intro_text_status = True
+        else:
+            self.intro_text_status = False
+
                     
         if self.npc_banner_status2 == True and keys[pygame.K_RETURN] == True:
             self.run_mg_status = True
+            print("running ai mini game")
+            pong.run(0,0)
 
         if keys[pygame.K_ESCAPE]:
             self.run_mg_status = False
@@ -110,11 +120,6 @@ class Player(pygame.sprite.Sprite):
 
                    
 
-                    
-    
-            
-
-       
     
         
         collided_interaction_sprite = pygame.sprite.spritecollide(self, self.interaction_sprites, False)

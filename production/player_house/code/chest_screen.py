@@ -31,6 +31,7 @@ exp_bg_surf, exp_bg_rect = None, None
 exp_surfs, exp_rects = [None,None], [None, None]
 trophy = pygame.image.load('assets/graphics/player_house_graphics/trophy.png') 
 biggest_banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),4.3)
+PADDING = 150
 
 class Achievement(pygame.sprite.Sprite):
 
@@ -55,12 +56,6 @@ class Achievement(pygame.sprite.Sprite):
         self.pos = pos
         
 
-        
-
-    def set_size(self, width: int, height:int):
-        self.image = pygame.Surface((width,height))
-        self.image.fill(self.SECONDARY_COLOUR)
-        self.rect = self.image.get_rect()
 
     
     
@@ -94,33 +89,6 @@ def setup():
     player_stats = DB.get_user()
 
     
-  
-   
-
-
-    #Position the stats block in a wrapper and 2x3 grid below it
-    statsblocks_wrapper_surf = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/brown_rectangle_14x6.png'),5.2)
-    statsblocks_wrapper_rect = statsblocks_wrapper_surf.get_rect()
-    statsblocks_wrapper_rect.midbottom = (screen.get_width()/2, screen.get_height() - 64)
-    
-    # REF_POINT = statsblocks_wrapper_rect.center # the center between sixoption blocks
-    # temp_spacing = ((statsblocks_wrapper_rect.height - 2*stats_blocks[0].rect.height - 64)/3,
-    #                 (statsblocks_wrapper_rect.width - 3*stats_blocks[0].rect.width - 64)/4 ) #(row,col)
-    # for index, block in enumerate(stats_blocks):
-    #     binary_index = format(index+1, '03b')
-    #     #set the row
-    #     if sum([ int(n) for n in binary_index]) == 2:
-    #         block.format(top=REF_POINT[1] + temp_spacing[0]/2)
-    #     else:
-    #         block.format(bottom=REF_POINT[1] - temp_spacing[0]/2)
-
-    #     #set the column
-    #     if binary_index[0] == binary_index[1]:
-    #         block.format(right=REF_POINT[0] - block.rect.width/2 - temp_spacing[1])
-    #     elif binary_index[0] == binary_index[2]:
-    #         block.format(left=REF_POINT[0] + block.rect.width/2 + temp_spacing[1])
-    #     elif binary_index[1] == binary_index[2]:
-    #         block.format(left=REF_POINT[0] - block.rect.width/2)
 
     button_surf = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/back_button.png'),4.0)
     button_rect = button_surf.get_rect(bottomright=(screen.get_width()-64, title_rect.bottom ))
@@ -174,8 +142,9 @@ def run():
         screen.blit(button_surf, button_rect)
         
         achi = Achievement("Welcome to IBM Village", "This is a welcome achievement. We hope you continue to earn more trophies", trophy, (50,150))
-        achi.display()
        
+        achi.display()
+        
         
         pygame.display.update()
         clock.tick(60)

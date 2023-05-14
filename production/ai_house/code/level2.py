@@ -6,7 +6,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__),'../../../'))
 import pygame
 from production.ai_house.code.settings2 import *
 
-import  production.ai_house.code.pong_minigame as pong
+
 from production.ai_house.code.player2 import Player
 from production.ai_house.code.sprites2 import Generic, NPC, Interaction
 from pytmx.util_pygame import load_pygame
@@ -22,29 +22,15 @@ class Level:
         self.all_sprites = CameraGroup()
         self.collision_sprites = pygame.sprite.Group()
         self.interaction_sprites = pygame.sprite.Group()
-
+       
         self.setup()
 
     def setup(self):
         tmx_data = load_pygame('ai_house/data/tmx/intro_map.tmx')
         self.player = Player((400, 400), self.all_sprites, self.collision_sprites, self.interaction_sprites)
-        print(self.player.pos)
-        # Generic(
-        #     pos=(0, 0),
-        #     surf=pygame.image.load("player_house/data/tmx/player_house.png").convert_alpha(),
-        #     groups=self.all_sprites,
-        #     z=LAYERS["Floor"],
-        # )
 
-
-        # for x, y, surf in tmx_data.get_layer_by_name('Floor').tiles():
-        #     Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
-
-        # for x, y, surf in tmx_data.get_layer_by_name('LPad').tiles():
-        #     Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
+        print(f"position{self.player.pos}")
         
-        # for x, y, surf in tmx_data.get_layer_by_name('Main').tiles():
-        #     Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
         
         for layer in ['Floor', 'LPad', 'Main', 'Railings']:
             for x, y, surf in tmx_data.get_layer_by_name(layer).tiles():
@@ -68,9 +54,7 @@ class Level:
         self.all_sprites.layered_draw(self.player)
         self.all_sprites.update(dt)
         pygame.transform.scale(self.display_surface, (SCREEN_WIDTH, SCREEN_HEIGHT))
-        if self.player.run_mg_status == True:
-            print("running ai mini game")
-            pong.run(0,0)
+        
        
         
             
@@ -103,9 +87,11 @@ class CameraGroup(pygame.sprite.Group):
         self.biggest_banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),(8,4.3))
         self.smallest_font = pygame.font.Font('graphics/font/Gameplaya.ttf', 14)
         self.small_font = pygame.font.Font('graphics/font/Gameplaya.ttf', 15)
-        self.medium_font = pygame.font.Font('graphics/font/Gameplaya.ttf', 18)
+        self.big_font = pygame.font.Font('graphics/font/Gameplaya.ttf', 20)
         self.npc_text_surf = self.small_font.render("Welcome to the AI House. ", False, 'Black')
         self.npc_text_surf2 = self.small_font.render("Here you'll be playing a game of the past to learn of the future. Press Enter to Play", False, 'Black')
+        self.intro_text_surf = self.small_font.render("Interact with any of the NPCs to find out what to do", False, 'Black')
+
 
     def layered_draw(self, player):
         self.offset.x = player.rect.centerx - SCREEN_WIDTH / 2
@@ -133,6 +119,8 @@ class CameraGroup(pygame.sprite.Group):
 
         self.display_surface.blit(scaled_surf, scaled_rect)
 
+        if player.intro_text_status:
+            self.display_surface.blit(self.intro_text_surf, (400,500))
 
         if player.npc_banner_status:
             self.display_surface.blit(self.banner_image, (1280*(1/2) - self.banner_image.get_width()/2, 720*(4/5)))
