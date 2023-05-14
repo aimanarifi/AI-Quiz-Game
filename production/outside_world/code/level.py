@@ -185,14 +185,14 @@ class Level:
             self.player.run_stats_status = False  # only runs when exits the run loop
 
         while self.player.run_ai_status == True:
-            if self.player.run_ai_status == True:
-                mixer.music.load('ai_house\sounds\Sleepless-City-Synthwave-Retrowave-Music.mp3')
-                mixer.music.play(-1)
+            #if self.player.run_ai_status == True:
+                #mixer.music.load('ai_house\sounds\Sleepless-City-Synthwave-Retrowave-Music.mp3')
+                #mixer.music.play(-1)
             print("running ai page")
             game.run()
             self.player.run_ai_status = False
-            if self.player.run_ai_status == False:
-                mixer.music.pause()
+            #if self.player.run_ai_status == False:
+                #mixer.music.pause()
             
 
         while self.player.run_cloud_status == True:

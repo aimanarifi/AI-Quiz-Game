@@ -259,6 +259,7 @@ class Game:
     PIECE_OFFSET = 20
 
     def __init__(self):
+
         pygame.init()
 
         self.player_stats = DB.get_user()
@@ -289,6 +290,8 @@ class Game:
 
         self.score_surf = None
         self.player_turn_surf = None
+        self.player_turn_surf_l2 = None
+        self.player_turn_surf_l3 = None
         self.comp_turn_surf = None
 
         self.run_quiz_status = None
@@ -306,10 +309,11 @@ class Game:
         self.instruction_surf_l6 = self.small_font.render("   - Otherwise the AI will go a lot", False, (101, 64, 83))
         self.instruction_surf_l7 = self.small_font.render("     harder !!", False, (101, 64, 83))
         self.instruction_surf_l8 = self.small_font.render("   - Win to increase score !!", False, (101, 64, 83))
+        self.instruction_surf_l9 = self.small_font.render("   - Exit to save XP and score !!", False, (101, 64, 83))
 
         self.instruction_surfaces = [self.instruction_surf_l1, self.instruction_surf_l2, self.instruction_surf_l3,
                                      self.instruction_surf_l4, self.instruction_surf_l5, self.instruction_surf_l6,
-                                     self.instruction_surf_l7, self.instruction_surf_l8]
+                                     self.instruction_surf_l7, self.instruction_surf_l8, self.instruction_surf_l9]
 
         self.center_piece_offset_width = self.grid_surf.get_width()/6 - self.x_surf.get_width()/2
         self.center_piece_offset_height = + self.grid_surf.get_height()/6 - self.x_surf.get_height()/2
@@ -422,14 +426,41 @@ class Game:
         self.screen.blit(self.score_surf, (self.SCREEN_WIDTH / 2 - self.score_surf.get_width() / 2,
                                            640 - self.title_surf.get_height() / 2))
 
-
     def draw_player_turn_display(self):
         self.player_turn_surf = self.large_font.render("It is your turn", False, (101, 64, 83))
+        self.player_turn_surf_l2 = self.medium_font.render("Use Keys 1,2,3,4,5,6,7,8,9 to Move", False, (101, 64, 83))
+        self.player_turn_surf_l3 = self.medium_font.render("(123) -> top row", False, (101, 64, 83))
+        self.player_turn_surf_l4 = self.medium_font.render("(456) -> middle row", False, (101, 64, 83))
+        self.player_turn_surf_l5 = self.medium_font.render("(789) -> bottom row", False, (101, 64, 83))
 
         self.screen.blit(self.player_turn_surf, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
                                                     + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
                                                     self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
                                                     + self.instruction_surf_l1.get_height()*3))
+
+        self.screen.blit(self.player_turn_surf_l2, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
+                                               + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
+                                               self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
+                                               + self.instruction_surf_l1.get_height() * 6))
+
+        self.screen.blit(self.player_turn_surf_l3, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
+                                               + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
+                                               self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
+                                               + self.instruction_surf_l1.get_height() * 6
+                                               + self.player_turn_surf_l2.get_height()))
+
+        self.screen.blit(self.player_turn_surf_l4, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
+                                                    + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
+                                                    self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
+                                                    + self.instruction_surf_l1.get_height() * 6
+                                                    + self.player_turn_surf_l2.get_height()*2))
+
+        self.screen.blit(self.player_turn_surf_l5, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
+                                                    + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
+                                                    self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
+                                                    + self.instruction_surf_l1.get_height() * 6
+                                                    + self.player_turn_surf_l2.get_height()*3))
+
 
     def draw_computer_turn_display(self):
         self.comp_turn_surf = self.large_font.render("Computers turn", False, (101, 64, 83))
