@@ -1,7 +1,10 @@
 import pygame
-from settings import *
+import sys
 import os
 
+sys.path.append(os.path.join(os.path.dirname(__file__),'../../../'))
+print(sys.path)
+from production.outside_world.code.settings import *
 
 def get_images(folder_dir):
     surfaces = []

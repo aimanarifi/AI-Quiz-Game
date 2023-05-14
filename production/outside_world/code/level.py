@@ -16,9 +16,9 @@ from production.cybersecurity_house import minigame_cyber
 from production.general.credits import run_credits
 
 #import production
-from settings import *
-from player import Player
-from sprites import Generic, Portal, Blacksmith, Wave, Fish, Tree, Interaction
+from production.outside_world.code.settings import *
+from production.outside_world.code.player import Player
+from production.outside_world.code.sprites import Generic, Portal, Blacksmith, Wave, Fish, Tree, Interaction
 from pytmx.util_pygame import load_pygame
 
 
@@ -165,6 +165,8 @@ class Level:
                 Interaction((obj.x, obj.y), (obj.width, obj.height), self.interaction_sprites, obj.name)
             if obj.name == "Credits":
                 Interaction((obj.x, obj.y), (obj.width, obj.height), self.interaction_sprites, obj.name)
+            if obj.name == "Start_Zone":
+                Interaction((obj.x, obj.y), (obj.width, obj.height), self.interaction_sprites, obj.name)
 
         # image of tiled map for testing
         '''Generic(
@@ -256,12 +258,14 @@ class CameraGroup(pygame.sprite.Group):
         #self.bg_surf = pygame.image.load('graphics/art/bg_1.png')
         #self.bg_surf_sized = pygame.transform.scale(self.bg_surf, (1280, 720))
 
+        self.title_banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_4x3.png'),5)
         self.banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),4)
         self.big_banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),4.15)
         self.biggest_banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),4.3)
         self.smallest_font = pygame.font.Font('graphics/font/PeaberryBase.ttf', 14)
         self.small_font = pygame.font.Font('graphics/font/PeaberryBase.ttf', 15)
         self.medium_font = pygame.font.Font('graphics/font/PeaberryBase.ttf', 18)
+        self.large_font = pygame.font.Font('graphics/font/PeaberryBase.ttf', 32)
 
         self.ai_text_surf = self.medium_font.render("This is the AI Mini-Game, Press X to Play", False, 'Black')
         self.blockchain_text_surf = self.small_font.render("This is the Blockchain Mini-Game, Press X to Play",
@@ -274,6 +278,8 @@ class CameraGroup(pygame.sprite.Group):
         self.house_text_surf = self.medium_font.render("Enter Home Here, Press X", False, 'Black')
         self.ladder_text_surf = self.medium_font.render("Enter Ladder to other Island, Press X", False, 'Black')
         self.credits_text_surf = self.medium_font.render("View Credits, Press X", False, 'Black')
+
+        self.title_text_surf = self.large_font.render("Welcome to IBM Village", False, 'Black')
 
     def layered_draw(self, player):
         self.offset.x = player.rect.centerx - SCREEN_WIDTH / 2
@@ -301,6 +307,10 @@ class CameraGroup(pygame.sprite.Group):
         scaled_rect = scaled_surf.get_rect(center=(self.half_w, self.half_h))
 
         self.display_surface.blit(scaled_surf, scaled_rect)
+
+        '''if player.title_status:
+            self.display_surface.blit(self.big_banner_image, (1280*(1/2) - self.big_banner_image.get_width()/2, 720*(4/5) - self.big_banner_image.get_height()/2))
+            self.display_surface.blit(self.title_text_surf, (self.display_surface.get_width()/2 - self.title_text_surf.get_width()/2, 720*(4/5) - self.title_text_surf.get_height()/2))'''
 
         if player.ai_banner_status:
             self.display_surface.blit(self.banner_image, (1280*(1/2) - self.banner_image.get_width()/2, 720*(4/5)))

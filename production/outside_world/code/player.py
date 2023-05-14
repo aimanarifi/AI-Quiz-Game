@@ -1,7 +1,12 @@
 import pygame
 from os import walk
 import os
-from settings import *
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__),'../../../'))
+print(sys.path)
+
+from production.outside_world.code.settings import *
 import time
 
 
@@ -61,7 +66,7 @@ class Player(pygame.sprite.Sprite):
         self.house_banner_status = False
         self.ladder_banner_status = False
         self.credits_banner_status = False
-        self.welcome_status = False
+        self.title_status = False
 
         # mini-game / stats / house
         self.run_stats_status = False
@@ -158,9 +163,8 @@ class Player(pygame.sprite.Sprite):
                 self.ladder_banner_status = True
             if collided_interaction_sprite[0].name == 'Credits':
                 self.credits_banner_status = True
-                print("over here")
-                print(self.credits_banner_status)
-                print(collided_interaction_sprite[0].name)
+            if collided_interaction_sprite[0].name == 'Start_Zone':
+                self.title_status = True
         else:
             self.ai_banner_status = False
             self.blockchain_banner_status = False
@@ -172,6 +176,7 @@ class Player(pygame.sprite.Sprite):
             self.house_banner_status = False
             self.ladder_banner_status = False
             self.credits_banner_status = False
+            self.title_status = False
                 #print(self.ai_banner_status)
 
     def check_status(self):

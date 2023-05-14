@@ -1,6 +1,10 @@
-import pygame, sys
-from settings import *
-from level import Level
+import pygame, sys, os
+
+sys.path.append(os.path.join(os.path.dirname(__file__),'../../../'))
+print(sys.path)
+
+from production.outside_world.code.settings import *
+from production.outside_world.code.level import Level
 
 
 class Game:
@@ -10,13 +14,17 @@ class Game:
         pygame.display.set_caption('IBM Village')
         self.clock = pygame.time.Clock()
         self.level = Level()
+        self.loop = True
 
     def run(self):
-        while True:
+        while self.loop:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    self.loop = False
+
 
             dt = self.clock.tick() / 1000
             self.level.run(dt)
