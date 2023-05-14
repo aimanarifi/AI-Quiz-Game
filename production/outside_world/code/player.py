@@ -60,6 +60,8 @@ class Player(pygame.sprite.Sprite):
         self.stats_banner_status = False
         self.house_banner_status = False
         self.ladder_banner_status = False
+        self.credits_banner_status = False
+        self.welcome_status = False
 
         # mini-game / stats / house
         self.run_stats_status = False
@@ -68,6 +70,7 @@ class Player(pygame.sprite.Sprite):
         self.run_data_sci_status = False
         self.run_ai_status = False
         self.run_cyber_status = False
+        self.run_credits_status = False
 
         # self.font = pygame.font.Font('graphics/font/PeaberryBase.ttf', 24)
         # self.banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),6.7)
@@ -103,9 +106,8 @@ class Player(pygame.sprite.Sprite):
 
         if keys[pygame.K_x]:
             collided_interaction_sprite = pygame.sprite.spritecollide(self, self.interaction_sprites, False)
-            print(collided_interaction_sprite)
             if collided_interaction_sprite:
-                print(collided_interaction_sprite)
+                #print(collided_interaction_sprite)
                 if collided_interaction_sprite[0].name == 'Blacksmith':   # stats man
                     self.animation_status = 'left_idle'
                     self.run_stats_status = True
@@ -130,6 +132,8 @@ class Player(pygame.sprite.Sprite):
                     self.pos.x = 663
                     self.pos.y = 374
                     time.sleep(0.1) # avoids error by allowing collided_interaction_sprite to update
+                if collided_interaction_sprite[0].name == 'Credits':
+                    self.run_credits_status = True
 
         collided_interaction_sprite = pygame.sprite.spritecollide(self, self.interaction_sprites, False)
         #print(collided_interaction_sprite)
@@ -152,6 +156,11 @@ class Player(pygame.sprite.Sprite):
                 self.house_banner_status = True
             if collided_interaction_sprite[0].name == 'Ladder1' or collided_interaction_sprite[0].name == 'Ladder2':
                 self.ladder_banner_status = True
+            if collided_interaction_sprite[0].name == 'Credits':
+                self.credits_banner_status = True
+                print("over here")
+                print(self.credits_banner_status)
+                print(collided_interaction_sprite[0].name)
         else:
             self.ai_banner_status = False
             self.blockchain_banner_status = False
@@ -162,6 +171,7 @@ class Player(pygame.sprite.Sprite):
             self.stats_banner_status = False
             self.house_banner_status = False
             self.ladder_banner_status = False
+            self.credits_banner_status = False
                 #print(self.ai_banner_status)
 
     def check_status(self):

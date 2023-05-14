@@ -11,8 +11,9 @@ from production.general import statistics
 from production.cloud_house import cloud_house
 from production.player_house.code.main import Game
 from production.ai_house_main import game
-from production.datascience_house import Minigame
+from production.datascience_house import minigame
 from production.cybersecurity_house import minigame_cyber
+from production.general.credits import run_credits
 
 #import production
 from settings import *
@@ -162,6 +163,8 @@ class Level:
                 Interaction((obj.x, obj.y), (obj.width, obj.height), self.interaction_sprites, obj.name)
             if obj.name == "Player_House":
                 Interaction((obj.x, obj.y), (obj.width, obj.height), self.interaction_sprites, obj.name)
+            if obj.name == "Credits":
+                Interaction((obj.x, obj.y), (obj.width, obj.height), self.interaction_sprites, obj.name)
 
         # image of tiled map for testing
         '''Generic(
@@ -209,7 +212,7 @@ class Level:
         while self.player.run_data_sci_status == True:
             print("running data science house")
             self.display_surface.fill('black')
-            Minigame.startGame()
+            minigame.startGame()
             self.player.run_data_sci_status = False
 
         while self.player.run_cyber_status == True:
@@ -217,6 +220,12 @@ class Level:
             gameCyber = minigame_cyber.Game()
             gameCyber.run()
             self.player.run_cyber_status = False
+
+        while self.player.run_credits_status == True:
+            print("running credit page")
+            run_credits()
+            self.player.run_credits_status = False
+
 
 
 
@@ -264,6 +273,7 @@ class CameraGroup(pygame.sprite.Group):
         self.stats_text_surf = self.medium_font.render("View Stats Here, Press X", False, 'Black')
         self.house_text_surf = self.medium_font.render("Enter Home Here, Press X", False, 'Black')
         self.ladder_text_surf = self.medium_font.render("Enter Ladder to other Island, Press X", False, 'Black')
+        self.credits_text_surf = self.medium_font.render("View Credits, Press X", False, 'Black')
 
     def layered_draw(self, player):
         self.offset.x = player.rect.centerx - SCREEN_WIDTH / 2
@@ -333,6 +343,11 @@ class CameraGroup(pygame.sprite.Group):
         if player.ladder_banner_status:
             self.display_surface.blit(self.banner_image, (1280*(1/2) - self.banner_image.get_width()/2, 720*(4/5)))
             self.display_surface.blit(self.ladder_text_surf, (1280*(1/2) - self.ladder_text_surf.get_width()/2, 720*(4/5)
+                                                          + self.banner_image.get_height()/2 - 10))
+
+        if player.credits_banner_status:
+            self.display_surface.blit(self.banner_image, (1280*(1/2) - self.banner_image.get_width()/2, 720*(4/5)))
+            self.display_surface.blit(self.credits_text_surf, (1280*(1/2) - self.credits_text_surf.get_width()/2, 720*(4/5)
                                                           + self.banner_image.get_height()/2 - 10))
 
 

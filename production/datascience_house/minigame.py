@@ -9,7 +9,7 @@ from production.datascience_house.Pages import MainPage, LevelOnePage, LevelTwoP
 from production.datascience_house.Levels import LevelOne, LevelTwo, LevelThree, showQuestions
 
 # initialise all classes needed and play music
-clock = pygame.time.Clock()  # 控制游戏的帧率
+
 mainPage = MainPage()
 levelOne = LevelOne()
 levelTwo = LevelTwo()
@@ -17,10 +17,12 @@ levelThree = LevelThree()
 levelOnePage = LevelOnePage()
 levelTwoPage = LevelTwoPage()
 levelThreePage = LevelThreePage()
-playMusic()
+# playMusic()    this function needs to be called in start game
 
 
 def startGame():
+    clock = pygame.time.Clock()  # 控制游戏的帧率
+    playMusic()
     """
     This is where the game start, it should be called from the outside world.
     """
