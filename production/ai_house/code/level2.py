@@ -88,7 +88,7 @@ class CameraGroup(pygame.sprite.Group):
         self.smallest_font = pygame.font.Font('graphics/font/Gameplaya.ttf', 14)
         self.small_font = pygame.font.Font('graphics/font/Gameplaya.ttf', 15)
         self.big_font = pygame.font.Font('graphics/font/Gameplaya.ttf', 20)
-        self.npc_text_surf = self.small_font.render("Welcome to the AI House. ", False, 'Black')
+        self.npc_text_surf = self.small_font.render("Welcome to the AI House. Press X", False, 'Black')
         self.npc_text_surf2 = self.small_font.render("Here you'll be playing a game of the past to learn of the future. Press Enter to Play", False, 'Black')
         self.intro_text_surf = self.small_font.render("Interact with any of the NPCs to find out what to do", False, 'Black')
 
