@@ -123,6 +123,14 @@ def get_questions(difficulty: int, house: str):
     This function is used to get all questions from the questions table.
     All questions corresponding to the difficulty condition will be returned in a tuple
     It takes a degree of difficulty and house name as parameters
+
+    list of house:
+    ai
+    cloud
+    cybersecurity
+    blockchain
+    datascience
+    iot
     """
     with sqlite3.connect(DB_PATH) as connection:
         cursor = connection.cursor()
