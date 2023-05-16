@@ -170,6 +170,7 @@ class Quiz:
 
     def __init__(self, question: str, choice: list[str], answer: str):
 
+        pygame.display.set_mode((1280,720))
         self.question = MultilineText(question, 70, self.question_font, "White")
         self.options = [self.Option(opt, opt == answer,self) for opt in choice]
         self.options_group = pygame.sprite.Group()
@@ -350,7 +351,8 @@ if __name__ == "__main__":
 
     #create quiz object
     test_question ="One of the challenges of a multi-cloud approach is that different cloud solutions run in different software environments. Organizations want to build applications that can easily move across a wide range of these environments without creating integration difficulties. Which of the following helps mitigate such challenges?"
-    test_options = ["Use private and public cloud in your business", "Use VMware services", "Use Container technologies","All of them"]
+    s = "Incidents where attackers gain access to vulnerable systems left exposed by inexperienced administrators or users (e.g., default factory settings"
+    test_options = ["Use private and public cloud in your business", s, "Use Container technologies","All of them"]
     q1 = Quiz(test_question, test_options, "Use Container technologies")
 
     #run the page

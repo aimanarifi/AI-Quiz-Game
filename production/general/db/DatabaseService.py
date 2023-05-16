@@ -136,7 +136,7 @@ def get_questions(difficulty: int, house: str):
         cursor = connection.cursor()
         try:
             cursor.execute(
-                f"SELECT QUESTION, OPTION_A, OPTION_B, OPTION_C, OPTION_D, CORRECT_OPTION FROM QUESTIONS WHERE DIFFICULTY = {difficulty} AND HOUSE = {house}")
+                f"SELECT QUESTION, OPTION_A, OPTION_B, OPTION_C, OPTION_D, CORRECT_OPTION FROM QUESTIONS WHERE DIFFICULTY = {difficulty} AND HOUSE = '{house}'")
             questions = cursor.fetchall()
         except sqlite3.Error as e:
             print("An error has occurred: ", e)
