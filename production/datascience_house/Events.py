@@ -42,10 +42,11 @@ def getLevelPageEvents(plane, level, levelPage):
         if event.type == pygame.KEYUP:
             plane.speed_x = 0
             plane.speed_y = 0
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if levelPage.button_acceptChallenge.collidepoint(event.pos):
-                level.acceptChallenge = True
-                levelPage.needToShowIntroduction1Text = False
-                levelPage.needToShowButtons = False
-            if levelPage.button_refuseChallenge.collidepoint(event.pos):
-                level.refuseChallenge = True
+        if level.name != 'level one':
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if levelPage.button_acceptChallenge.collidepoint(event.pos):
+                    level.acceptChallenge = True
+                    levelPage.needToShowIntroduction1Text = False
+                    levelPage.needToShowButtons = False
+                if levelPage.button_refuseChallenge.collidepoint(event.pos):
+                    level.refuseChallenge = True

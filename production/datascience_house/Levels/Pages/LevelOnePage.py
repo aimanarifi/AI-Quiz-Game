@@ -1,15 +1,9 @@
 import time
-from production.datascience_house.Window import pygame, window
+from production.datascience_house.Window import pygame, window, font
 from production.datascience_house.Levels.Pages.PageText.LevelOnePageText import LevelOnePageText
 
 
 class LevelOnePage:
-    """
-    This class is used to design the level one page, including a background image and text.
-    Some text only needs to be displayed temporarily and then disappear automatically. I created variables for start, end, and duration to
-    track the time changes and achieve this functionality.
-    It provides several methods to show all the things.
-    """
     def __init__(self):
         self.image_background = pygame.image.load('datascience_house/images/LevelOneBackground.jpg')
         self.levelOnePageText = LevelOnePageText()
@@ -51,11 +45,15 @@ class LevelOnePage:
                 self.introduction_textStartTime = time.time()
             self.introduction_textEndTime = time.time()
             self.introduction_textLastTime = self.introduction_textEndTime - self.introduction_textStartTime
-            if self.introduction_textLastTime < 10:
-                window.blit(self.levelOnePageText.introduction_textLine1, (240, 170))
-                window.blit(self.levelOnePageText.introduction_textLine2, (240, 220))
-                window.blit(self.levelOnePageText.introduction_textLine3, (240, 270))
-                window.blit(self.levelOnePageText.introduction_textLine4, (240, 320))
+            countdown_text_time_left = 11 - self.introduction_textLastTime
+            countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
+            if (11 - self.introduction_textLastTime) >= 0:
+                window.blit(self.levelOnePageText.introduction_textLine1, (280, 170))
+                window.blit(self.levelOnePageText.introduction_textLine2, (280, 220))
+                window.blit(self.levelOnePageText.introduction_textLine3, (280, 270))
+                window.blit(self.levelOnePageText.introduction_textLine4, (280, 320))
+                window.blit(self.levelOnePageText.introduction_textLine5, (565, 370))
+                window.blit(countdown_text, (10, 690))
             else:
                 self.needToShowIntroductionText = False
                 self.needToShowReminder1Text = True
@@ -66,19 +64,23 @@ class LevelOnePage:
                 self.reminder_textStartTime = time.time()
             self.reminder_textEndTime = time.time()
             self.reminder_textLastTime = self.reminder_textEndTime - self.reminder_textStartTime
-            if self.reminder_textLastTime < 6:
-                window.blit(self.levelOnePageText.reminder_textLine1, (380, 420))
-                window.blit(self.levelOnePageText.reminder_textLine2, (575, 470))
+            countdown_text_time_left = 6 - self.reminder_textLastTime
+            countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
+            if (6 - self.reminder_textLastTime) >= 0:
+                window.blit(self.levelOnePageText.reminder_textLine1, (355, 500))
+                window.blit(self.levelOnePageText.reminder_textLine2, (550, 550))
+                window.blit(countdown_text, (10, 690))
             else:
                 self.needToShowReminder1Text = False
                 self.showText_beforeGame = False
 
     def showEndText(self):
-        window.blit(self.levelOnePageText.end_textLine1, (230, 170))
-        window.blit(self.levelOnePageText.end_textLine2, (230, 220))
-        window.blit(self.levelOnePageText.end_textLine3, (230, 270))
-        window.blit(self.levelOnePageText.end_textLine4, (230, 320))
+        window.blit(self.levelOnePageText.end_textLine1, (245, 170))
+        window.blit(self.levelOnePageText.end_textLine2, (245, 220))
+        window.blit(self.levelOnePageText.end_textLine3, (245, 270))
+        window.blit(self.levelOnePageText.end_textLine4, (245, 320))
+        window.blit(self.levelOnePageText.end_textLine5, (480, 370))
 
     def showExitText(self):
         window.blit(self.levelOnePageText.exit_textLine1, (314, 315))
-        window.blit(self.levelOnePageText.exit_textLine2, (314, 365))
+        window.blit(self.levelOnePageText.exit_textLine2, (337, 365))

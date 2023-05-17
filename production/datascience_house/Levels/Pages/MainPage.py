@@ -3,10 +3,6 @@ from production.datascience_house.Levels.Pages.PageText.MainPageText import Main
 
 
 class MainPage:
-    """
-    This class is used to design the main page, including a background image, text and a button.
-    It provides two methods which will be called by its object to show all the things.
-    """
     def __init__(self):
         self.image_background = pygame.image.load('datascience_house/images/mainBackground.jpg')
         self.mainPageText = MainPageText()
@@ -33,11 +29,11 @@ class MainPage:
         window.blit(self.image_background, (0, 0))
 
     def showIntroductionTextLine(self):
-        window.blit(self.mainPageText.introduction_textLine1, (240, 170))
-        window.blit(self.mainPageText.introduction_textLine2, (240, 220))
-        window.blit(self.mainPageText.introduction_textLine3, (240, 270))
-        window.blit(self.mainPageText.introduction_textLine4, (240, 320))
-        window.blit(self.mainPageText.introduction_textLine5, (240, 370))
+        window.blit(self.mainPageText.introduction_textLine1, (230, 170))
+        window.blit(self.mainPageText.introduction_textLine2, (230, 220))
+        window.blit(self.mainPageText.introduction_textLine3, (230, 270))
+        window.blit(self.mainPageText.introduction_textLine4, (230, 320))
+        window.blit(self.mainPageText.introduction_textLine5, (450, 370))
 
     def showButtons(self, levelTwo, levelThree):
         # 玩家需要先完成前面的关卡才能进入后面的关卡

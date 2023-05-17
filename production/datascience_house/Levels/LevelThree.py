@@ -4,7 +4,7 @@ Written by Zhongjie Huang
 """
 import time
 import random
-from production.datascience_house.Window import window
+from production.datascience_house.Window import pygame, window
 from production.datascience_house.Plane import Plane
 from production.datascience_house.Enemy import Enemy
 from production.datascience_house.Levels.CommonFunctions import showQuestions, image_bullet, image_bullet_auto_track, showPlane_setPlaneMoveRange, showScoreObtained, showEnemy, image_enemy_weapon, hitByEnemy_judge, hit_judge, end
@@ -25,7 +25,7 @@ class LevelThree:
         self.acceptChallenge = False  # Control of whether the player accepts answering questions
         self.refuseChallenge = False  # Control of whether the player refuses answering questions
         self.questionScore = 0  # The player's score in answering questions
-        self.questionAnswered = True  # Control of whether the player has answered questions
+        self.questionAnswered = False  # Control of whether the player has answered questions
         self.needToDoQuestions = True
 
     # Call this method after the start of the current level/game.
@@ -36,12 +36,18 @@ class LevelThree:
             self.levelThreePage.showTextBeforeQuestions(self)
             if self.acceptChallenge:
                 self.levelThreePage.showReminder1Text()
-                if self.needToDoQuestions:
-                    showQuestions(self, 3)
-                    if self.questionScore / 9 >= 0.7:
-                        self.questionAnswered = True
-                    else:
-                        self.needToDoQuestions = False
+                if not self.levelThreePage.needToShowReminder1Text:
+                    if self.needToDoQuestions:
+                        pygame.mixer.music.pause()
+                        showQuestions(self, 3)
+                        if self.questionScore / 9 >= 0.7:
+                            pygame.mixer.music.unpause()
+                            self.questionAnswered = True
+                            self.questionScore = 0
+                        else:
+                            pygame.mixer.music.unpause()
+                            self.needToDoQuestions = False
+                            self.questionScore = 0
                 if not self.needToDoQuestions:
                     self.levelThreePage.showReminder2Text(self)
             elif self.refuseChallenge:
@@ -65,7 +71,7 @@ class LevelThree:
                         self.enemies.append(Enemy(random.randint(0, 1250), -28, random.randint(-4, 4), 0.25))
                         self.enemiesPresent += 1
                 elif not self.enemies:
-                    end(self.levelThreePage, self, 12)
+                    end(self.levelThreePage, self, 11)
 
                 showEnemy(self)
                 self.showEnemyBullet()

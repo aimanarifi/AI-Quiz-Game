@@ -14,6 +14,9 @@ from production.datascience_house.Events import getMainPageEvents, getLevelPageE
 
 
 def startGame():
+    """
+    This is where the game start, it should be called from the outside world.
+    """
     clock = pygame.time.Clock()  # Control the frame rate of the game
 
     mainPage = MainPage()
@@ -22,9 +25,9 @@ def startGame():
     levelTwo = LevelTwo()
     levelThree = LevelThree()
 
-    """
-    This is where the game start, it should be called from the outside world.
-    """
+    pygame.mixer.music.load('datascience_house/music/game.mp3')
+    pygame.mixer.music.play(-1)
+
     while True:
         clock.tick(60)
         # If the player hasn't entered any level, display the main page with button selection

@@ -4,7 +4,7 @@ Written by Zhongjie Huang
 """
 import math
 
-from Window import pygame, window
+from production.datascience_house.Window import pygame, window
 
 
 class Plane:

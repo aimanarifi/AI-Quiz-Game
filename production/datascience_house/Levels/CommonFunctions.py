@@ -105,8 +105,11 @@ def end(levelPage, level, seconds):
             levelPage.end_textStartTime = time.time()
         levelPage.end_textEndTime = time.time()
         levelPage.end_textLastTime = levelPage.end_textEndTime - levelPage.end_textStartTime
-        if levelPage.end_textLastTime <= seconds:
+        countdown_text_time_left = seconds - levelPage.end_textLastTime
+        countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
+        if (seconds - levelPage.end_textLastTime) >= 0:
             levelPage.showEndText()
+            window.blit(countdown_text, (10, 690))
         else:
             levelPage.needTOShowEndText = False
             levelPage.needToShowExitText = True

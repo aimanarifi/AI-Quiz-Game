@@ -57,13 +57,13 @@ class LevelThreePage:
         # 玩家选择答题的按钮
         self.button_acceptChallenge = pygame.Rect(375, 500, 210, 40)
         pygame.draw.rect(window, (0, 255, 0), self.button_acceptChallenge)
-        self.text_acceptChallenge = font.render("Click here to start!", True, (255, 255, 255))
+        self.text_acceptChallenge = font.render("Click here to start!", True, (125, 125, 125))
         self.text_rect_acceptChallenge = self.text_acceptChallenge.get_rect(center=self.button_acceptChallenge.center)
 
         # 玩家拒绝答题的按钮
         self.button_refuseChallenge = pygame.Rect(685, 500, 210, 40)
         pygame.draw.rect(window, (0, 255, 0), self.button_refuseChallenge)
-        self.text_refuseChallenge = font.render("Click here to go back!", True, (255, 255, 255))
+        self.text_refuseChallenge = font.render("Click here to go back!", True, (125, 125, 125))
         self.text_rect_refuseChallenge = self.text_refuseChallenge.get_rect(center=self.button_refuseChallenge.center)
 
     def showBackground(self):
@@ -81,6 +81,7 @@ class LevelThreePage:
             window.blit(self.levelThreePageText.introduction1_textLine3, (280, 270))
             window.blit(self.levelThreePageText.introduction1_textLine4, (280, 320))
             window.blit(self.levelThreePageText.introduction1_textLine5, (280, 370))
+            window.blit(self.levelThreePageText.introduction1_textLine6, (280, 420))
 
     def showButtons(self):
         if self.needToShowButtons:
@@ -93,11 +94,16 @@ class LevelThreePage:
                 self.reminder1_textStartTime = time.time()
             self.reminder1_textEndTime = time.time()
             self.reminder1_textLastTime = self.reminder1_textEndTime - self.reminder1_textStartTime
-            if self.reminder1_textLastTime < 5:
+            countdown_text_time_left = 6 - self.reminder1_textLastTime
+            countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
+            if (6 - self.reminder1_textLastTime) >= 0:
                 window.blit(self.levelThreePageText.reminder1_textLine1,
-                            (280, 170))
+                            (380, 290))
                 window.blit(self.levelThreePageText.reminder1_textLine2,
-                            (280, 220))
+                            (380, 340))
+                window.blit(self.levelThreePageText.reminder1_textLine3,
+                            (563, 390))
+                window.blit(countdown_text, (10, 690))
             else:
                 self.needToShowReminder1Text = False
 
@@ -106,12 +112,15 @@ class LevelThreePage:
             self.reminder2_textStartTime = time.time()
         self.reminder2_textEndTime = time.time()
         self.reminder2_textLastTime = self.reminder2_textEndTime - self.reminder2_textStartTime
-        if self.reminder2_textLastTime < 5:
+        countdown_text_time_left = 6 - self.reminder2_textLastTime
+        countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
+        if (6 - self.reminder2_textLastTime) >= 0:
             window.blit(self.levelThreePageText.reminder2_textLine1,
-                        (280, 170))
+                        (380, 270))
             window.blit(self.levelThreePageText.reminder2_textLine2,
-                        (280, 220))
-            window.blit(self.levelThreePageText.reminder2_textLine3, (280, 270))
+                        (380, 320))
+            window.blit(self.levelThreePageText.reminder2_textLine3, (380, 370))
+            window.blit(countdown_text, (10, 690))
         else:
             self.reminder2_textStartTime = 0
             self.reminder2_textEndTime = 0
@@ -132,17 +141,20 @@ class LevelThreePage:
                 self.reminder3_textStartTime = time.time()
             self.reminder3_textEndTime = time.time()
             self.reminder3_textLastTime = self.reminder3_textEndTime - self.reminder3_textStartTime
-            if self.reminder3_textLastTime < 2:
+            countdown_text_time_left = 6 - self.reminder3_textLastTime
+            countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
+            if (6 - self.reminder3_textLastTime) >= 0:
                 window.blit(self.levelThreePageText.reminder3_textLine1,
-                            (280, 190))
+                            (300, 190))
                 window.blit(self.levelThreePageText.reminder3_textLine2,
-                            (280, 240))
+                            (300, 240))
                 window.blit(self.levelThreePageText.reminder3_textLine3,
-                            (280, 300))
+                            (300, 290))
                 window.blit(self.levelThreePageText.reminder3_textLine4,
-                            (280, 340))
+                            (300, 340))
                 window.blit(self.levelThreePageText.reminder3_textLine5,
-                            (280, 390))
+                            (580, 390))
+                window.blit(countdown_text, (10, 690))
             else:
                 self.needToShowReminder3Text = False
                 self.needToShowIntroduction2Text = True
@@ -153,12 +165,18 @@ class LevelThreePage:
                 self.introduction2_textStartTime = time.time()
             self.introduction2_textEndTime = time.time()
             self.introduction2_textLastTime = self.introduction2_textEndTime - self.introduction2_textStartTime
-            if self.introduction2_textLastTime < 2:
-                window.blit(self.levelThreePageText.introduction2_textLine1, (280, 170))
-                window.blit(self.levelThreePageText.introduction2_textLine2, (280, 220))
-                window.blit(self.levelThreePageText.introduction2_textLine3, (280, 270))
-                window.blit(self.levelThreePageText.introduction2_textLine4, (280, 320))
-                window.blit(self.levelThreePageText.introduction2_textLine5, (280, 370))
+            countdown_text_time_left = 11 - self.introduction2_textLastTime
+            countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
+            if (11 - self.introduction2_textLastTime) >= 0:
+                window.blit(self.levelThreePageText.introduction2_textLine1, (320, 160))
+                window.blit(self.levelThreePageText.introduction2_textLine2, (320, 210))
+                window.blit(self.levelThreePageText.introduction2_textLine3, (320, 260))
+                window.blit(self.levelThreePageText.introduction2_textLine4, (320, 310))
+                window.blit(self.levelThreePageText.introduction2_textLine5, (320, 360))
+                window.blit(self.levelThreePageText.introduction2_textLine6, (320, 410))
+                window.blit(self.levelThreePageText.introduction2_textLine7, (320, 460))
+                window.blit(self.levelThreePageText.introduction2_textLine8, (547, 510))
+                window.blit(countdown_text, (10, 690))
             else:
                 self.needToShowIntroduction2Text = False
                 self.needToShowReminder4Text = True
@@ -169,20 +187,24 @@ class LevelThreePage:
                 self.reminder4_textStartTime = time.time()
             self.reminder4_textEndTime = time.time()
             self.reminder4_textLastTime = self.reminder4_textEndTime - self.reminder4_textStartTime
-            if self.reminder4_textLastTime < 2:
+            countdown_text_time_left = 6 - self.reminder4_textLastTime
+            countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
+            if (6 - self.reminder4_textLastTime) >= 0:
                 window.blit(self.levelThreePageText.reminder4_textLine1,
-                            (320, 440))
+                            (220, 500))
                 window.blit(self.levelThreePageText.reminder4_textLine2,
-                            (340, 470))
+                            (490, 550))
+                window.blit(countdown_text, (10, 690))
             else:
                 self.needToShowReminder4Text = False
                 self.showText_beforeGame = False
 
     def showEndText(self):
-        window.blit(self.levelThreePageText.end_textLine1, (280, 170))
-        window.blit(self.levelThreePageText.end_textLine2, (280, 220))
-        window.blit(self.levelThreePageText.end_textLine3, (280, 270))
+        window.blit(self.levelThreePageText.end_textLine1, (350, 170))
+        window.blit(self.levelThreePageText.end_textLine2, (350, 220))
+        window.blit(self.levelThreePageText.end_textLine3, (350, 270))
+        window.blit(self.levelThreePageText.end_textLine4, (350, 320))
 
     def showExitText(self):
         window.blit(self.levelThreePageText.exit_textLine1, (314, 315))
-        window.blit(self.levelThreePageText.exit_textLine2, (314, 365))
+        window.blit(self.levelThreePageText.exit_textLine2, (337, 365))

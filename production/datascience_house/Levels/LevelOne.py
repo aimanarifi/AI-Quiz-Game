@@ -40,7 +40,7 @@ class LevelOne:
                     self.enemiesPresent += 1
             # If no enemies, end the game
             if not self.enemies:
-                end(self.levelOnePage, self, 12)
+                end(self.levelOnePage, self, 11)
 
             showEnemy(self)
 

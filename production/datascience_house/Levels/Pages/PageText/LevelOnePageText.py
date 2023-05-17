@@ -5,14 +5,16 @@ class LevelOnePageText:
     def __init__(self):
         # 欢迎玩家来到第一关的介绍文字
         self.introduction_textLine1 = font.render(
-            "Welcome to Scorpio Interstellar. I am the messenger here. We have been",
+            "Welcome to Scorpio Interstellar. I am the messenger here.",
             True, (0, 0, 0))
         self.introduction_textLine2 = font.render(
-            "attacked by some interstellar disruptors who spread viruses to disrupt",
+            "We have been attacked by some interstellar disruptors who",
             True, (0, 0, 0))
         self.introduction_textLine3 = font.render(
-            "the ecology of this interstellar system. If you can help us eliminate them,", True, (0, 0, 0))
-        self.introduction_textLine4 = font.render(" I would be very grateful. Good luck!", True, (0, 0, 0))
+            "spread viruses to disrupt the ecology of this interstellar system.", True, (0, 0, 0))
+        self.introduction_textLine4 = font.render("If you can help us eliminate them, I would be very grateful.", True,
+                                                  (0, 0, 0))
+        self.introduction_textLine5 = font.render("Good luck!", True, (0, 0, 0))
 
         # 告诉玩家如何操作飞机的提醒文字
         self.reminder_textLine1 = font.render("Press up, down, left or right to move your plane.", True, (0, 0, 0))
@@ -20,15 +22,16 @@ class LevelOnePageText:
 
         # 玩家消灭本关所有敌人后显示的文字
         self.end_textLine1 = font.render("Wow, it's incredible that you were able to eliminate those monsters.",
-                                               True,
-                                               (0, 0, 0))
+                                         True,
+                                         (0, 0, 0))
         self.end_textLine2 = font.render(
-            "To thank you for your help, let me give you some crystals from our interstellar", True, (0, 0, 0))
+            "To thank you for your help, let me give you some crystals from our", True, (0, 0, 0))
         self.end_textLine3 = font.render(
-            "system. They can make your spacecraft faster and also enhance your weapons.", True, (0, 0, 0))
-        self.end_textLine4 = font.render("I wish you a pleasant journey.", True, (0, 0, 0))
+            "interstellar system. They can make your spacecraft faster and also", True, (0, 0, 0))
+        self.end_textLine4 = font.render("enhance your weapons.", True, (0, 0, 0))
+        self.end_textLine5 = font.render("I wish you a pleasant journey.", True, (0, 0, 0))
 
         # 指示玩家离开本关的文字
         self.exit_textLine1 = font.render("Well done! The exit of the interstellar has been opened.", True,
-                                               (0, 0, 0))
+                                          (0, 0, 0))
         self.exit_textLine2 = font.render("Please proceed to the next interstellar destination.", True, (0, 0, 0))

@@ -3,7 +3,7 @@ Last modified: 15/05/2023
 Written by Zhongjie Huang
 """
 import random
-from production.datascience_house.Window import window
+from production.datascience_house.Window import pygame, window
 from production.datascience_house.Plane import Plane
 from production.datascience_house.Enemy import Enemy
 from production.datascience_house.Levels.CommonFunctions import showQuestions, image_bullet, showPlane_setPlaneMoveRange, showScoreObtained, showEnemy, hitByEnemy_judge, hit_judge, end
@@ -35,12 +35,18 @@ class LevelTwo:
             self.levelTwoPage.showTextBeforeQuestions(self)
             if self.acceptChallenge:
                 self.levelTwoPage.showReminder1Text()
-                if self.needToDoQuestions:
-                    showQuestions(self, 2)
-                    if self.questionScore / 6 >= 0.7:
-                        self.questionAnswered = True
-                    else:
-                        self.needToDoQuestions = False
+                if not self.levelTwoPage.needToShowReminder1Text:
+                    if self.needToDoQuestions:
+                        pygame.mixer.music.pause()
+                        showQuestions(self, 2)
+                        if self.questionScore / 6 >= 0.7:
+                            pygame.mixer.music.unpause()
+                            self.questionAnswered = True
+                            self.questionScore = 0
+                        else:
+                            pygame.mixer.music.unpause()
+                            self.needToDoQuestions = False
+                            self.questionScore = 0
                 if not self.needToDoQuestions:
                     self.levelTwoPage.showReminder2Text(self)
             elif self.refuseChallenge:
@@ -64,7 +70,7 @@ class LevelTwo:
                         self.enemies.append(Enemy(random.randint(0, 1250), -28, random.randint(-3, 3), 0.2))
                         self.enemiesPresent += 1
                 if not self.enemies:
-                    end(self.levelTwoPage, self, 12)
+                    end(self.levelTwoPage, self, 11)
 
                 showEnemy(self)
 
