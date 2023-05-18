@@ -9,7 +9,7 @@ from production.datascience_house.Levels.Pages.PageText.LevelTwoPageText import 
 
 class LevelTwoPage:
     def __init__(self):
-        self.image_background = pygame.image.load('datascience_house/images/LevelTwoBackground.jpg')
+        self.image_background = pygame.image.load('datascience_house/images/pink background.png')
         self.levelTwoPageText = LevelTwoPageText()
 
         # The display attributes for the introduction text when the player doesn't answer the questions

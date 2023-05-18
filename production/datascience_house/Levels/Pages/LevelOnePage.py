@@ -9,7 +9,7 @@ from production.datascience_house.Levels.Pages.PageText.LevelOnePageText import 
 
 class LevelOnePage:
     def __init__(self):
-        self.image_background = pygame.image.load('datascience_house/images/LevelOneBackground.jpg')
+        self.image_background = pygame.image.load('datascience_house/images/blue background.png')
         self.levelOnePageText = LevelOnePageText()
 
         # Introduction text Properties

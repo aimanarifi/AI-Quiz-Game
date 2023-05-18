@@ -6,7 +6,7 @@ It imports level_builder so it can display the the minigame level
 
 Created by: Muhammad Kamaludin
 Modified by:
-Last modified: 27/4/2023
+Last modified: 18/5/2023
 """
 
 import pygame
@@ -159,7 +159,7 @@ def run_level(level: level_builder.Level):
             #Interaction on tiles
             for tile in [tile for row in level.layout for tile in row]: #flatten the list
             
-                if tile.type in ['blank','input','output']: continue
+                if tile.type in ['blank','input','output','4branch']: continue
             
                 #hover effect
                 if tile.rect.collidepoint(pygame.mouse.get_pos()):
@@ -228,8 +228,8 @@ def setup(**setting):
     clock = pygame.time.Clock()
     difficulty = setting["difficulty"]
     player_stats = setting["player_stats"]
-    levels = level_builder.get_levels( 3*(difficulty-1)+1,3*(difficulty-1)+3)
-    quizzes = [quiz.Quiz(f"Question {i}: This is sample question This is sample question This is sample question This is sample question This is sample question This is sample question", ["AAAA", "BBBB", "CCCC","DDDD"],"BBBB") for i in range(len(levels))]
+    levels = level_builder.get_levels( 3*(difficulty-1),3*(difficulty-1)+2)
+    quizzes = DB.get_questions(difficulty,"cloud")
     score = 0
     in_between_sublevel = False
 
@@ -249,7 +249,7 @@ def run(diff: int = 0, user=None):
     global initial_time
 
     level_counter = 0
-    initial_time = pygame.time.get_ticks()/1000
+    initial_time = pygame.time.get_ticks()/1000 + 1
     for level in levels:
         level_counter += 1
         run_level(level)
