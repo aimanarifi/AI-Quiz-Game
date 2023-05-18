@@ -8,59 +8,59 @@ class LevelTwoPage:
         self.image_background = pygame.image.load('datascience_house/images/LevelTwoBackground.jpg')
         self.levelTwoPageText = LevelTwoPageText()
 
-        # 欢迎文字(玩家没有答题)的显示属性
+        # The display attributes for the introduction text when the player doesn't answer the questions
         self.needToShowIntroduction1Text = True
 
-        # 按钮选项的显示属性
+        # The display attributes for the button options
         self.needToShowButtons = True
 
-        # 提醒文字(玩家选择答题后)的显示属性
+        # The display attributes for the reminder text after the player selects an answer
         self.needToShowReminder1Text = True
         self.reminder1_textStartTime = 0
         self.reminder1_textEndTime = 0
         self.reminder1_textLastTime = 0
 
-        # 提醒文字(玩家答题失败)的显示属性
+        # The display attributes for the reminder text when the player fails to answer a question
         self.reminder2_textStartTime = 0
         self.reminder2_textEndTime = 0
         self.reminder2_textLastTime = 0
 
         self.showText_beforeGame = True
 
-        # 提醒文字(玩家答题成功)的显示属性
+        # The display attributes for the reminder text when the player successfully answers a question
         self.needToShowReminder3Text = True
         self.reminder3_textStartTime = 0
         self.reminder3_textEndTime = 0
         self.reminder3_textLastTime = 0
 
-        # 欢迎文字(玩家已答题)的显示属性
+        # The display attributes for the introduction text when the player has already answered a question
         self.needToShowIntroduction2Text = False
         self.introduction2_textStartTime = 0
         self.introduction2_textEndTime = 0
         self.introduction2_textLastTime = 0
 
-        # 提醒文字(飞机性能)的显示属性
+        # The display attributes for the reminder text regarding the aircraft's performance
         self.needToShowReminder4Text = False
         self.reminder4_textStartTime = 0
         self.reminder4_textEndTime = 0
         self.reminder4_textLastTime = 0
 
-        # 提醒文字(游戏结束)的显示属性
+        # The display attributes for the reminder text when the game is over
         self.needTOShowEndText = True
         self.end_textStartTime = 0
         self.end_textEndTime = 0
         self.end_textLastTime = 0
 
-        # 提醒文字(退出关卡)的显示属性
+        # The display attributes for the reminder text when exiting the level
         self.needToShowExitText = False
 
-        # 玩家选择答题的按钮
+        # The button for the player to choose to answer the questions
         self.button_acceptChallenge = pygame.Rect(385, 500, 210, 40)
         pygame.draw.rect(window, (0, 255, 0), self.button_acceptChallenge)
         self.text_acceptChallenge = font.render("Click here to start!", True, (255, 255, 255))
         self.text_rect_acceptChallenge = self.text_acceptChallenge.get_rect(center=self.button_acceptChallenge.center)
 
-        # 玩家拒绝答题的按钮
+        # The button for the player to refuse answering the questions
         self.button_refuseChallenge = pygame.Rect(695, 500, 210, 40)
         pygame.draw.rect(window, (0, 255, 0), self.button_refuseChallenge)
         self.text_refuseChallenge = font.render("Click here to go back!", True, (255, 255, 255))

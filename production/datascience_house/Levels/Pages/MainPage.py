@@ -7,19 +7,19 @@ class MainPage:
         self.image_background = pygame.image.load('datascience_house/images/mainBackground.jpg')
         self.mainPageText = MainPageText()
 
-        # 进入第一关的按钮
+        # The button to enter the first level
         self.button_levelOne = pygame.Rect(545, 460, 210, 40)
         pygame.draw.rect(window, (0, 255, 0), self.button_levelOne)
         self.text_levelOne = font.render("Click here to start level one!", True, (255, 255, 255))
         self.text_rect_levelOne = self.text_levelOne.get_rect(center=self.button_levelOne.center)
 
-        # 进入第二关的按钮
+        # The button to enter the second level
         self.button_levelTwo = pygame.Rect(545, 510, 210, 40)
         pygame.draw.rect(window, (0, 255, 0), self.button_levelTwo)
         self.text_levelTwo = font.render("Click here to start level two!", True, (255, 255, 255))
         self.text_rect_levelTwo = self.text_levelTwo.get_rect(center=self.button_levelTwo.center)
 
-        # 进入第三关的按钮
+        # The button to enter the third level
         self.button_levelThree = pygame.Rect(545, 560, 210, 40)
         pygame.draw.rect(window, (0, 255, 0), self.button_levelThree)
         self.text_levelThree = font.render("Click here to start level three!", True, (255, 255, 255))
@@ -35,10 +35,8 @@ class MainPage:
         window.blit(self.mainPageText.introduction_textLine4, (230, 320))
         window.blit(self.mainPageText.introduction_textLine5, (450, 370))
 
-    def showButtons(self, levelTwo, levelThree):
-        # 玩家需要先完成前面的关卡才能进入后面的关卡
+    def showButtons(self):
+        # Players need to complete the previous levels before they can proceed to the next levels
         window.blit(self.text_levelOne, self.text_rect_levelOne)
-        # if levelTwo.passed:
         window.blit(self.text_levelTwo, self.text_rect_levelTwo)
-        # if levelThree.passed:
         window.blit(self.text_levelThree, self.text_rect_levelThree)

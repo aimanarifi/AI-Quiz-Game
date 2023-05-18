@@ -32,11 +32,13 @@ def getLevelPageEvents(plane, level, levelPage):
                 plane.speed_y = plane.velocity2
             if event.key == pygame.K_DOWN:  # move down
                 plane.speed_y = plane.velocity1
-            if event.key == pygame.K_w:  # shoot bullet
+            # shoot bullet
+            if event.key == pygame.K_w:
                 if level.name == 'level one':
                     plane.shoot(plane.position_x + 35, plane.position_y)
                 if level.name == 'level two' or level.name == 'level three':
                     plane.shoot_threeBullets(plane.position_x + 35, plane.position_y)
+            # shoot auto-track bullet (level 3)
             if event.key == pygame.K_r and level.name == 'level three':
                 plane.shoot_auto_track(plane.position_x + 35, plane.position_y)
         if event.type == pygame.KEYUP:

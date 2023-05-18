@@ -96,7 +96,7 @@ class LevelTwo:
                 i += 1
 
     # To reset all the states of the level when the player exits,
-    # you can call this method to ensure that the player can restart the level without encountering any errors.
+    # call this method to ensure that the player can restart the level without encountering errors.
     def finish(self, levelTwoPage):
         if 1190 > self.plane.position_x > 1010 and 28 < self.plane.position_y < 172:
             self.gameIsOn = False

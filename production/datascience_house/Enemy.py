@@ -7,26 +7,26 @@ import random
 
 class Enemy:
     def __init__(self, position_x, position_y, speed_x, speed_y):
-        # 敌人的位置
+        # The position of the enemy
         self.position_x = position_x
         self.position_y = position_y
 
-        # 敌人的移速
+        # The speed of the enemy
         self.speed_x = speed_x
         self.speed_y = speed_y
 
-        # 敌人发射的所有子弹
+        # All bullets fired by the enemy
         self.all_bullets = []
 
-        # 敌人发射子弹的频率控制
+        # Controlling the frequency of enemy bullet firing
         self.fire_StartTime = 0
         self.fire_EndTime = 0
         self.fire_LastTime = 0
 
-        # 敌人是否被子弹(飞机)击中
+        # Whether the enemy is hit by the bullets (from the aircraft)
         self.hitByBullet = False
 
-        # 敌人是否与飞机相撞
+        # Whether the enemy collides with the aircraft
         self.hitByPlane = False
 
     def shoot(self):

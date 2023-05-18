@@ -3,7 +3,7 @@ from production.datascience_house.Window import font
 
 class LevelOnePageText:
     def __init__(self):
-        # 欢迎玩家来到第一关的介绍文字
+        # Introduction text to welcome players to the level 1
         self.introduction_textLine1 = font.render(
             "Welcome to Scorpio Interstellar. I am the messenger here.",
             True, (0, 0, 0))
@@ -16,11 +16,11 @@ class LevelOnePageText:
                                                   (0, 0, 0))
         self.introduction_textLine5 = font.render("Good luck!", True, (0, 0, 0))
 
-        # 告诉玩家如何操作飞机的提醒文字
+        # Reminder text telling the player how to operate the aircraft
         self.reminder_textLine1 = font.render("Press up, down, left or right to move your plane.", True, (0, 0, 0))
         self.reminder_textLine2 = font.render("Press w to fire.", True, (0, 0, 0))
 
-        # 玩家消灭本关所有敌人后显示的文字
+        # The text displayed after the player has destroyed all enemies in this level
         self.end_textLine1 = font.render("Wow, it's incredible that you were able to eliminate those monsters.",
                                          True,
                                          (0, 0, 0))
@@ -31,7 +31,7 @@ class LevelOnePageText:
         self.end_textLine4 = font.render("enhance your weapons.", True, (0, 0, 0))
         self.end_textLine5 = font.render("I wish you a pleasant journey.", True, (0, 0, 0))
 
-        # 指示玩家离开本关的文字
+        # The text instructing the player to leave the level
         self.exit_textLine1 = font.render("Well done! The exit of the interstellar has been opened.", True,
                                           (0, 0, 0))
         self.exit_textLine2 = font.render("Please proceed to the next interstellar destination.", True, (0, 0, 0))

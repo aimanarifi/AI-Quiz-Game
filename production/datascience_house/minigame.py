@@ -40,11 +40,11 @@ def startGame():
         elif levelOne.gameIsOn:
             levelOne.loadStuff()
             getLevelPageEvents(levelOne.plane, levelOne, levelOne.levelOnePage)
-        # If the player selects to enter the second level.
+        # If the player selects to enter the second level
         elif levelTwo.gameIsOn:
             levelTwo.loadStuff()
             getLevelPageEvents(levelTwo.plane, levelTwo, levelTwo.levelTwoPage)
-        # 如果玩家选择进入第三关
+        # If the player selects to enter the third level
         elif levelThree.gameIsOn:
             levelThree.loadStuff()
             getLevelPageEvents(levelThree.plane, levelThree, levelThree.levelThreePage)

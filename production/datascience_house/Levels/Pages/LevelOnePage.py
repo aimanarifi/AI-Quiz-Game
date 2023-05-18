@@ -10,25 +10,25 @@ class LevelOnePage:
 
         self.showText_beforeGame = True
 
-        # 欢迎文字的显示属性
+        # Introduction text display properties
         self.needToShowIntroductionText = True
         self.introduction_textStartTime = 0
         self.introduction_textEndTime = 0
         self.introduction_textLastTime = 0
 
-        # 提醒文字(飞机操控)的显示属性
+        # Display properties for reminder text (aircraft control)
         self.needToShowReminder1Text = False
         self.reminder_textStartTime = 0
         self.reminder_textEndTime = 0
         self.reminder_textLastTime = 0
 
-        # 提醒文字(游戏结束)的显示属性
+        # Display properties for reminder text (game over)
         self.needTOShowEndText = True
         self.end_textStartTime = 0
         self.end_textEndTime = 0
         self.end_textLastTime = 0
 
-        # 提醒文字(退出关卡的显示属性
+        # Display properties for reminder text (exit level)
         self.needToShowExitText = False
 
     def showBackground(self):

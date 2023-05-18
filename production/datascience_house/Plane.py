@@ -9,25 +9,25 @@ from production.datascience_house.Window import pygame, window
 
 class Plane:
     def __init__(self):
-        # 飞机的生命值
+        # health points of the aircraft
         self.HP_max = 100
         self.HP_current = 100
         self.healthBar_width = 77
 
-        # 飞机的位置
+        # The position of the aircraft
         self.position_x = 0
         self.position_y = 675
 
-        # 飞机的速度和数值
+        # The speed and numerical value of the aircraft
         self.speed_x = 0  # level speed
         self.speed_y = 0  # vertical speed
         self.velocity1 = 3  # velocity size (one direction)
         self.velocity2 = -3  # velocity size (one direction)
 
-        # 飞机发射的所有子弹
+        # All bullets fired by the aircraft
         self.all_bullets = []
 
-    # 显示飞机的生命值
+    # Displaying the life points of the aircraft
     def showHealth(self):
         pygame.draw.rect(window, (0, 255, 0), (self.position_x, self.position_y - 7, self.healthBar_width, 5))
 
@@ -220,17 +220,17 @@ class Plane:
 
 class Bullet:
     def __init__(self, position_x, position_y, speed_x=0, position=None):
-        # 子弹的位置
+        # The position of the bullet
         self.position_x = position_x
         self.position_y = position_y
 
-        # 子弹的速度
+        # The speed of the bullet
         self.speed_x = speed_x
         self.speed_y = 0
         self.speed_default = 10
 
-        # 子弹的移动方位
+        # The movement direction of the bullet
         self.position = position
 
-        # 子弹是否击中敌人
+        # Whether the bullet hit the enemy
         self.hitEnemy = False
