@@ -1,5 +1,5 @@
 """
-Last modified: 03/05/2023
+Last modified: 18/05/2023
 Written by Zhongjie Huang
 """
 import math
@@ -8,21 +8,27 @@ from production.datascience_house.Window import pygame, window
 
 class Plane:
     def __init__(self):
+        # health points of the aircraft
         self.HP_max = 100
         self.HP_current = 100
         self.healthBar_width = 77
+
+        # The position of the aircraft
         self.position_x = 0
         self.position_y = 675
+
+        # The speed and numerical value of the aircraft
         self.speed_x = 0  # level speed
         self.speed_y = 0  # vertical speed
         self.velocity1 = 3  # velocity size (one direction)
         self.velocity2 = -3  # velocity size (one direction)
-        self.all_bullets = []
-        self.everyThreeBullets = []
-        self.all_auto_track_bullets = []
 
+        # All bullets fired by the aircraft
+        self.all_bullets = []
+
+    # Displaying the life points of the aircraft
     def showHealth(self):
-        pygame.draw.rect(window, (255, 0, 0), (self.position_x, self.position_y - 7, self.healthBar_width, 5))
+        pygame.draw.rect(window, (0, 255, 0), (self.position_x, self.position_y - 7, self.healthBar_width, 5))
 
     # Upgrading spacecraft performance to increase speed.
     def move_speed_improve(self):
@@ -198,25 +204,32 @@ class Plane:
         new_bullet = Bullet(position_x, position_y)
         self.all_bullets.append(new_bullet)
 
-    def shoot_threeBullets(self, position_x, position_y, speed_x, speed_y):
-        new_bullet1 = Bullet(position_x, position_y, speed_x, speed_y)
-        new_bullet2 = Bullet(position_x, position_y, speed_x, speed_y)
-        new_bullet3 = Bullet(position_x, position_y, speed_x, speed_y)
+    def shoot_threeBullets(self, position_x, position_y):
+        new_bullet1 = Bullet(position_x, position_y, 2, 'right')
+        new_bullet2 = Bullet(position_x, position_y, 2, 'middle')
+        new_bullet3 = Bullet(position_x, position_y, 2, 'left')
         self.all_bullets.append(new_bullet1)
         self.all_bullets.append(new_bullet2)
         self.all_bullets.append(new_bullet3)
-        self.everyThreeBullets.append((new_bullet1, new_bullet2, new_bullet3))
 
     def shoot_auto_track(self, position_x, position_y):
-        new_bullet = Bullet(position_x, position_y)
+        new_bullet = Bullet(position_x, position_y, 0, 'auto_track')
         self.all_bullets.append(new_bullet)
-        self.all_auto_track_bullets.append(new_bullet)
 
 
 class Bullet:
-    def __init__(self, position_x, position_y, speed_x=0, speed_y=0):
+    def __init__(self, position_x, position_y, speed_x=0, position=None):
+        # The position of the bullet
         self.position_x = position_x
         self.position_y = position_y
+
+        # The speed of the bullet
         self.speed_x = speed_x
-        self.speed_y = speed_y
+        self.speed_y = 0
         self.speed_default = 10
+
+        # The movement direction of the bullet
+        self.position = position
+
+        # Whether the bullet hit the enemy
+        self.hitEnemy = False
