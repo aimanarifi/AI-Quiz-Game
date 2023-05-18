@@ -129,6 +129,7 @@ class LevelTwo:
             self.gameIsOn = False
             self.plane.position_x, self.plane.position_y = 0, 675
             self.plane.speed_x, self.plane.speed_y = 0, 0
+            self.plane.HP_current = 100
             self.enemiesPresent = 0
             self.enemyDestroyed = 0
             self.score = 0
