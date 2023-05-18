@@ -145,15 +145,15 @@ class LevelThreePage:
             countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
             if (6 - self.reminder3_textLastTime) >= 0:
                 window.blit(self.levelThreePageText.reminder3_textLine1,
-                            (300, 190))
+                            (300, 230))
                 window.blit(self.levelThreePageText.reminder3_textLine2,
-                            (300, 240))
+                            (300, 280))
                 window.blit(self.levelThreePageText.reminder3_textLine3,
-                            (300, 290))
+                            (300, 330))
                 window.blit(self.levelThreePageText.reminder3_textLine4,
-                            (300, 340))
+                            (300, 370))
                 window.blit(self.levelThreePageText.reminder3_textLine5,
-                            (580, 390))
+                            (580, 420))
                 window.blit(countdown_text, (10, 690))
             else:
                 self.needToShowReminder3Text = False
@@ -200,11 +200,11 @@ class LevelThreePage:
                 self.showText_beforeGame = False
 
     def showEndText(self):
-        window.blit(self.levelThreePageText.end_textLine1, (350, 170))
-        window.blit(self.levelThreePageText.end_textLine2, (350, 220))
-        window.blit(self.levelThreePageText.end_textLine3, (350, 270))
-        window.blit(self.levelThreePageText.end_textLine4, (350, 320))
+        window.blit(self.levelThreePageText.end_textLine1, (365, 250))
+        window.blit(self.levelThreePageText.end_textLine2, (365, 300))
+        window.blit(self.levelThreePageText.end_textLine3, (365, 350))
+        window.blit(self.levelThreePageText.end_textLine4, (365, 400))
 
     def showExitText(self):
         window.blit(self.levelThreePageText.exit_textLine1, (314, 315))
-        window.blit(self.levelThreePageText.exit_textLine2, (337, 365))
+        window.blit(self.levelThreePageText.exit_textLine2, (410, 365))

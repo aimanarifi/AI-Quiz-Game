@@ -65,12 +65,12 @@ class LevelThreePageText:
 
         # 玩家消灭本关所有敌人后的提醒文字
         self.end_textLine1 = font.render("Wow, you have eliminated all those destroyers.", True, (0, 0, 0))
-        self.end_textLine2 = font.render("That's incredible! You have truly become a hero of",
+        self.end_textLine2 = font.render("That's incredible! You have truly become a hero",
                                          True, (0, 0, 0))
-        self.end_textLine3 = font.render("the interstellar region.",
+        self.end_textLine3 = font.render("of the interstellar region.",
                                          True, (0, 0, 0))
         self.end_textLine4 = font.render("Congratulations on your achievement!", True, (0, 0, 0))
 
         # 指示玩家离开本关的提醒文字
         self.exit_textLine1 = font.render("Well done! The exit of the interstellar has been opened.", True, (0, 0, 0))
-        self.exit_textLine2 = font.render("Please proceed to the final destination.", True, (0, 0, 0))
+        self.exit_textLine2 = font.render("Please proceed to finish your journey.", True, (0, 0, 0))
