@@ -1,3 +1,7 @@
+"""
+Last modified: 18/05/2023
+Written by Zhongjie Huang
+"""
 import time
 from production.datascience_house.Window import pygame, window, font
 from production.datascience_house.Levels.Pages.PageText.LevelTwoPageText import LevelTwoPageText
@@ -54,6 +58,11 @@ class LevelTwoPage:
         # The display attributes for the reminder text when exiting the level
         self.needToShowExitText = False
 
+        self.needToShowDefeatedText = True
+        self.defeated_text_startTime = 0
+        self.defeated_text_endTime = 0
+        self.defeated_text_lastTime = 0
+
         # The button for the player to choose to answer the questions
         self.button_acceptChallenge = pygame.Rect(385, 500, 210, 40)
         pygame.draw.rect(window, (0, 255, 0), self.button_acceptChallenge)
@@ -94,9 +103,9 @@ class LevelTwoPage:
                 self.reminder1_textStartTime = time.time()
             self.reminder1_textEndTime = time.time()
             self.reminder1_textLastTime = self.reminder1_textEndTime - self.reminder1_textStartTime
-            countdown_text_time_left = 6 - self.reminder1_textLastTime
+            countdown_text_time_left = 7 - self.reminder1_textLastTime
             countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
-            if (6 - self.reminder1_textLastTime) >= 0:
+            if (7 - self.reminder1_textLastTime) >= 0:
                 window.blit(self.levelTwoPageText.reminder1_textLine1, (420, 270))
                 window.blit(self.levelTwoPageText.reminder1_textLine2, (420, 320))
                 window.blit(self.levelTwoPageText.reminder1_textLine3, (420, 370))
@@ -104,28 +113,31 @@ class LevelTwoPage:
                 window.blit(countdown_text, (10, 690))
             else:
                 self.needToShowReminder1Text = False
+                self.reminder1_textStartTime = 0
+                self.reminder1_textEndTime = 0
+                self.reminder1_textLastTime = 0
 
     def showReminder2Text(self, levelTwo):
         if self.reminder2_textStartTime == 0:
             self.reminder2_textStartTime = time.time()
         self.reminder2_textEndTime = time.time()
         self.reminder2_textLastTime = self.reminder2_textEndTime - self.reminder2_textStartTime
-        countdown_text_time_left = 6 - self.reminder2_textLastTime
+        countdown_text_time_left = 7 - self.reminder2_textLastTime
         countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
-        if (6 - self.reminder2_textLastTime) >= 0:
+        if (7 - self.reminder2_textLastTime) >= 0:
             window.blit(self.levelTwoPageText.reminder2_textLine1, (325, 260))
             window.blit(self.levelTwoPageText.reminder2_textLine2, (325, 310))
             window.blit(self.levelTwoPageText.reminder2_textLine3, (325, 360))
             window.blit(self.levelTwoPageText.reminder2_textLine4, (325, 410))
             window.blit(countdown_text, (10, 690))
         else:
-            self.reminder2_textStartTime = 0
-            self.reminder2_textEndTime = 0
-            self.reminder2_textLastTime = 0
             self.needToShowIntroduction1Text = True
             self.needToShowButtons = True
             levelTwo.acceptChallenge = False
             levelTwo.needToDoQuestions = True
+            self.reminder2_textStartTime = 0
+            self.reminder2_textEndTime = 0
+            self.reminder2_textLastTime = 0
 
     def showTextBeforeGame(self):
         self.showReminder3Text()
@@ -138,9 +150,9 @@ class LevelTwoPage:
                 self.reminder3_textStartTime = time.time()
             self.reminder3_textEndTime = time.time()
             self.reminder3_textLastTime = self.reminder3_textEndTime - self.reminder3_textStartTime
-            countdown_text_time_left = 6 - self.reminder3_textLastTime
+            countdown_text_time_left = 7 - self.reminder3_textLastTime
             countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
-            if (6 - self.reminder3_textLastTime) >= 0:
+            if (7 - self.reminder3_textLastTime) >= 0:
                 window.blit(self.levelTwoPageText.reminder3_textLine1, (315, 283))
                 window.blit(self.levelTwoPageText.reminder3_textLine2, (315, 333))
                 window.blit(self.levelTwoPageText.reminder3_textLine3, (315, 383))
@@ -148,6 +160,9 @@ class LevelTwoPage:
             else:
                 self.needToShowReminder3Text = False
                 self.needToShowIntroduction2Text = True
+                self.reminder3_textStartTime = 0
+                self.reminder3_textEndTime = 0
+                self.reminder3_textLastTime = 0
 
     def showIntroduction2Text(self):
         if self.needToShowIntroduction2Text:
@@ -155,9 +170,9 @@ class LevelTwoPage:
                 self.introduction2_textStartTime = time.time()
             self.introduction2_textEndTime = time.time()
             self.introduction2_textLastTime = self.introduction2_textEndTime - self.introduction2_textStartTime
-            countdown_text_time_left = 11 - self.introduction2_textLastTime
+            countdown_text_time_left = 12 - self.introduction2_textLastTime
             countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
-            if (11 - self.introduction2_textLastTime) >= 0:
+            if (12 - self.introduction2_textLastTime) >= 0:
                 window.blit(self.levelTwoPageText.introduction2_textLine1, (315, 170))
                 window.blit(self.levelTwoPageText.introduction2_textLine2, (315, 220))
                 window.blit(self.levelTwoPageText.introduction2_textLine3, (315, 270))
@@ -169,6 +184,9 @@ class LevelTwoPage:
             else:
                 self.needToShowIntroduction2Text = False
                 self.needToShowReminder4Text = True
+                self.introduction2_textStartTime = 0
+                self.introduction2_textEndTime = 0
+                self.introduction2_textLastTime = 0
 
     def showReminder4Text(self):
         if self.needToShowReminder4Text:
@@ -176,14 +194,17 @@ class LevelTwoPage:
                 self.reminder4_textStartTime = time.time()
             self.reminder4_textEndTime = time.time()
             self.reminder4_textLastTime = self.reminder4_textEndTime - self.reminder4_textStartTime
-            countdown_text_time_left = 6 - self.reminder4_textLastTime
+            countdown_text_time_left = 7 - self.reminder4_textLastTime
             countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
-            if (6 - self.reminder4_textLastTime) >= 0:
+            if (7 - self.reminder4_textLastTime) >= 0:
                 window.blit(self.levelTwoPageText.reminder4_textLine, (290, 513))
                 window.blit(countdown_text, (10, 690))
             else:
                 self.needToShowReminder4Text = False
                 self.showText_beforeGame = False
+                self.reminder4_textStartTime = 0
+                self.reminder4_textEndTime = 0
+                self.reminder4_textLastTime = 0
 
     def showEndText(self):
         window.blit(self.levelTwoPageText.end_textLine1, (317, 170))

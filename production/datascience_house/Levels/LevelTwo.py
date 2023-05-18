@@ -1,13 +1,14 @@
 """
-Last modified: 15/05/2023
+Last modified: 18/05/2023
 Written by Zhongjie Huang
 """
 import random
 from production.datascience_house.Window import pygame, window
 from production.datascience_house.Plane import Plane
 from production.datascience_house.Enemy import Enemy
-from production.datascience_house.Levels.CommonFunctions import showQuestions, image_bullet, showPlane_setPlaneMoveRange, showScoreObtained, showEnemy, hitByEnemy_judge, hit_judge, end
+from production.datascience_house.Levels.CommonFunctions import showQuestions, image_bullet, showPlane_setPlaneMoveRange, showScoreObtained, showEnemy, showRemainingEnemies, hitByEnemy_judge, hit_judge, end
 from production.datascience_house.Levels.Pages.LevelTwoPage import LevelTwoPage
+from production.datascience_house.Levels.Pages.PageText.CommonText import showDefeatedText
 
 
 class LevelTwo:
@@ -20,6 +21,7 @@ class LevelTwo:
         self.enemies = []  # All enemies
         self.allEnemies = 60  # Total number of enemies
         self.enemiesPresent = 0  # Enemies that have appeared
+        self.enemyDestroyed = 0
         self.score = 0  # Score
         self.acceptChallenge = False  # Control of whether the player accepts answering questions
         self.refuseChallenge = False  # Control of whether the player refuses answering questions
@@ -57,11 +59,32 @@ class LevelTwo:
             self.levelTwoPage.showTextBeforeGame()
 
             if not self.levelTwoPage.showText_beforeGame:
-                showPlane_setPlaneMoveRange(self.plane)
-                self.plane.showHealth()
-                showScoreObtained(self)
+                if self.plane.HP_current > 0:
+                    showPlane_setPlaneMoveRange(self.plane)
+                    self.plane.showHealth()
+                    self.showBullet()
+                else:
+                    if not (self.plane.position_x == 0 and self.plane.position_y == -100):
+                        self.plane.position_x = 0
+                        self.plane.position_y = -100
+                    if self.levelTwoPage.needToShowDefeatedText:
+                        showDefeatedText(self.levelTwoPage)
+                    else:
+                        self.gameIsOn = False
+                        self.plane.HP_current = 100
+                        i = 0
+                        while self.plane.all_bullets:
+                            del self.plane.all_bullets[i]
+                        while self.enemies:
+                            del self.enemies[i]
+                        self.plane.position_x, self.plane.position_y = 0, 675
+                        self.plane.speed_x, self.plane.speed_y = 0, 0
+                        self.enemiesPresent = 0
+                        self.enemyDestroyed = 0
+                        self.score = 0
+                        self.levelTwoPage.needToShowDefeatedText = True
 
-                self.showBullet()
+                showScoreObtained(self)
 
                 # Up to ten enemies can exist simultaneously,
                 # and the total number of enemies and their movement speed are increased compared to the first level.
@@ -69,10 +92,11 @@ class LevelTwo:
                     while len(self.enemies) < 10:
                         self.enemies.append(Enemy(random.randint(0, 1250), -28, random.randint(-3, 3), 0.2))
                         self.enemiesPresent += 1
-                if not self.enemies:
-                    end(self.levelTwoPage, self, 11)
+                if not self.enemies and self.plane.HP_current > 0:
+                    end(self.levelTwoPage, self, 12)
 
                 showEnemy(self)
+                showRemainingEnemies(self)
 
                 hitByEnemy_judge(self)
                 hit_judge(self)  # To check whether a bullet has hit an enemy
@@ -109,22 +133,7 @@ class LevelTwo:
             levelTwoPage.needToShowIntroduction1Text = True
             levelTwoPage.needToShowButtons = True
             levelTwoPage.needToShowReminder1Text = True
-            levelTwoPage.reminder1_textStartTime = 0
-            levelTwoPage.reminder1_textEndTime = 0
-            levelTwoPage.reminder1_textLastTime = 0
             levelTwoPage.showText_beforeGame = True
             levelTwoPage.needToShowReminder3Text = True
-            levelTwoPage.reminder3_textStartTime = 0
-            levelTwoPage.reminder3_textEndTime = 0
-            levelTwoPage.reminder3_textLastTime = 0
-            levelTwoPage.introduction2_textStartTime = 0
-            levelTwoPage.introduction2_textEndTime = 0
-            levelTwoPage.introduction2_textLastTime = 0
-            levelTwoPage.reminder4_textStartTime = 0
-            levelTwoPage.reminder4_textEndTime = 0
-            levelTwoPage.reminder4_textLastTime = 0
             levelTwoPage.needTOShowEndText = True
-            levelTwoPage.end_textStartTime = 0
-            levelTwoPage.end_textEndTime = 0
-            levelTwoPage.end_textLastTime = 0
             levelTwoPage.needToShowExitText = False

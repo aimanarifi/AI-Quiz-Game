@@ -1,3 +1,7 @@
+"""
+Last modified: 18/05/2023
+Written by Zhongjie Huang
+"""
 from production.datascience_house.Window import font
 
 
@@ -13,3 +17,5 @@ class MainPageText:
             "exploring different galaxies and helping the intergalactic steward eliminate", True, (0, 0, 0))
         self.introduction_textLine4 = font.render("space destroyers.", True, (0, 0, 0))
         self.introduction_textLine5 = font.render("Begin your fantastic journey now!", True, (0, 0, 0))
+
+        self.reminder_textLine = font.render("Please complete the previous level first!", True, (0, 0, 0))

@@ -1,5 +1,5 @@
 """
-Last modified: 15/05/2023
+Last modified: 18/05/2023
 Written by Zhongjie Huang
 """
 import random
@@ -40,3 +40,4 @@ class Bullet:
         self.position_y = position_y
         self.speed_x = speed_x
         self.speed_y = 4
+        self.hitPlane = False

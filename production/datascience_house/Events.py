@@ -1,3 +1,7 @@
+"""
+Last modified: 18/05/2023
+Written by Zhongjie Huang
+"""
 from production.datascience_house.Window import pygame
 
 
@@ -16,6 +20,8 @@ def getMainPageEvents(mainPage, levelOne, levelTwo, levelThree):
                 levelTwo.gameIsOn = True
             if mainPage.button_levelThree.collidepoint(event.pos):
                 levelThree.gameIsOn = True
+            if mainPage.button_goBack.collidepoint(event.pos):
+                mainPage.goBack = True
 
 
 def getLevelPageEvents(plane, level, levelPage):

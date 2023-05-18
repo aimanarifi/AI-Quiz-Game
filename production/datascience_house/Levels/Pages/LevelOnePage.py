@@ -1,3 +1,7 @@
+"""
+Last modified: 18/05/2023
+Written by Zhongjie Huang
+"""
 import time
 from production.datascience_house.Window import pygame, window, font
 from production.datascience_house.Levels.Pages.PageText.LevelOnePageText import LevelOnePageText
@@ -31,6 +35,11 @@ class LevelOnePage:
         # Display properties for reminder text (exit level)
         self.needToShowExitText = False
 
+        self.needToShowDefeatedText = True
+        self.defeated_text_startTime = 0
+        self.defeated_text_endTime = 0
+        self.defeated_text_lastTime = 0
+
     def showBackground(self):
         window.blit(self.image_background, (0, 0))
 
@@ -45,9 +54,9 @@ class LevelOnePage:
                 self.introduction_textStartTime = time.time()
             self.introduction_textEndTime = time.time()
             self.introduction_textLastTime = self.introduction_textEndTime - self.introduction_textStartTime
-            countdown_text_time_left = 11 - self.introduction_textLastTime
+            countdown_text_time_left = 12 - self.introduction_textLastTime
             countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
-            if (11 - self.introduction_textLastTime) >= 0:
+            if (12 - self.introduction_textLastTime) >= 0:
                 window.blit(self.levelOnePageText.introduction_textLine1, (280, 170))
                 window.blit(self.levelOnePageText.introduction_textLine2, (280, 220))
                 window.blit(self.levelOnePageText.introduction_textLine3, (280, 270))
@@ -57,6 +66,9 @@ class LevelOnePage:
             else:
                 self.needToShowIntroductionText = False
                 self.needToShowReminder1Text = True
+                self.introduction_textStartTime = 0
+                self.introduction_textEndTime = 0
+                self.introduction_textLastTime = 0
 
     def showReminderText(self):
         if self.needToShowReminder1Text:
@@ -64,15 +76,18 @@ class LevelOnePage:
                 self.reminder_textStartTime = time.time()
             self.reminder_textEndTime = time.time()
             self.reminder_textLastTime = self.reminder_textEndTime - self.reminder_textStartTime
-            countdown_text_time_left = 6 - self.reminder_textLastTime
+            countdown_text_time_left = 7 - self.reminder_textLastTime
             countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
-            if (6 - self.reminder_textLastTime) >= 0:
+            if (7 - self.reminder_textLastTime) >= 0:
                 window.blit(self.levelOnePageText.reminder_textLine1, (355, 500))
                 window.blit(self.levelOnePageText.reminder_textLine2, (550, 550))
                 window.blit(countdown_text, (10, 690))
             else:
                 self.needToShowReminder1Text = False
                 self.showText_beforeGame = False
+                self.reminder_textStartTime = 0
+                self.reminder_textEndTime = 0
+                self.reminder_textLastTime = 0
 
     def showEndText(self):
         window.blit(self.levelOnePageText.end_textLine1, (245, 170))

@@ -1,5 +1,5 @@
 """
-Last modified: 15/05/2023
+Last modified: 18/05/2023
 Written by Zhongjie Huang
 """
 import math
@@ -40,8 +40,12 @@ def showPlane_setPlaneMoveRange(plane):
 
 
 def showScoreObtained(level):
-    score_bar = font.render("score: " + str(level.score), True, (255, 255, 255))
-    window.blit(score_bar, (10, 10))
+    if level.name == 'level one' or level.name == 'level two':
+        score_bar = font.render("score: " + str(level.score), True, (255, 255, 255))
+        window.blit(score_bar, (10, 10))
+    elif level.name == 'level three':
+        score_bar = font.render("score: " + str(level.score), True, (125, 125, 125))
+        window.blit(score_bar, (10, 10))
 
 
 # The enemy will bounce back when it touches the edge of the screen.
@@ -56,6 +60,16 @@ def showEnemy(level):
         enemy.position_y += enemy.speed_y
 
 
+def showRemainingEnemies(level):
+    if level.name == 'level one' or level.name == 'level two':
+        remainingEnemies_bar = font.render("remaining enemies: " + str(level.allEnemies - level.enemyDestroyed), True, (255, 255, 255))
+        window.blit(remainingEnemies_bar, (1000, 10))
+    elif level.name == 'level three':
+        remainingEnemies_bar = font.render("remaining enemies: " + str(level.allEnemies - level.enemyDestroyed), True,
+                                           (125, 125, 125))
+        window.blit(remainingEnemies_bar, (1000, 10))
+
+
 def hitByEnemy_judge(level):
     for enemy in level.enemies:
         distance_plane_enemy = math.sqrt(((enemy.position_x + 15) - (level.plane.position_x + 37)) ** 2 + (
@@ -66,6 +80,7 @@ def hitByEnemy_judge(level):
             if level.score > 0:
                 level.score -= 1
             enemy.hitByPlane = True
+            level.enemyDestroyed += 1
     i = 0
     while i < len(level.enemies):
         if level.enemies[i].hitByPlane:
@@ -84,6 +99,7 @@ def hit_judge(level):
                 sound_hit.play()  # hit sound effect
                 enemy.hitByBullet = True
                 bullet.hitEnemy = True
+                level.enemyDestroyed += 1
     i1 = 0
     while i1 < len(level.plane.all_bullets):
         if level.plane.all_bullets[i1].hitEnemy:
@@ -113,6 +129,9 @@ def end(levelPage, level, seconds):
         else:
             levelPage.needTOShowEndText = False
             levelPage.needToShowExitText = True
+            levelPage.end_textStartTime = 0
+            levelPage.end_textEndTime = 0
+            levelPage.end_textLastTime = 0
     elif levelPage.needToShowExitText:
         levelPage.showExitText()
         window.blit(image_exit, (1100, 100))

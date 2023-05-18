@@ -1,9 +1,17 @@
+"""
+Last modified: 18/05/2023
+Written by Zhongjie Huang
+"""
 from production.datascience_house.Window import pygame, window, font
 from production.datascience_house.Levels.Pages.PageText.MainPageText import MainPageText
 
 
 class MainPage:
     def __init__(self):
+        self.needToShowIntroductionText = True
+        self.needToShowButtons = True
+        self.needToShowReminderText = True
+
         self.image_background = pygame.image.load('datascience_house/images/mainBackground.jpg')
         self.mainPageText = MainPageText()
 
@@ -25,18 +33,33 @@ class MainPage:
         self.text_levelThree = font.render("Click here to start level three!", True, (255, 255, 255))
         self.text_rect_levelThree = self.text_levelThree.get_rect(center=self.button_levelThree.center)
 
+        self.goBack = False
+
+        # The button to go back
+        self.button_goBack = pygame.Rect(1195, 15, 60, 20)
+        pygame.draw.rect(window, (0, 255, 0), self.button_goBack)
+        self.text_goBack = font.render("Back", True, (255, 255, 255))
+        self.text_rect_goBack = self.text_goBack.get_rect(center=self.button_goBack.center)
+
     def showBackground(self):
         window.blit(self.image_background, (0, 0))
 
     def showIntroductionTextLine(self):
-        window.blit(self.mainPageText.introduction_textLine1, (230, 170))
-        window.blit(self.mainPageText.introduction_textLine2, (230, 220))
-        window.blit(self.mainPageText.introduction_textLine3, (230, 270))
-        window.blit(self.mainPageText.introduction_textLine4, (230, 320))
-        window.blit(self.mainPageText.introduction_textLine5, (450, 370))
+        if self.needToShowIntroductionText:
+            window.blit(self.mainPageText.introduction_textLine1, (230, 170))
+            window.blit(self.mainPageText.introduction_textLine2, (230, 220))
+            window.blit(self.mainPageText.introduction_textLine3, (230, 270))
+            window.blit(self.mainPageText.introduction_textLine4, (230, 320))
+            window.blit(self.mainPageText.introduction_textLine5, (450, 370))
 
     def showButtons(self):
         # Players need to complete the previous levels before they can proceed to the next levels
-        window.blit(self.text_levelOne, self.text_rect_levelOne)
-        window.blit(self.text_levelTwo, self.text_rect_levelTwo)
-        window.blit(self.text_levelThree, self.text_rect_levelThree)
+        if self.needToShowButtons:
+            window.blit(self.text_levelOne, self.text_rect_levelOne)
+            window.blit(self.text_levelTwo, self.text_rect_levelTwo)
+            window.blit(self.text_levelThree, self.text_rect_levelThree)
+            window.blit(self.text_goBack, self.text_rect_goBack)
+
+    def showReminderText(self):
+        if self.needToShowReminderText:
+            window.blit(self.mainPageText.reminder_textLine)

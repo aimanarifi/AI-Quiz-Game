@@ -20,7 +20,6 @@ def startGame():
     clock = pygame.time.Clock()  # Control the frame rate of the game
 
     mainPage = MainPage()
-
     levelOne = LevelOne()
     levelTwo = LevelTwo()
     levelThree = LevelThree()
@@ -28,13 +27,13 @@ def startGame():
     pygame.mixer.music.load('datascience_house/music/game.mp3')
     pygame.mixer.music.play(-1)
 
-    while True:
+    while not mainPage.goBack:
         clock.tick(60)
         # If the player hasn't entered any level, display the main page with button selection
         if not levelOne.gameIsOn and not levelTwo.gameIsOn and not levelThree.gameIsOn:
             mainPage.showBackground()
             mainPage.showIntroductionTextLine()
-            mainPage.showButtons(levelTwo, levelThree)
+            mainPage.showButtons()
             getMainPageEvents(mainPage, levelOne, levelTwo, levelThree)
         # If the player selects to enter the first level
         elif levelOne.gameIsOn:
@@ -50,6 +49,12 @@ def startGame():
             getLevelPageEvents(levelThree.plane, levelThree, levelThree.levelThreePage)
 
         pygame.display.update()
+
+    del clock
+    del mainPage
+    del levelOne
+    del levelTwo
+    del levelThree
 
 
 if __name__ == '__main__':

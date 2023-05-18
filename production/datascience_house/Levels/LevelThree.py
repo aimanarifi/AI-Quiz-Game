@@ -1,14 +1,16 @@
 """
-Last modified: 15/05/2023
+Last modified: 18/05/2023
 Written by Zhongjie Huang
 """
 import time
 import random
+import math
 from production.datascience_house.Window import pygame, window
 from production.datascience_house.Plane import Plane
 from production.datascience_house.Enemy import Enemy
-from production.datascience_house.Levels.CommonFunctions import showQuestions, image_bullet, image_bullet_auto_track, showPlane_setPlaneMoveRange, showScoreObtained, showEnemy, image_enemy_weapon, hitByEnemy_judge, hit_judge, end
+from production.datascience_house.Levels.CommonFunctions import showQuestions, image_bullet, image_bullet_auto_track, showPlane_setPlaneMoveRange, showScoreObtained, showEnemy, showRemainingEnemies, image_enemy_weapon, hitByEnemy_judge, hit_judge, end
 from production.datascience_house.Levels.Pages.LevelThreePage import LevelThreePage
+from production.datascience_house.Levels.Pages.PageText.CommonText import showDefeatedText
 
 
 class LevelThree:
@@ -21,6 +23,7 @@ class LevelThree:
         self.enemies = []  # All enemies
         self.allEnemies = 90  # Total number of enemies
         self.enemiesPresent = 0  # Enemies that have appeared
+        self.enemyDestroyed = 0
         self.score = 0  # Score
         self.acceptChallenge = False  # Control of whether the player accepts answering questions
         self.refuseChallenge = False  # Control of whether the player refuses answering questions
@@ -58,11 +61,32 @@ class LevelThree:
             self.levelThreePage.showTextBeforeGame()
 
             if not self.levelThreePage.showText_beforeGame:
-                showPlane_setPlaneMoveRange(self.plane)
-                self.plane.showHealth()
-                showScoreObtained(self)
+                if self.plane.HP_current > 0:
+                    showPlane_setPlaneMoveRange(self.plane)
+                    self.plane.showHealth()
+                    self.showPlaneBullet()
+                else:
+                    if not (self.plane.position_x == 0 and self.plane.position_y == -100):
+                        self.plane.position_x = 0
+                        self.plane.position_y = -100
+                    if self.levelThreePage.needToShowDefeatedText:
+                        showDefeatedText(self.levelThreePage)
+                    else:
+                        self.gameIsOn = False
+                        self.plane.HP_current = 100
+                        i = 0
+                        while self.plane.all_bullets:
+                            del self.plane.all_bullets[i]
+                        while self.enemies:
+                            del self.enemies[i]
+                        self.plane.position_x, self.plane.position_y = 0, 675
+                        self.plane.speed_x, self.plane.speed_y = 0, 0
+                        self.enemiesPresent = 0
+                        self.enemyDestroyed = 0
+                        self.score = 0
+                        self.levelThreePage.needToShowDefeatedText = True
 
-                self.showPlaneBullet()
+                showScoreObtained(self)
 
                 # Up to fifteen enemies can exist simultaneously,
                 # and the total number of enemies and their movement speed are increased compared to the second level.
@@ -70,11 +94,13 @@ class LevelThree:
                     while len(self.enemies) < 15:
                         self.enemies.append(Enemy(random.randint(0, 1250), -28, random.randint(-4, 4), 0.25))
                         self.enemiesPresent += 1
-                elif not self.enemies:
-                    end(self.levelThreePage, self, 11)
+                elif not self.enemies and self.plane.HP_current > 0:
+                    end(self.levelThreePage, self, 12)
 
                 showEnemy(self)
+                showRemainingEnemies(self)
                 self.showEnemyBullet()
+                self.hitByEnemyBullet_judge()
 
                 hitByEnemy_judge(self)
                 hit_judge(self)  # To check whether a bullet has hit an enemy
@@ -118,14 +144,30 @@ class LevelThree:
                 window.blit(image_enemy_weapon, (bullet.position_x, bullet.position_y))
                 bullet.position_x += bullet.speed_x
                 bullet.position_y += bullet.speed_y
-                if bullet.position_y > 750:
-                    enemy.all_bullets.remove(bullet)
-        i = 0
-        while i < len(self.enemies):
-            if self.enemies[i].position_y > 750:
-                del self.enemies[i]
-            else:
-                i += 1
+            i = 0
+            while i < len(enemy.all_bullets):
+                if enemy.all_bullets[i].position_y > 750:
+                    del enemy.all_bullets[i]
+                else:
+                    i += 1
+
+    def hitByEnemyBullet_judge(self):
+        for enemy in self.enemies:
+            for bullet in enemy.all_bullets:
+                distance_plane_enemyBullet = math.sqrt(((bullet.position_x + 2) - (self.plane.position_x + 37)) ** 2 + (
+                        (bullet.position_y + 2) - (self.plane.position_y + 27)) ** 2)
+                if distance_plane_enemyBullet < 30:
+                    self.plane.HP_current -= 10
+                    self.plane.healthBar_width = (self.plane.HP_current / self.plane.HP_max) * self.plane.healthBar_width
+                    if self.score > 0:
+                        self.score -= 1
+                    bullet.hitPlane = True
+            i = 0
+            while i < len(enemy.all_bullets):
+                if enemy.all_bullets[i].hitPlane:
+                    del enemy.all_bullets[i]
+                else:
+                    i += 1
 
     # To reset all the states of the level when the player exits,
     # call this method to ensure that the player can restart the level without encountering errors.
@@ -141,24 +183,7 @@ class LevelThree:
             levelThreePage.needToShowIntroduction1Text = True
             levelThreePage.needToShowButtons = True
             levelThreePage.needToShowReminder1Text = True
-            levelThreePage.reminder1_textStartTime = 0
-            levelThreePage.reminder1_textEndTime = 0
-            levelThreePage.reminder1_textLastTime = 0
             levelThreePage.showText_beforeGame = True
             levelThreePage.needToShowReminder3Text = True
-            levelThreePage.reminder3_textStartTime = 0
-            levelThreePage.reminder3_textEndTime = 0
-            levelThreePage.reminder3_textLastTime = 0
-            levelThreePage.needToShowIntroduction2Text = False
-            levelThreePage.introduction2_textStartTime = 0
-            levelThreePage.introduction2_textEndTime = 0
-            levelThreePage.introduction2_textLastTime = 0
-            levelThreePage.needToShowReminder4Text = False
-            levelThreePage.reminder4_textStartTime = 0
-            levelThreePage.reminder4_textEndTime = 0
-            levelThreePage.reminder4_textLastTime = 0
             levelThreePage.needTOShowEndText = True
-            levelThreePage.end_textStartTime = 0
-            levelThreePage.end_textEndTime = 0
-            levelThreePage.end_textLastTime = 0
             levelThreePage.needToShowExitText = False
