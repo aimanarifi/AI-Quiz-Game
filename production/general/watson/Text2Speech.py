@@ -1,21 +1,22 @@
+"""
+AI Group Project Team 7 Spring22/23
+
+Desc: This module contains a IBM text to speech class which handles te speech synthesis
+      It should automatically handles error when using the API. 
+      Especially when the ibm cloud account associated with the key and url reached the maximum monthly characterslimit
+
+Created by: Kyungtae Han
+Modified by: Muhammad Kamaludin
+Last modified: 18/5/2023
+"""
 
 from ibm_watson import TextToSpeechV1
+from ibm_watson import ApiException
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
-
-
-# Dub
 import pygame
 
-"""
- textFilePath : String
- apiKey : String
- fileName : String 
- voice : String 
- 
-
-"""
-
 def runIBMTextToSpeech(textFilePath, apiKey, filename , aiVoice ):
+        # Parameter: (textFilePath, yourAPIKey, filename, voiceType) 
         watsonTextFile = open(textFilePath,"r")
         watsonText = watsonTextFile.read()
         watsonTextFile.close()
@@ -35,10 +36,9 @@ def runIBMTextToSpeech(textFilePath, apiKey, filename , aiVoice ):
                     accept='audio/wav'        
                 ).get_result().content) 
     
-# Parameter: (textFilePath, yourAPIKey, filename, voiceType)    
+   
 
-#apiKey = ""
-#runIBMTextToSpeech("sampleText.txt",apiKey,"closeAchievement.wav",'en-US_AllisonExpressive')    
+
 
 class Text2Speech():
       
@@ -53,22 +53,32 @@ class Text2Speech():
         self.authenticator = IAMAuthenticator(self.api_key)
         self.t2s_agent = TextToSpeechV1( authenticator=self.authenticator)
         self.t2s_agent.set_service_url(self.url)
+        self.success = False
         
-        self.is_synthesizing = False
     
     def synthesize_by_str(self, text: str):
         """
         synthesize the speech. it will overwrite the content of the audio file
+
+        update the success var
         """
-        with open(self.AUDIO_FILE_PATH, 'wb') as audio_file:
+        try:
             self.is_synthesizing = True
-            audio_file.write(
+            with open(self.AUDIO_FILE_PATH, 'wb') as audio_file:
+                
+                audio_file.write(
                 self.t2s_agent.synthesize(
                 text,
                 accept='audio/wav'
                 ).get_result().content)
+            self.success = True
+        except ApiException as ex:
+            print ("Method failed with status code " + str(ex.code) + ": " + ex.message)
+            self.success = False
 
         self.is_synthesizing = False
+        
+
     
     def synthesize_by_file(self, text_file_path):
 
@@ -84,8 +94,3 @@ class Text2Speech():
         you may want to specify the mixer channel so it doesnt clash with other audio 
         """
         pygame.mixer.Channel(channel_number).play(pygame.mixer.Sound(self.AUDIO_FILE_PATH))
-    
-            
-    
-# song = AudioSegment.from_wav('closeAchievement.wav')
-# play(song)

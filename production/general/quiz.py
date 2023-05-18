@@ -2,11 +2,10 @@
 AI Group Project Team 7 Spring22/23
 
 Desc: This module contains Quiz and Quiz.Option classes that is used for the general quiz template
-*you must run this from production folder
 
 Created by: Muhammad Kamaludin
 Modified by:
-Last modified: 14/4/2023
+Last modified: 18/5/2023
 """
 
 import sys, os
@@ -18,6 +17,7 @@ import asyncio
 from typing import Optional
 from production.general.loading_screen import loading_screen
 from production.general.watson import Text2Speech
+from ibm_watson import ApiException
 
 
 class MultilineText():
@@ -178,6 +178,7 @@ class Quiz:
             self.options_group.add(opt)
         self.selected_option = None
         self.is_submitted = False
+        self.speech_synthesized = False
 
     def display(self):
         """
@@ -245,10 +246,12 @@ class Quiz:
 
         #play BGM
         pygame.mixer.init()
-        #pygame.mixer.Channel(2).set_volume(0.1)
-        #pygame.mixer.Channel(2).play(pygame.mixer.Sound(T2S_AUDIO_FILE_PATH))
         pygame.mixer.Channel(0).set_volume(0.1)
         pygame.mixer.Channel(0).play(pygame.mixer.Sound('graphics/audio/quiz_bgm.wav'),-1)
+        #only play audio file when it's synthesized, bcs otherwise, the audio file will have the old audio
+        if self.speech_synthesized: 
+            pygame.mixer.Channel(2).set_volume(0.1)
+            pygame.mixer.Channel(2).play(pygame.mixer.Sound(T2S_AUDIO_FILE_PATH))
         
 
     def run(self):
@@ -335,12 +338,14 @@ class Quiz:
 
     async def convert_question_to_speech(self):
 
-        await asyncio.sleep(1)
+        await asyncio.sleep(1.1)
+        T2S_API_KEY = 'uOUrfG5RxGWbvGGhDTtpCO41uGBpUaihUbnb6Hx2Xu6o'
+        T2S_URL = 'https://api.eu-gb.text-to-speech.watson.cloud.ibm.com/instances/39bd2aae-af32-48c2-8c04-20131d0adde1'
 
-        #T2S_API_KEY = 'uOUrfG5RxGWbvGGhDTtpCO41uGBpUaihUbnb6Hx2Xu6o'
-        #T2S_URL = 'https://api.eu-gb.text-to-speech.watson.cloud.ibm.com/instances/39bd2aae-af32-48c2-8c04-20131d0adde1'
-        #watson = Text2Speech.Text2Speech(T2S_API_KEY,T2S_URL)
-        #watson.synthesize_by_str(self.question.raw_text)
+        watson = Text2Speech.Text2Speech(T2S_API_KEY,T2S_URL)
+        watson.synthesize_by_str(self.question.raw_text) 
+        self.speech_synthesized = watson.success
+        return self.speech_synthesized
 
 
 if __name__ == "__main__":
