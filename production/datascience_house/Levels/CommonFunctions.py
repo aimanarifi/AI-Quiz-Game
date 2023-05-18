@@ -43,7 +43,7 @@ def showScoreObtained(level):
     if level.name == 'level one' or level.name == 'level two':
         score_bar = font.render("score: " + str(level.score), True, (255, 255, 255))
         window.blit(score_bar, (10, 10))
-    elif level.name == 'level three':
+    if level.name == 'level three':
         score_bar = font.render("score: " + str(level.score), True, (125, 125, 125))
         window.blit(score_bar, (10, 10))
 
@@ -64,7 +64,7 @@ def showRemainingEnemies(level):
     if level.name == 'level one' or level.name == 'level two':
         remainingEnemies_bar = font.render("remaining enemies: " + str(level.allEnemies - level.enemyDestroyed), True, (255, 255, 255))
         window.blit(remainingEnemies_bar, (1000, 10))
-    elif level.name == 'level three':
+    if level.name == 'level three':
         remainingEnemies_bar = font.render("remaining enemies: " + str(level.allEnemies - level.enemyDestroyed), True,
                                            (125, 125, 125))
         window.blit(remainingEnemies_bar, (1000, 10))
@@ -132,7 +132,7 @@ def end(levelPage, level, seconds):
             levelPage.end_textStartTime = 0
             levelPage.end_textEndTime = 0
             levelPage.end_textLastTime = 0
-    elif levelPage.needToShowExitText:
+    if levelPage.needToShowExitText:
         levelPage.showExitText()
         window.blit(image_exit, (1100, 100))
         level.finish(levelPage)

@@ -17,11 +17,28 @@ def getMainPageEvents(mainPage, levelOne, levelTwo, levelThree):
             if mainPage.button_levelOne.collidepoint(event.pos):
                 levelOne.gameIsOn = True
             if mainPage.button_levelTwo.collidepoint(event.pos):
-                levelTwo.gameIsOn = True
+                if levelOne.passed != 'False':
+                    levelTwo.gameIsOn = True
+                else:
+                    mainPage.needToShowReminderText = True
+                    mainPage.needToShowButtons_notPassed = True
+                    mainPage.needToShowIntroductionText = False
+                    mainPage.needToShowButtons = False
             if mainPage.button_levelThree.collidepoint(event.pos):
-                levelThree.gameIsOn = True
+                if levelTwo.passed != 'False':
+                    levelThree.gameIsOn = True
+                else:
+                    mainPage.needToShowReminderText = True
+                    mainPage.needToShowButtons_notPassed = True
+                    mainPage.needToShowIntroductionText = False
+                    mainPage.needToShowButtons = False
             if mainPage.button_goBack.collidepoint(event.pos):
                 mainPage.goBack = True
+            if mainPage.button_goBack_notPassed.collidepoint(event.pos):
+                mainPage.needToShowIntroductionText = True
+                mainPage.needToShowButtons = True
+                mainPage.needToShowReminderText = False
+                mainPage.needToShowButtons_notPassed = False
 
 
 def getLevelPageEvents(plane, level, levelPage):

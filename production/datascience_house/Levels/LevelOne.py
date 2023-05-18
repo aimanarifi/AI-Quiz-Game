@@ -14,6 +14,7 @@ from production.datascience_house.Levels.Pages.PageText.CommonText import showDe
 class LevelOne:
     def __init__(self):
         self.name = 'level one'
+        self.passed = 'False'
         self.gameIsOn = False  # Control of whether the player has entered the current level
         self.plane = Plane()
         self.levelOnePage = LevelOnePage()
@@ -26,9 +27,10 @@ class LevelOne:
     # Call this method after the start of the current level/game.
     def loadStuff(self):
         self.levelOnePage.showBackground()
-        self.levelOnePage.showTextBeforeGame()
+        self.levelOnePage.showIntroductionText()
+        self.levelOnePage.showReminderText()
 
-        if not self.levelOnePage.showText_beforeGame:
+        if not self.levelOnePage.needToShowIntroductionText:
             if self.plane.HP_current > 0:
                 showPlane_setPlaneMoveRange(self.plane)
                 self.plane.showHealth()
@@ -56,22 +58,23 @@ class LevelOne:
                     self.levelOnePage.showText_beforeGame = True
                     self.levelOnePage.needToShowDefeatedText = True
 
-            showScoreObtained(self)
+            if not self.levelOnePage.needToShowReminderText:
+                showScoreObtained(self)
 
-            # Up to five enemies can exist simultaneously.
-            if self.enemiesPresent < self.allEnemies:
-                while len(self.enemies) < 5:
-                    self.enemies.append(Enemy(random.randint(0, 1250), -28, random.randint(-2, -2), 0.1))
-                    self.enemiesPresent += 1
-            # If no enemies, end the game
-            if not self.enemies:
-                end(self.levelOnePage, self, 12)
+                # Up to five enemies can exist simultaneously.
+                if self.enemiesPresent < self.allEnemies:
+                    while len(self.enemies) < 5:
+                        self.enemies.append(Enemy(random.randint(0, 1250), -28, random.randint(-2, -2), 0.1))
+                        self.enemiesPresent += 1
+                # If no enemies, end the game
+                if not self.enemies:
+                    end(self.levelOnePage, self, 12)
 
-            showEnemy(self)
-            showRemainingEnemies(self)
+                showEnemy(self)
+                showRemainingEnemies(self)
 
-            hitByEnemy_judge(self)
-            hit_judge(self)  # To check whether a bullet has hit an enemy
+                hitByEnemy_judge(self)
+                hit_judge(self)  # To check whether a bullet has hit an enemy
 
     def showBullet(self):
         for bullet in self.plane.all_bullets:
@@ -95,6 +98,6 @@ class LevelOne:
             self.enemyDestroyed = 0
             self.score = 0
             levelOnePage.needToShowIntroductionText = True
-            levelOnePage.showText_beforeGame = True
             levelOnePage.needToShowEndText = True
             levelOnePage.needToShowExitText = False
+            self.passed = 'True'
