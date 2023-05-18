@@ -8,7 +8,7 @@ Level class represent a level of the game which contains bunch of Tile classes.
  
 Created by: Muhammad Kamaludin
 Modified by:
-Last modified: 27/4/2023
+Last modified: 18/5/2023
 """
 
 import pygame
@@ -124,15 +124,55 @@ class Level():
 
 """
 All cloud minigame sublevels are created here
-"""          
+"""       
 #(type,current_dir, target_dir, locked, key_solution, row, col)
-tiles_1 = [('input',2,2,True,False,0,0),('turn',3,1,False,True,1,0),
-           ('3branch',0,0,False,True,1,1),('straight',1,1,False,True,1,2),
+
+tiles_1 = [('input',0,0,True,False,4,2),('straight',1,0,False,True,3,2),
+           ('straight',0,0,False,True,2,2),('straight',1,0,True,True,1,2),
+           ('output',2,2,True,False,0,2)]
+
+tiles_2 = [('input',0,0,True,False,4,2),('straight',0,0,False,True,3,2),
+           ('turn',2,0,True,True,2,2), ('straight',0,1,False,True,2,3),
+           ('output',1,1,True,False,2,4)]
+
+
+tiles_3 = [('input',2,2,True,False,0,0),('turn',3,1,False,True,1,0),
+           ('3branch',0,0,False,True,1,1),('straight',1,1,False,True,1,2), 
            ('turn',3,3,False,True,1,3),('straight',1,0,True,True,2,3),
            ('turn',1,2,False,True,3,3),('turn',0,0,False,True,3,2),
            ('output',0,0,True,False,4,2)]
 
-tiles_2 = [('3branch',3,3,False,False,1,1),('turn',3,0,True,True,1,2),
+tiles_4 = [('input',3,3,True,False,2,0),('turn',2,3,False,True,2,1),
+           ('turn',3,1,False,True,3,1),('straight',1,1,False,False,1,1),
+           ('straight',1,1,False,True,3,2),
+           ('straight',1,1,False,True,3,3),('turn',0,2,True,True,3,4),
+           ('straight',0,0,False,True,2,4),('turn',3,3,False,True,1,4),
+           ('output',3,3,True,False,1,3)]
+
+tiles_5 = [('input',0,0,True,False,4,0),('turn',0,0,False,True,3,0),
+           ('4branch',0,0,True,False,3,1),('turn',3,0,False,True,2,1),
+           ('straight',1,1,False,False,3,2),('4branch',0,0,True,False,2,2),
+           ('straight',1,0,False,True,1,2),('turn',0,0,False,True,0,2),
+           ('straight',0,1,True,True,0,3),('turn',2,2,False,False,1,3),
+           ('4branch',0,0,True,False,0,4),('straight',0,0,False,True,1,4),
+           ('straight',0,0,False,True,2,4),('4branch',0,0,True,False,3,4),
+           ('output',0,0,True,False,4,4)]
+
+tiles_6 = [('output',2,2,True,False,0,0),('straight',0,0,False,True,1,0),
+           ('straight',0,0,False,True,2,0),('straight',0,0,False,True,3,0),
+           ('turn',3,1,False,True,4,0),('straight',0,1,False,True,4,1),
+           ('straight',0,1,False,True,4,2),('straight',1,1,False,True,4,3),
+           ('turn',2,2,False,True,4,4),('straight',0,0,False,True,3,4),
+           ('straight',1,0,False,True,2,4),('straight',1,0,False,True,1,4),
+           ('turn',0,3,False,True,0,4),('straight',1,1,False,True,0,3),
+           ('turn',3,0,True,True,0,2),('straight',0,0,False,True,1,2),
+           ('output',0,0,True,False,2,2)]
+
+tiles_7 = [('input',2,2,True,False,1,2),
+           ('straight',1,0,True,True,2,2),
+           ('output',0,0,True,False,3,2)]
+
+tiles_8 = [('3branch',3,3,False,False,1,1),('turn',3,0,True,True,1,2),
            ('straight',1,1,False,True,1,3),('turn',2,3,False,True,1,4),
            ('input',3,3,True,False,2,0),('straight',0,1,False,True,2,1),
            ('turn',2,2,False,True,2,2),('3branch',2,2,False,False,2,3),
@@ -141,9 +181,9 @@ tiles_2 = [('3branch',3,3,False,False,1,1),('turn',3,0,True,True,1,2),
            ('3branch',3,3,False,True,3,4),('turn',1,1,False,True,4,1),
            ('output',1,1,True,False,4,2)]
 
-tiles_3 = [('turn',3,0,True,True,0,1),('straight',0,1,False,True,0,2),
+tiles_9 = [('turn',3,0,True,True,0,1),('straight',0,1,False,True,0,2),
            ('turn',3,3,False,True,0,3),('turn',0,0,False,True,1,0),
-           ('4branch',0,0,False,True,1,1),('turn',1,1,False,False,1,2),
+           ('4branch',0,0,True,False,1,1),('turn',1,1,False,False,1,2),
            ('turn',0,1,False,True,1,3),('turn',3,3,False,True,1,4),
            ('straight',0,0,False,True,2,0),('turn',3,0,False,True,2,2),
            ('straight',0,1,False,True,2,3),('turn',2,2,False,True,2,4),
@@ -152,41 +192,7 @@ tiles_3 = [('turn',3,0,True,True,0,1),('straight',0,1,False,True,0,2),
            ('straight',0,0,False,False,4,1),('turn',1,1,False,True,4,3),
            ('input',1,1,True,False,4,4)]
 
-tiles_4 = [('input',2,2,True,False,0,0),('turn',1,1,False,True,1,0),
-           ('3branch',0,0,False,True,1,1),('straight',1,1,False,True,1,2),
-           ('turn',3,3,False,True,1,3),('straight',1,0,True,True,2,3),
-           ('turn',2,2,False,True,3,3),('turn',0,0,False,True,3,2),
-           ('output',0,0,True,False,4,2)]
 
-tiles_5 = [('input',2,2,True,False,0,0),('turn',1,1,False,True,1,0),
-           ('3branch',0,0,False,True,1,1),('straight',1,1,False,True,1,2),
-           ('turn',3,3,False,True,1,3),('straight',0,0,True,True,2,3),
-           ('turn',2,2,False,True,3,3),('turn',0,0,False,True,3,2),
-           ('output',0,0,True,False,4,2)]
-
-tiles_6 = [('input',2,2,True,False,0,0),('turn',1,1,False,True,1,0),
-           ('3branch',0,0,False,True,1,1),('straight',1,1,False,True,1,2),
-           ('turn',3,3,False,True,1,3),('straight',0,0,True,True,2,3),
-           ('turn',2,2,False,True,3,3),('turn',0,0,False,True,3,2),
-           ('output',0,0,True,False,4,2)]
-
-tiles_7 = [('input',2,2,True,False,0,0),('turn',1,1,False,True,1,0),
-           ('3branch',0,0,False,True,1,1),('straight',1,1,False,True,1,2),
-           ('turn',3,3,False,True,1,3),('straight',0,0,True,True,2,3),
-           ('turn',2,2,False,True,3,3),('turn',0,0,False,True,3,2),
-           ('output',0,0,True,False,4,2)]
-
-tiles_8 = [('input',2,2,True,False,0,0),('turn',1,1,False,True,1,0),
-           ('3branch',0,0,False,True,1,1),('straight',1,1,False,True,1,2),
-           ('turn',3,3,False,True,1,3),('straight',0,0,True,True,2,3),
-           ('turn',2,2,False,True,3,3),('turn',0,0,False,True,3,2),
-           ('output',0,0,True,False,4,2)]
-
-tiles_9 = [('input',2,2,True,False,0,0),('turn',1,1,False,True,1,0),
-           ('3branch',0,0,False,True,1,1),('straight',1,1,False,True,1,2),
-           ('turn',3,3,False,True,1,3),('straight',0,0,True,True,2,3),
-           ('turn',2,2,False,True,3,3),('turn',0,0,False,True,3,2),
-           ('output',0,0,True,False,4,2)]
 
 all_tiles = [tiles_1,tiles_2,tiles_3,tiles_4,tiles_5,tiles_6,tiles_7,tiles_8,tiles_9]
 
@@ -194,7 +200,7 @@ def get_levels(lower:int, upper:int):
     """
     Get multiples level object based on the specified levels created above
     """
-    selected_tiles = all_tiles[lower-1:upper+1]
+    selected_tiles = all_tiles[lower:upper+1]
     lvls = [None for i in selected_tiles]
 
     #(type,current_dir, target_dir, locked, key_solution, row, col)

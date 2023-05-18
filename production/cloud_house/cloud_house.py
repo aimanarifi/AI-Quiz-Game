@@ -6,7 +6,7 @@ It imports level_builder so it can display the the minigame level
 
 Created by: Muhammad Kamaludin
 Modified by:
-Last modified: 1/5/2023
+Last modified: 18/5/2023
 """
 
 import pygame
@@ -68,8 +68,8 @@ def setup():
     display_text_banner = False
 
     temp_txt = ["Hey buddy, come try this minigame :D", "Wow you got potential! Try the medium one",
-            "Come beat this 'Boss' level" , "You need more experience to beat this level", "[This is text for sign board]",
-            "Hold [F] to play"]
+            "Come beat this 'Boss' level" , "You need more experience to beat this level", "Welcome to the Cloud House!",
+            "Hold [F] to play", "Go explore and interact with the NPC :D"]
 
     all_text_messages = [ FONT.render(txt, False, 'Black') for txt in temp_txt]
     displayed_text_messages = [None,None] #some text banner requires 2 lines of text
@@ -217,7 +217,7 @@ def check_sign_interaction():
     if border.Border([(720,458),(720,526)]).is_colliding(player_feet_rect.midright):
         display_text_banner = True
         displayed_text_messages[0] = all_text_messages[4]
-        displayed_text_messages[1] = None
+        displayed_text_messages[1] = all_text_messages[len(all_text_messages)-1]
 
 def run():
     """
