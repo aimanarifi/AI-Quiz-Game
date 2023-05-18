@@ -13,23 +13,26 @@ class MainPage:
         self.needToShowReminderText = False
         self.needToShowButtons_notPassed = False
 
-        self.image_background = pygame.image.load('datascience_house/images/mainBackground.jpg')
+        self.image_background = pygame.image.load('datascience_house/images/blue-pink-red background.png')
         self.mainPageText = MainPageText()
 
         # The button to enter the first level
-        self.button_levelOne = pygame.Rect(545, 460, 245, 40)
+        self.button_levelOne = pygame.Rect(545, 510, 245, 40)
+        self.button_levelOne.center = (window.get_width()/2, window.get_height()/2 + 100)
         pygame.draw.rect(window, (0, 255, 0), self.button_levelOne)
         self.text_levelOne = font.render("Click here to start level one!", True, (255, 255, 255))
         self.text_rect_levelOne = self.text_levelOne.get_rect(center=self.button_levelOne.center)
 
         # The button to enter the second level
         self.button_levelTwo = pygame.Rect(545, 510, 245, 40)
+        self.button_levelTwo.midtop = (window.get_width() / 2, self.button_levelOne.midbottom[1] + 16)
         pygame.draw.rect(window, (0, 255, 0), self.button_levelTwo)
         self.text_levelTwo = font.render("Click here to start level two!", True, (255, 255, 255))
         self.text_rect_levelTwo = self.text_levelTwo.get_rect(center=self.button_levelTwo.center)
 
         # The button to enter the third level
         self.button_levelThree = pygame.Rect(545, 560, 245, 40)
+        self.button_levelThree.midtop = (window.get_width() / 2, self.button_levelTwo.midbottom[1] + 16)
         pygame.draw.rect(window, (0, 255, 0), self.button_levelThree)
         self.text_levelThree = font.render("Click here to start level three!", True, (255, 255, 255))
         self.text_rect_levelThree = self.text_levelThree.get_rect(center=self.button_levelThree.center)
@@ -53,11 +56,11 @@ class MainPage:
 
     def showIntroductionTextLine(self):
         if self.needToShowIntroductionText:
-            window.blit(self.mainPageText.introduction_textLine1, (230, 170))
-            window.blit(self.mainPageText.introduction_textLine2, (230, 220))
-            window.blit(self.mainPageText.introduction_textLine3, (230, 270))
-            window.blit(self.mainPageText.introduction_textLine4, (230, 320))
-            window.blit(self.mainPageText.introduction_textLine5, (450, 370))
+            window.blit(self.mainPageText.introduction_textLine1, (window.get_width()/2 - self.mainPageText.introduction_textLine1.get_width()/2, window.get_height()/4 - self.mainPageText.introduction_textLine1.get_height()/2))
+            window.blit(self.mainPageText.introduction_textLine2, (window.get_width() / 2 - self.mainPageText.introduction_textLine2.get_width() / 2, window.get_height() / 4 - self.mainPageText.introduction_textLine2.get_height() / 2 + 50))
+            window.blit(self.mainPageText.introduction_textLine3, (window.get_width() / 2 - self.mainPageText.introduction_textLine3.get_width() / 2, window.get_height() / 4 - self.mainPageText.introduction_textLine3.get_height() / 2 + 100))
+            window.blit(self.mainPageText.introduction_textLine4, (window.get_width()/2 - self.mainPageText.introduction_textLine4.get_width()/2, window.get_height()/4 - self.mainPageText.introduction_textLine4.get_height()/2 + 150))
+            window.blit(self.mainPageText.introduction_textLine5, (window.get_width()/2 - self.mainPageText.introduction_textLine5.get_width()/2, window.get_height()/4 - self.mainPageText.introduction_textLine5.get_height()/2 + 200))
 
     def showButtons(self):
         # Players need to complete the previous levels before they can proceed to the next levels

@@ -28,7 +28,7 @@ class LevelThree:
         self.acceptChallenge = False  # Control of whether the player accepts answering questions
         self.refuseChallenge = False  # Control of whether the player refuses answering questions
         self.questionScore = 0  # The player's score in answering questions
-        self.questionAnswered = True  # Control of whether the player has answered questions
+        self.questionAnswered = False  # Control of whether the player has answered questions
         self.needToDoQuestions = True
 
     # Call this method after the start of the current level/game.

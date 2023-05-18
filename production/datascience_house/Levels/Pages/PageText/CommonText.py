@@ -7,13 +7,13 @@ from production.datascience_house.Window import window, font
 
 defeated_text_textLine1 = font.render(
     "Unfortunately you have been defeated, you are",
-    True, (0, 0, 0))
+    True, (255, 255, 255))
 defeated_text_textLine2 = font.render(
     " about to be sent out of this interstellar.",
-    True, (0, 0, 0))
+    True, (255, 255, 255))
 defeated_text_textLine3 = font.render(
     "Welcome to try again.",
-    True, (0, 0, 0))
+    True, (255, 255, 255))
 
 
 def showDefeatedText(levelPage):
