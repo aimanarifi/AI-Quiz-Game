@@ -26,7 +26,8 @@ class Level:
 
     def setup(self):
         tmx_data = load_pygame('player_house/data/tmx/player_house.tmx')
-        self.player = Player((100, 100), self.all_sprites, self.collision_sprites, self.interaction_sprites)
+        self.player = Player((100,200), self.all_sprites, self.collision_sprites, self.interaction_sprites)
+        
         # Generic(
         #     pos=(0, 0),
         #     surf=pygame.image.load("player_house/data/tmx/player_house.png").convert_alpha(),

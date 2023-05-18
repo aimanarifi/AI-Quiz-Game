@@ -5,6 +5,7 @@ from pygame import mixer
 sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
 from production.general.quiz import Quiz 
 import production.general.db.DatabaseService as DB
+import random
 # from production.ai_house.code.intro import intro_level
 # from production.ai_house.code.main2 import Game 
 # from production.ai_house.code.level2 import Level
@@ -25,6 +26,7 @@ screen_height = 720
 
 pygame.display.set_caption('AI House')
 player_stats = DB.get_user()
+db_questions = DB.get_questions(1, 'ai')
 
 
 
@@ -37,8 +39,6 @@ bg_img = pygame.image.load('ai_house/images/game_bg.jpg')
 bg_img = pygame.transform.scale(bg_img,(screen_width,screen_height))
 
 exp = 0
-
-
 quiz_status = None
 
 
@@ -50,6 +50,8 @@ margin = 50
 fps = 70
 live_ball = False
 fpsClock = pygame.time.Clock()
+i=0
+j=0
 
 
 
@@ -59,44 +61,35 @@ white = (255, 255, 255)
 #define font
 font = pygame.font.Font('graphics/font/Gameplaya.ttf', 20)
 
-def miniquiz(player_score, cpu_score):
-    global  quiz_status, exp, i
-    i=0
+
+mixer.init()
+mixer.music.load('ai_house/sounds/Sleepless-City-Synthwave-Retrowave-Music.mp3')
+
+
+
+def miniquiz():
+    global  quiz_status, exp, i, j, live_ball
+    
     mixer.music.pause()
-    quiz1 = Quiz("Question 1. Which of the following Narrow AI systems would you want to include when building the Broad AI system for a self-driving car?", ["Long-term weather patterns","Information from the Global Positioning System (GPS)","Entertainment trends","International news"],"Information from the Global Positioning System (GPS)")
-    quiz2 = Quiz("Question 2. What one word best describes what AI can do?", ["Predict","Decide","Think","Calculate"], "Predict")
-    quiz3 = Quiz("Question 3. Fill in the blank. Data scientists describe a library of text and data used to train machine learning systems as a ________. ", ["Corpus","Collation","Collection","Compilation"],"Corpus")
-    quiz4 = Quiz("Question 4. What is the first step a machine must take in order to win a debate?", ["Ingest content from a corpus of publications, books, articles and web sites.","Build an argument using all the elements in the corpus of the opponent opening speech.","Understand human speech in order to listen and object to debate coach instructions.","Recite a corpus of text in a silly, rapid, or hostile way that could distract the opponent."],"Ingest content from a corpus of publications, books, articles and web sites.")
     
-    quizzes = [quiz1,quiz2, quiz3, quiz4]
-    
-    
-    for quiz in quizzes:
-        quiz.run()
-        if quiz.get_score() == 1:
-            exp += 10
-        
-    
+    while i <= 3:
+        db_questions[j].run()
         quiz_status = False
-    mixer.music.unpause()
+       
+        if db_questions[j].get_score() == 1:
+            exp += 10
+            i+=1
+            j+=1
 
-    
-    mixer.music.play()
-    
+        if i == 3:
+            i=0
+            break
+        
+        
+        
         
     
-        
 
-    # loop = True
-    # while loop:
-    #     for event in pygame.event.get():
-    #             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-    #                 loop = False
-    #                 print("b")
-    
-
-    
-    
 def draw_board():
     pygame.draw.line(screen, white, (0, margin), (screen_width, margin), 2)
 
@@ -121,10 +114,10 @@ class paddle():
         key = pygame.key.get_pressed()
         if key[pygame.K_UP] and self.rect.top > margin:
             self.rect.move_ip(0, -1 * self.speed)
-            print("up")
+            
         if key[pygame.K_DOWN] and self.rect.bottom < screen_height:
             self.rect.move_ip(0, self.speed)
-            print("down")
+            
 
     def draw(self):
         pygame.draw.rect(screen, white, self.rect)
@@ -188,6 +181,7 @@ class ball():
 
 
 def run(player_score, cpu_score):
+    mixer.music.play()
     global quiz_status
     live_ball = False
     winner = 0
@@ -234,11 +228,7 @@ def run(player_score, cpu_score):
 
 
         #print player instructions
-        if player_score == 2:
-            while quiz_status == True:
-                print("Running quiz page")
-                miniquiz(player_score, cpu_score)
-                live_ball = True
+        
 
 
         if live_ball == False:
@@ -256,6 +246,11 @@ def run(player_score, cpu_score):
                 quiz_status = True
                 draw_text('YOU SCORED!', font, white, 520, screen_height // 2 -100)
                 draw_text('CLICK ANYWHERE TO START', font, white,(screen_width //2)-200 , screen_height // 2 -50)
+                while quiz_status == True:
+                    print("Running quiz page")
+                    miniquiz()
+                   
+                    
                 
                     
                     
@@ -280,7 +275,7 @@ def run(player_score, cpu_score):
                 
                 DB.update_user(player_stats)
 
-                print("a")
+               
                 
 
 
@@ -307,6 +302,8 @@ cpu_paddle = paddle(20, screen_height // 2)
 
 #create pong ball
 pong = ball(screen_width - 60, screen_height // 2 + 50)
+
+print(f"questions {db_questions}")
 
 
     

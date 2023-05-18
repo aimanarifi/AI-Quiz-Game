@@ -5,11 +5,14 @@ sys.path.append(os.path.join(os.path.dirname(__file__),'../../../'))
 
 import pygame
 from production.ai_house.code.settings2 import *
+from pygame import mixer
 
 
 from production.ai_house.code.player2 import Player
 from production.ai_house.code.sprites2 import Generic, NPC, Interaction
 from pytmx.util_pygame import load_pygame
+
+
 
 
 class Level:
@@ -50,19 +53,13 @@ class Level:
         
 
     def run(self, dt):
+        
         # self.display_surface.fill('black')
         self.all_sprites.layered_draw(self.player)
         self.all_sprites.update(dt)
         pygame.transform.scale(self.display_surface, (SCREEN_WIDTH, SCREEN_HEIGHT))
         
-       
-        
-            
-            
-
            
-
-
 class CameraGroup(pygame.sprite.Group):
     def __init__(self):
         super().__init__()
