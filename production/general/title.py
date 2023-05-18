@@ -27,9 +27,9 @@ def run_title():
     background_rect = background.get_rect()
     counter, inc = 0, 1
 
-    #pygame.mixer.init()
-    #pygame.mixer.music.load('assets/sound/McNamaras-Band.wav')
-    #pygame.mixer.music.play(-1, 0.0, 1)
+    '''pygame.mixer.init()
+    pygame.mixer.music.load('assets/sound/McNamaras-Band.wav')
+    pygame.mixer.music.play(-1, 0.0, 1)'''
 
     while loop:
 
