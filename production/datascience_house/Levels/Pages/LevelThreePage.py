@@ -145,7 +145,6 @@ class LevelThreePage:
     def showTextBeforeGame(self):
         self.showReminder3Text()
         self.showIntroduction2Text()
-        self.showReminder4Text()
 
     def showReminder3Text(self):
         if self.needToShowReminder3Text:
@@ -195,6 +194,7 @@ class LevelThreePage:
             else:
                 self.needToShowIntroduction2Text = False
                 self.needToShowReminder4Text = True
+                self.showText_beforeGame = False
                 self.introduction2_textStartTime = 0
                 self.introduction2_textEndTime = 0
                 self.introduction2_textLastTime = 0
@@ -215,7 +215,6 @@ class LevelThreePage:
                 window.blit(countdown_text, (10, 690))
             else:
                 self.needToShowReminder4Text = False
-                self.showText_beforeGame = False
                 self.reminder4_textStartTime = 0
                 self.reminder4_textEndTime = 0
                 self.reminder4_textLastTime = 0

@@ -270,7 +270,7 @@ class Game:
 
         self.tic_tac_toe = TicTacToe(self)
 
-        self.quiz = Quiz("This is the prompt", ["AAAA","BBBB","CCCC","DDDD"], "CCCC")
+        self.quiz = Quiz("This is the prompt", ["True","False","True","False"], "True")
         self.quizzes = [self.quiz]
 
         self.score = 0

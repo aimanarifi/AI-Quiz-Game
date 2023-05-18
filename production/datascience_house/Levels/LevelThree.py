@@ -28,7 +28,7 @@ class LevelThree:
         self.acceptChallenge = False  # Control of whether the player accepts answering questions
         self.refuseChallenge = False  # Control of whether the player refuses answering questions
         self.questionScore = 0  # The player's score in answering questions
-        self.questionAnswered = False  # Control of whether the player has answered questions
+        self.questionAnswered = True  # Control of whether the player has answered questions
         self.needToDoQuestions = True
 
     # Call this method after the start of the current level/game.
@@ -59,6 +59,7 @@ class LevelThree:
                 self.levelThreePage.needToShowReminder1Text = True
         else:
             self.levelThreePage.showTextBeforeGame()
+            self.levelThreePage.showReminder4Text()
 
             if not self.levelThreePage.showText_beforeGame:
                 if self.plane.HP_current > 0:
@@ -86,24 +87,25 @@ class LevelThree:
                         self.score = 0
                         self.levelThreePage.needToShowDefeatedText = True
 
-                showScoreObtained(self)
+                if not self.levelThreePage.needToShowReminder4Text:
+                    showScoreObtained(self)
 
-                # Up to fifteen enemies can exist simultaneously,
-                # and the total number of enemies and their movement speed are increased compared to the second level.
-                if self.enemiesPresent < self.allEnemies:
-                    while len(self.enemies) < 15:
-                        self.enemies.append(Enemy(random.randint(0, 1250), -28, random.randint(-4, 4), 0.25))
-                        self.enemiesPresent += 1
-                elif not self.enemies and self.plane.HP_current > 0:
-                    end(self.levelThreePage, self, 12)
+                    # Up to fifteen enemies can exist simultaneously,
+                    # and the total number of enemies and their movement speed are increased compared to the second level.
+                    if self.enemiesPresent < self.allEnemies:
+                        while len(self.enemies) < 15:
+                            self.enemies.append(Enemy(random.randint(0, 1250), -28, random.randint(-4, 4), 0.25))
+                            self.enemiesPresent += 1
+                    elif not self.enemies and self.plane.HP_current > 0:
+                        end(self.levelThreePage, self, 12)
 
-                showEnemy(self)
-                showRemainingEnemies(self)
-                self.showEnemyBullet()
-                self.hitByEnemyBullet_judge()
+                    showEnemy(self)
+                    showRemainingEnemies(self)
+                    self.showEnemyBullet()
+                    self.hitByEnemyBullet_judge()
 
-                hitByEnemy_judge(self)
-                hit_judge(self)  # To check whether a bullet has hit an enemy
+                    hitByEnemy_judge(self)
+                    hit_judge(self)  # To check whether a bullet has hit an enemy
 
     def showPlaneBullet(self):
         for bullet in self.plane.all_bullets:
@@ -176,9 +178,12 @@ class LevelThree:
             self.gameIsOn = False
             self.plane.position_x, self.plane.position_y = 0, 675
             self.plane.speed_x, self.plane.speed_y = 0, 0
+            self.plane.HP_current = 100
             self.enemiesPresent = 0
+            self.enemyDestroyed = 0
             self.acceptChallenge = False
             self.questionScore = 0
+            self.score = 0
             self.questionAnswered = False
             levelThreePage.needToShowIntroduction1Text = True
             levelThreePage.needToShowButtons = True

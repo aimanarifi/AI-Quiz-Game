@@ -28,17 +28,17 @@ os.chdir("production/blockchain_house/ibm_blockchain")
 
 
 print("Your Current Directory in BlockChain House Main file is = ",os.getcwd())
-from emmaVoiceGenerator import generateEmmaVoice
-generateEmmaVoice() # Home Node NPC
-from matthewVoiceGenerator import generateMatthewVoice 
-generateMatthewVoice()
-from rogerVoiceGenerator import generateRogerVoice 
-generateRogerVoice()
-from kingVoiceGenerator import generateTheKingVoice 
-generateTheKingVoice()
+# from emmaVoiceGenerator import generateEmmaVoice
+# generateEmmaVoice() # Home Node NPC
+# from matthewVoiceGenerator import generateMatthewVoice 
+# generateMatthewVoice()
+# from rogerVoiceGenerator import generateRogerVoice 
+# generateRogerVoice()
+# from kingVoiceGenerator import generateTheKingVoice 
+# generateTheKingVoice()
 #from quizNPCVoiceGenerator import generateQuizNPCVoice
 
-os.chdir("../../../..")
+# os.chdir("../../../..")
 
 print("Your Current Directory in BlockChain House Main file is = ",os.getcwd())
 
@@ -957,7 +957,7 @@ class Dialog:
         self.screen.blit(uniLogo,(100,430)) 
         
         ibmLogoPath = "assets/ibmlogo.jpeg"
-        ibmLogo = pygame.image.load(ibmLogoPath)
+        ibmLogo = pygame.image.load(uniLogoPath)
         ibmLogo = pygame.transform.scale( ibmLogo, (100,50) )
         self.screen.blit(ibmLogo,(215,430)) 
         
@@ -1098,7 +1098,7 @@ class SceneStack:
 
 
 
-USER_ID = 10
+USER_ID = 1
 
 PLAYER_X = 512
 PLAYER_Y = 700        

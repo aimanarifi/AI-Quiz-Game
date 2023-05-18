@@ -3,6 +3,8 @@ Last modified: 18/05/2023
 Written by Zhongjie Huang
 """
 import random
+import sqlite3
+
 from production.datascience_house.Window import pygame, window
 from production.datascience_house.Plane import Plane
 from production.datascience_house.Enemy import Enemy
@@ -14,6 +16,7 @@ from production.datascience_house.Levels.Pages.PageText.CommonText import showDe
 class LevelTwo:
     def __init__(self):
         self.name = 'level two'
+        self.passed = 'False'
         self.gameIsOn = False  # Control of whether the player has entered the current level
         self.plane = Plane()
         self.plane.move_speed_improve()
@@ -57,6 +60,7 @@ class LevelTwo:
                 self.levelTwoPage.needToShowReminder1Text = True
         else:
             self.levelTwoPage.showTextBeforeGame()
+            self.levelTwoPage.showReminder4Text()
 
             if not self.levelTwoPage.showText_beforeGame:
                 if self.plane.HP_current > 0:
@@ -84,22 +88,23 @@ class LevelTwo:
                         self.score = 0
                         self.levelTwoPage.needToShowDefeatedText = True
 
-                showScoreObtained(self)
+                if not self.levelTwoPage.needToShowReminder4Text:
+                    showScoreObtained(self)
 
-                # Up to ten enemies can exist simultaneously,
-                # and the total number of enemies and their movement speed are increased compared to the first level.
-                if self.enemiesPresent < self.allEnemies:
-                    while len(self.enemies) < 10:
-                        self.enemies.append(Enemy(random.randint(0, 1250), -28, random.randint(-3, 3), 0.2))
-                        self.enemiesPresent += 1
-                if not self.enemies and self.plane.HP_current > 0:
-                    end(self.levelTwoPage, self, 12)
+                    # Up to ten enemies can exist simultaneously,
+                    # and the total number of enemies and their movement speed are increased compared to the first level.
+                    if self.enemiesPresent < self.allEnemies:
+                        while len(self.enemies) < 10:
+                            self.enemies.append(Enemy(random.randint(0, 1250), -28, random.randint(-3, 3), 0.2))
+                            self.enemiesPresent += 1
+                    if not self.enemies and self.plane.HP_current > 0:
+                        end(self.levelTwoPage, self, 12)
 
-                showEnemy(self)
-                showRemainingEnemies(self)
+                    showEnemy(self)
+                    showRemainingEnemies(self)
 
-                hitByEnemy_judge(self)
-                hit_judge(self)  # To check whether a bullet has hit an enemy
+                    hitByEnemy_judge(self)
+                    hit_judge(self)  # To check whether a bullet has hit an enemy
 
     def showBullet(self):
         for bullet in self.plane.all_bullets:
@@ -126,7 +131,10 @@ class LevelTwo:
             self.gameIsOn = False
             self.plane.position_x, self.plane.position_y = 0, 675
             self.plane.speed_x, self.plane.speed_y = 0, 0
+            self.plane.HP_current = 100
             self.enemiesPresent = 0
+            self.enemyDestroyed = 0
+            self.score = 0
             self.acceptChallenge = False
             self.questionScore = 0
             self.questionAnswered = False
@@ -137,3 +145,9 @@ class LevelTwo:
             levelTwoPage.needToShowReminder3Text = True
             levelTwoPage.needTOShowEndText = True
             levelTwoPage.needToShowExitText = False
+            self.passed = 'True'
+            with sqlite3.connect('general/db/AIGame.db') as connection:
+                cursor = connection.cursor()
+                cursor.execute(
+                    f"UPDATE DATASCIENCELEVELSTATE SET levelTwo = {self.passed} WHERE id = 1")
+                connection.commit()
