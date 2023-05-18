@@ -61,11 +61,6 @@ def startGame():
 
         pygame.display.update()
 
-    with sqlite3.connect('general/db/AIGame.db') as connection:
-        cursor = connection.cursor()
-        cursor.execute(f"UPDATE DATASCIENCELEVELSTATE SET levelOne = {levelOne.passed}, levelTwo = {levelTwo.passed} WHERE id = 1")
-        connection.commit()
-
     del clock
     del mainPage
     del levelOne

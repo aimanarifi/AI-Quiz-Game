@@ -3,6 +3,8 @@ Last modified: 18/05/2023
 Written by Zhongjie Huang
 """
 import random
+import sqlite3
+
 from production.datascience_house.Plane import Plane
 from production.datascience_house.Enemy import Enemy
 from production.datascience_house.Window import window
@@ -101,3 +103,8 @@ class LevelOne:
             levelOnePage.needToShowEndText = True
             levelOnePage.needToShowExitText = False
             self.passed = 'True'
+            with sqlite3.connect('general/db/AIGame.db') as connection:
+                cursor = connection.cursor()
+                cursor.execute(
+                    f"UPDATE DATASCIENCELEVELSTATE SET levelOne = {self.passed} WHERE id = 1")
+                connection.commit()
