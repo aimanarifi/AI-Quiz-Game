@@ -32,6 +32,7 @@ db_questions = DB.get_questions(1, 'ai')
 
 
 screen = pygame.display.set_mode((screen_width, screen_height))
+bg = pygame.Rect((0,0),screen.get_size())
 end = False
 
 #define background image
@@ -49,14 +50,17 @@ margin = 50
 
 fps = 70
 live_ball = False
-fpsClock = pygame.time.Clock()
+fps_clock = pygame.time.Clock()
 i=0
-j=0
+
 
 
 
 #define colours
 white = (255, 255, 255)
+blue = (3, 165, 252)
+green = (3, 252, 74)
+red = (252, 3, 3)
 
 #define font
 font = pygame.font.Font('graphics/font/Gameplaya.ttf', 20)
@@ -66,28 +70,105 @@ mixer.init()
 mixer.music.load('ai_house/sounds/Sleepless-City-Synthwave-Retrowave-Music.mp3')
 
 
+def score_screen(exp):
+    """
+    Game loop for score screen
+    """
+    global screen, player_stats, player_score, cpu_score,i
+    loop = True
+    on_click = False
+
+    TXTS_REF_POINT = (screen.get_size()[0]/2, screen.get_size()[1]/2 - 70)
+    medium_font = pygame.font.Font('graphics/font/Gameplaya.ttf', 18)
+    biggest_banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),4.3)
+    text_surf1 = medium_font.render("WELL DONE! YOU'VE BEATEN THE AI", False, 'Black')
+    text_surf2 = medium_font.render(F"YOU'VE EARNED {exp} EXP ", False, 'Black')
+    text_surf3 =  medium_font.render(F"YOU HAVE A NEW HIGHSCORE OF  {player_score} ", False, 'Black')
+    next_button_surf = pygame.transform.scale_by(pygame.image.load("graphics/art/UI/button_2x1.png"),4.5)
+    next_button_rect = next_button_surf.get_rect(bottomleft=(440+400+24,160+400))
+    button_text_surf = medium_font.render("NEXT  >>", False, "White")
+    button_text_rect = button_text_surf.get_rect(center = next_button_rect.center)
+
+    
+    next_button_rect.center = (screen.get_size()[0]/2, screen.get_size()[1]*3/4 - 70)
+    button_text_surf = medium_font.render("CONTINUE", False, "White")
+    button_text_rect = button_text_surf.get_rect(center = next_button_rect.center)
+
+    while loop:
+        on_click = False
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            
+            if event.type == pygame.MOUSEBUTTONUP:
+                on_click = True
+
+        pygame.draw.rect(screen,(25,36,40),bg)
+        screen.blit(biggest_banner_image, biggest_banner_image.get_rect(center=bg.center))
+        screen.blit(text_surf1, text_surf1.get_rect(midbottom= (TXTS_REF_POINT[0],TXTS_REF_POINT[1]+55)))
+        screen.blit(text_surf2, text_surf2.get_rect(center= (TXTS_REF_POINT[0],TXTS_REF_POINT[1]+60)))
+        
+
+        if player_stats.highscore_ai < player_score:
+            print("high score")
+            screen.blit(text_surf3, text_surf3.get_rect(center= (TXTS_REF_POINT[0],TXTS_REF_POINT[1]+70)))
+
+
+        screen.blit(next_button_surf,next_button_rect)
+        screen.blit(button_text_surf, button_text_rect)
+
+        player_stats.exp_ai += exp
+        if player_stats.highscore_ai < player_score:
+            player_stats.highscore_ai = player_score
+
+        #button click micro interation and animation 
+        if next_button_rect.collidepoint(pygame.mouse.get_pos()):
+                
+            if pygame.mouse.get_pressed()[0]:
+                next_button_surf = pygame.transform.scale_by(pygame.image.load("graphics/art/UI/button_2x1_clicked.png"),4.5)
+                    
+                if not mouse_hold:
+                    button_text_rect.y += 4
+                    pygame.mixer.Channel(1).play(pygame.mixer.Sound('graphics/audio/button_click.wav'))
+                mouse_hold = True
+            else:
+                mouse_hold = False
+                next_button_surf = pygame.transform.scale_by(pygame.image.load("graphics/art/UI/button_2x1.png"),4.5)
+
+            if on_click: button_text_rect.y -= 4
+            loop = False if on_click else True
+            player_score, cpu_score = 0,0
+            exp, i = 0,0
+    
+        pygame.display.update()
+        fps_clock.tick(24)
+
 
 def miniquiz():
-    global  quiz_status, exp, i, j, live_ball
+    global  quiz_status, exp, i
     
     mixer.music.pause()
     
-    while i <= 3:
-        db_questions[j].run()
-        quiz_status = False
-       
-        if db_questions[j].get_score() == 1:
-            exp += 10
-            i+=1
-            j+=1
 
-        if i == 3:
-            i=0
-            break
+    db_questions[i].run()
+    # quiz_status = False
+
+    if db_questions[i].get_score() == 1:
+        exp += 10
+        i+=1
+        cpu_paddle.speed -= 1
         
+
+    elif db_questions[i].get_score() == 0:
+        i+=1
+        cpu_paddle.speed += 2
+    
+    if i > (len(db_questions)-1):
+        score_screen(exp)
         
-        
-        
+
     
 
 def draw_board():
@@ -136,6 +217,9 @@ class paddle():
 class ball():
     def __init__(self, x, y):
         self.reset(x, y)
+        self.speed_x = -7
+        self.speed_y = 5
+       
 
 
     def move(self):
@@ -166,26 +250,27 @@ class ball():
         pygame.draw.circle(screen, white, (self.rect.x + self.ball_rad, self.rect.y + self.ball_rad), self.ball_rad)
 
 
-    def reset(self, x, y):
+    def reset(self, x, y ):
         self.x = x
         self.y = y
         self.ball_rad = 8
         self.rect = Rect(x, y, self.ball_rad * 2, self.ball_rad * 2)
-        self.speed_x = -7
-        self.speed_y = 5
-        self.winner = 0# 1 is the player and -1 is the CPU
+        self.winner = 0
+ # 1 is the player and -1 is the CPU
 
 
 
  #create paddles
 
 
-def run(player_score, cpu_score):
+def run():
     mixer.music.play()
-    global quiz_status
+    global quiz_status, player_score, cpu_score
     live_ball = False
     winner = 0
     speed_increase = 0
+    player_score, cpu_score = 0,0
+    max_speed = -11
     
     #create game loop
     run = True
@@ -193,10 +278,10 @@ def run(player_score, cpu_score):
     while run:
         
         screen.blit(bg_img,(0,0))
-        fpsClock.tick(fps) 
+        fps_clock.tick(fps) 
         draw_board()
-        draw_text('CPU: ' + str(cpu_score), font, white, 20, 15)
-        draw_text('P1: ' + str(player_score), font, white, screen_width - 100, 15)
+        draw_text('CPU: ' + str(cpu_score), font, red, 20, 15)
+        draw_text('P1: ' + str(player_score), font, blue, screen_width - 100, 15)
         draw_text('BALL SPEED: ' + str(abs(pong.speed_x)), font, white, screen_width // 2 - 100 , 15)
         draw_text('EXP: ' + str(exp), font, white, screen_width // 2 + 200  , 15)
         
@@ -208,7 +293,7 @@ def run(player_score, cpu_score):
         
 
         if live_ball == True:
-            speed_increase += 1.5
+            speed_increase += 1
             winner = pong.move()
             if winner == 0:
                 #draw ball
@@ -220,7 +305,7 @@ def run(player_score, cpu_score):
                 live_ball = False
                 if winner == 1:
                     player_score += 1
-                    pong.speed_x += 1
+                    
                     
 
                 elif winner == -1:
@@ -233,40 +318,47 @@ def run(player_score, cpu_score):
 
         if live_ball == False:
             if winner == 0:
-                draw_text('CLICK ANYWHERE TO START', font, white,425 , screen_height // 2 -100)
-                draw_text('USE ARROW KEYS TO MOVE', font, white, (screen_width //2)-200 , screen_height // 2 -50)
-                draw_text("YOU WILL BE QUIZZED IF YOU CAN SCORE TWICE AGAINST THE AI", font, white, (screen_width //2)-400 , screen_height // 2 -10)
-                draw_text("You'll gain 10 EXP for each correct answer", font, white, (screen_width //2)-300 , screen_height // 2 + 20 )
+                draw_text('CLICK ANYWHERE TO START', font, green,425 , screen_height // 2 -100)
+                draw_text('USE ARROW KEYS TO MOVE', font, green, (screen_width //2)-200 , screen_height // 2 -50)
+                draw_text("YOU WILL BE QUIZZED EVERYTIME YOU SCORE AGAINST THE AI", font, green, (screen_width //2)-400 , screen_height // 2 -10)
+                draw_text("YOU'LL RECIEVE 10 EXP FOR EVERY CORRECT ANSWER", font, green, (screen_width //2)-350 , screen_height // 2 + 20 )
+                draw_text("BUT THE AI AND BALL WILL GET FASTER, SO BE READY!", font, green, (screen_width //2)-350 , screen_height // 2 + 40 )
 
 
 
-                
                 
             if winner == 1:
-                quiz_status = True
-                draw_text('YOU SCORED!', font, white, 520, screen_height // 2 -100)
-                draw_text('CLICK ANYWHERE TO START', font, white,(screen_width //2)-200 , screen_height // 2 -50)
-                while quiz_status == True:
-                    print("Running quiz page")
-                    miniquiz()
-                   
-                    
+                # draw_text('YOU SCORED!', font, white, 520, screen_height // 2 -100)
+                # draw_text('CLICK ANYWHERE TO START', font, white,(screen_width //2)-200 , screen_height // 2 -50)
+                curr_speed = pong.speed_x
                 
-                    
-                    
+                print("Running quiz page")
+                quiz_status = True
+                miniquiz()
+                winner = 0
+                
+                
+                   
                 
             if winner == -1:
                 draw_text('CPU SCORED!', font, white, 520, screen_height // 2 -100)
                 draw_text('CLICK ANYWHERE TO START', font, white, (screen_width //2)-200 , screen_height // 2 -50)
+                draw_text("YOU CAN DO BETTER THAN THAT!", font, white, (screen_width //2)-250 , screen_height // 2 -10)
 
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
+
             if (event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN) and live_ball == False:
                 live_ball = True
-                pong.reset(screen_width - 60, screen_height // 2 + 50)
+                pong.reset(screen_width - 700, screen_height // 2 + 50)
+                cpu_paddle.y = pong.y
+                
+                if pong.speed_x < max_speed:
+                    pong.speed_x,pong.speed_y = -7,5
+
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 run = False
                 player_stats.exp_ai += exp
@@ -289,6 +381,8 @@ def run(player_score, cpu_score):
                 pong.speed_y -= 1
             if pong.speed_y > 0:
                 pong.speed_y += 1
+        
+        
             
            
 
