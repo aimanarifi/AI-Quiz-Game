@@ -8,13 +8,16 @@ Desc: This module contains function to run the loading screen.
 
 Created by: Muhammad Kamaludin
 Modified by:
-Last modified: 13/5/2023
+Last modified: 18/5/2023
 """
 
 import sys
 import pygame
 import asyncio
 import time
+
+global coro_success_status
+coro_success_status = False
 async def run(coroutine_status: asyncio.Event):
 
     
@@ -33,8 +36,7 @@ async def run(coroutine_status: asyncio.Event):
     text_banner_rect = text_banner.get_rect(center=screen.get_rect().center)
 
     #animation
-    print(screen.get_rect().center[1])
-    loading_dots = [pygame.Rect(screen.get_rect().center[0] + i*30, screen.get_rect().center[1]+20, 10, 10) for i in range(-5,5)]
+    loading_dots = [pygame.Rect(screen.get_rect().center[0] + i*30, screen.get_rect().center[1]+20, 10, 10) for i in range(-4,4)]
 
     #util
     bg_counter = 0
@@ -59,7 +61,7 @@ async def run(coroutine_status: asyncio.Event):
         if not bg_counter % 2: background_rect.left += inc  
         
         #animate the loading dots
-        loading_counter = (loading_counter + 1) % 10
+        loading_counter = (loading_counter + 1) % 12
 
         for pos, dot in enumerate(loading_dots):
 
@@ -79,19 +81,20 @@ async def run(coroutine_status: asyncio.Event):
         screen.blit(background,background_rect)
         screen.blit(text_banner,text_banner_rect)
         screen.blit(loading_text, loading_text.get_rect(center=(screen.get_rect().center[0],screen.get_rect().center[1]-30)))
+        
         for dots in loading_dots:
             pygame.draw.rect(screen, 'White', dots)
 
-        if int(time.time() - init_time) != current_time:
-            current_time = int(time.time() - init_time)
-            print(f"time elapsed: {current_time} seconds")
-
-
         pygame.display.update()
 
-        if coroutine_status.is_set() : loop = False
+        if coroutine_status.is_set() : 
+            loop = False
 
         await asyncio.sleep(0.09)
+
+        
+
+
 
 async def loading_screen(coroutine):
 
@@ -101,8 +104,6 @@ async def loading_screen(coroutine):
     
     #start loading screen in background
     loading_task = asyncio.create_task(run(is_coroutine_complete))
-    
-    #start the coroutine in background
     coroutine_task = asyncio.create_task(coroutine())
 
     #signal the completion of coroutine
@@ -112,6 +113,25 @@ async def loading_screen(coroutine):
     #wait for loading screen to complete
     await loading_task
 
+    #show a message of the success/failure status of the text2speech for 1 second
+    screen = pygame.display.get_surface()
+    t_0 = time.time()
+    FONT = pygame.font.Font('graphics/font/monogram.ttf',40)
+    loading_text = FONT.render('speech synthesis successful', False, 'White') if res else [FONT.render('speech synthesis failed:', False, 'White'),FONT.render('reached text-to-speech limit', False, 'White')]
+    text_banner = pygame.transform.scale_by(pygame.image.load("graphics/art/UI/brown_rectangle_3x14.png"),2.8)
+    text_banner_rect = text_banner.get_rect(center=screen.get_rect().center)
+
+    while time.time() - t_0 < 1.5:
+        screen.blit(text_banner,text_banner_rect)
+
+        if res:
+            screen.blit(loading_text, loading_text.get_rect(center=(screen.get_rect().center)))
+        else:
+            screen.blit(loading_text[0], loading_text[0].get_rect(midbottom=(screen.get_rect().center[0], screen.get_rect().center[1] - 8)))
+            screen.blit(loading_text[1], loading_text[1].get_rect(midtop=(screen.get_rect().center[0], screen.get_rect().center[1] + 4)))
+        pygame.display.update()
+
+
 async def test_coroutine():
 
     await asyncio.sleep(2)
@@ -120,6 +140,7 @@ async def test_coroutine():
     
 if __name__ == "__main__":
 
+    coro_success_status = False
     pygame.init()
     pygame.display.set_mode((1280,720))
     pygame.display.set_caption("Loading screen: currently ran directly from loading_screen.py")
