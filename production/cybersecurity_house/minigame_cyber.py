@@ -1,8 +1,10 @@
+import random
+
 import pygame
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__),'../../'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
 
 from random import randint
 from production.general.quiz import Quiz
@@ -25,7 +27,7 @@ class TicTacToe():
 
         self.was_q_correct = None
         self.q_answered = False
-        #self.run_quiz_status = None
+        # self.run_quiz_status = None
 
         self.board_array = ["-", "-", "-",
                             "-", "-", "-",
@@ -89,7 +91,7 @@ class TicTacToe():
                 self.player_turn = False
 
     def check_if_game_end(self):
-        #print("does this even call")
+        # print("does this even call")
         if self.check_if_win():
             print("theres a winner")
             if self.check_if_is_winner("x"):
@@ -106,39 +108,39 @@ class TicTacToe():
     # check for win or tie
     def check_horizontal(self):
         if self.board_array[0] == self.board_array[1] == self.board_array[2] and self.board_array[0] != "-":
-            #self.winner = self.board_array[0]
+            # self.winner = self.board_array[0]
             return True
         elif self.board_array[3] == self.board_array[4] == self.board_array[5] and self.board_array[3] != "-":
-            #self.winner = self.board_array[3]
+            # self.winner = self.board_array[3]
             return True
         elif self.board_array[6] == self.board_array[7] == self.board_array[8] and self.board_array[6] != "-":
-            #self.winner = self.board_array[6]
+            # self.winner = self.board_array[6]
             return True
 
     def check_vertical(self):
         if self.board_array[0] == self.board_array[3] == self.board_array[6] and self.board_array[0] != "-":
-            #self.winner = self.board_array[0]
+            # self.winner = self.board_array[0]
             return True
         elif self.board_array[1] == self.board_array[4] == self.board_array[7] and self.board_array[1] != "-":
-            #self.winner = self.board_array[1]
+            # self.winner = self.board_array[1]
             return True
         elif self.board_array[2] == self.board_array[5] == self.board_array[8] and self.board_array[2] != "-":
-            #self.winner = self.board_array[3]
+            # self.winner = self.board_array[3]
             return True
 
     def check_diagonal(self):
         if self.board_array[0] == self.board_array[4] == self.board_array[8] and self.board_array[0] != "-":
-            #self.winner = self.board_array[0]
+            # self.winner = self.board_array[0]
             return True
         elif self.board_array[2] == self.board_array[4] == self.board_array[6] and self.board_array[4] != "-":
-            #self.winner = self.board_array[2]
+            # self.winner = self.board_array[2]
             return True
 
     def check_if_win(self):
         return self.check_horizontal() or self.check_diagonal() or self.check_vertical()
-            #return True
-        #else:
-            #return False
+        # return True
+        # else:
+        # return False
 
     def check_if_tie(self):
         if "-" not in self.board_array:
@@ -147,21 +149,29 @@ class TicTacToe():
             return False
 
     def check_if_is_winner(self, letter):
-        if self.board_array[0] == self.board_array[1] and self.board_array[0] == self.board_array[2] and self.board_array[0] == letter:
+        if self.board_array[0] == self.board_array[1] and self.board_array[0] == self.board_array[2] and \
+                self.board_array[0] == letter:
             return True
-        elif self.board_array[3] == self.board_array[4] and self.board_array[3] == self.board_array[5] and self.board_array[3] == letter:
+        elif self.board_array[3] == self.board_array[4] and self.board_array[3] == self.board_array[5] and \
+                self.board_array[3] == letter:
             return True
-        elif self.board_array[6] == self.board_array[7] and self.board_array[6] == self.board_array[8] and self.board_array[6] == letter:
+        elif self.board_array[6] == self.board_array[7] and self.board_array[6] == self.board_array[8] and \
+                self.board_array[6] == letter:
             return True
-        elif self.board_array[0] == self.board_array[3] and self.board_array[0] == self.board_array[6] and self.board_array[0] == letter:
+        elif self.board_array[0] == self.board_array[3] and self.board_array[0] == self.board_array[6] and \
+                self.board_array[0] == letter:
             return True
-        elif self.board_array[1] == self.board_array[4] and self.board_array[1] == self.board_array[7] and self.board_array[1] == letter:
+        elif self.board_array[1] == self.board_array[4] and self.board_array[1] == self.board_array[7] and \
+                self.board_array[1] == letter:
             return True
-        elif self.board_array[2] == self.board_array[5] and self.board_array[2] == self.board_array[8] and self.board_array[2] == letter:
+        elif self.board_array[2] == self.board_array[5] and self.board_array[2] == self.board_array[8] and \
+                self.board_array[2] == letter:
             return True
-        elif self.board_array[0] == self.board_array[4] and self.board_array[0] == self.board_array[8] and self.board_array[0] == letter:
+        elif self.board_array[0] == self.board_array[4] and self.board_array[0] == self.board_array[8] and \
+                self.board_array[0] == letter:
             return True
-        elif self.board_array[6] == self.board_array[4] and self.board_array[6] == self.board_array[2] and self.board_array[6] == letter:
+        elif self.board_array[6] == self.board_array[4] and self.board_array[6] == self.board_array[2] and \
+                self.board_array[6] == letter:
             return True
         else:
             return False
@@ -232,8 +242,7 @@ class TicTacToe():
             if self.tie:
                 return "-"'''
 
-
-        #print(self.winner)
+        # print(self.winner)
         if not self.player_turn:
             if self.q_answered:
                 if self.was_q_correct:
@@ -246,11 +255,6 @@ class TicTacToe():
                     self.was_q_correct = None
         else:
             self.player_move()
-
-
-
-
-
 
 
 class Game:
@@ -270,8 +274,9 @@ class Game:
 
         self.tic_tac_toe = TicTacToe(self)
 
-        self.quiz = Quiz("This is the prompt", ["True","False","True","False"], "True")
-        self.quizzes = [self.quiz]
+        #self.quiz = Quiz("This is the prompt", ["True", "False", "True", "False"], "True")
+        self.quizzes = DB.get_questions(1, "cybersecurity")
+        self.quiz = random.choice(self.quizzes)
 
         self.score = 0
 
@@ -302,9 +307,11 @@ class Game:
         self.title_surf = self.large_font.render("Tic-Tac-Toe", False, (168, 96, 93))
         self.instruction_surf = self.medium_font.render("Instructions", False, (101, 64, 83))
         self.instruction_surf_l1 = self.small_font.render("   - Take your Turn (you are X)", False, (101, 64, 83))
-        self.instruction_surf_l2 = self.small_font.render("   - Answer the Question to let the AI", False, (101, 64, 83))
+        self.instruction_surf_l2 = self.small_font.render("   - Answer the Question to let the AI", False,
+                                                          (101, 64, 83))
         self.instruction_surf_l3 = self.small_font.render("     make its Move", False, (101, 64, 83))
-        self.instruction_surf_l4 = self.small_font.render("   - Answer Question Correctly and the", False, (101, 64, 83))
+        self.instruction_surf_l4 = self.small_font.render("   - Answer Question Correctly and the", False,
+                                                          (101, 64, 83))
         self.instruction_surf_l5 = self.small_font.render("     AI will go Easy", False, (101, 64, 83))
         self.instruction_surf_l6 = self.small_font.render("   - Otherwise the AI will go a lot", False, (101, 64, 83))
         self.instruction_surf_l7 = self.small_font.render("     harder !!", False, (101, 64, 83))
@@ -315,48 +322,48 @@ class Game:
                                      self.instruction_surf_l4, self.instruction_surf_l5, self.instruction_surf_l6,
                                      self.instruction_surf_l7, self.instruction_surf_l8, self.instruction_surf_l9]
 
-        self.center_piece_offset_width = self.grid_surf.get_width()/6 - self.x_surf.get_width()/2
-        self.center_piece_offset_height = + self.grid_surf.get_height()/6 - self.x_surf.get_height()/2
+        self.center_piece_offset_width = self.grid_surf.get_width() / 6 - self.x_surf.get_width() / 2
+        self.center_piece_offset_height = + self.grid_surf.get_height() / 6 - self.x_surf.get_height() / 2
 
         self.draw_x_o_dict = {
             "1": (self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2
                   + self.center_piece_offset_width,
                   self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + self.center_piece_offset_height),
 
-            "2": (self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + self.grid_surf.get_width()/3
+            "2": (self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + self.grid_surf.get_width() / 3
                   + self.center_piece_offset_width,
                   self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + self.center_piece_offset_height),
 
-            "3": (self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + 2*(self.grid_surf.get_width()/3)
+            "3": (self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + 2 * (self.grid_surf.get_width() / 3)
                   + self.center_piece_offset_width,
                   self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + self.center_piece_offset_height),
 
             "4": (self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + self.center_piece_offset_width,
-                  self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + self.grid_surf.get_height()/3
+                  self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + self.grid_surf.get_height() / 3
                   + self.center_piece_offset_height),
 
-            "5": (self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + self.grid_surf.get_width()/3
+            "5": (self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + self.grid_surf.get_width() / 3
                   + self.center_piece_offset_width,
-                  self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + self.grid_surf.get_height()/3
+                  self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + self.grid_surf.get_height() / 3
                   + self.center_piece_offset_height),
 
-            "6": (self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + 2*(self.grid_surf.get_width()/3)
+            "6": (self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + 2 * (self.grid_surf.get_width() / 3)
                   + self.center_piece_offset_width,
-                  self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + self.grid_surf.get_height()/3
+                  self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + self.grid_surf.get_height() / 3
                   + self.center_piece_offset_height),
 
             "7": (self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + self.center_piece_offset_width,
-                  self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + 2*(self.grid_surf.get_height()/3)
+                  self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + 2 * (self.grid_surf.get_height() / 3)
                   + self.center_piece_offset_height),
 
-            "8": (self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + self.grid_surf.get_width()/3
+            "8": (self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + self.grid_surf.get_width() / 3
                   + self.center_piece_offset_width,
-                  self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + 2*(self.grid_surf.get_height()/3)
+                  self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + 2 * (self.grid_surf.get_height() / 3)
                   + self.center_piece_offset_height),
 
-            "9": (self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + 2*(self.grid_surf.get_width()/3)
+            "9": (self.SCREEN_WIDTH / 2 - self.grid_surf.get_width() / 2 + 2 * (self.grid_surf.get_width() / 3)
                   + self.center_piece_offset_width,
-                  self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + 2*(self.grid_surf.get_height()/3)
+                  self.SCREEN_HEIGHT / 2 - self.grid_surf.get_height() / 2 + 2 * (self.grid_surf.get_height() / 3)
                   + self.center_piece_offset_height)
         }
 
@@ -377,7 +384,7 @@ class Game:
                 if event.key == pygame.K_x and not self.tic_tac_toe.player_turn:
                     self.run_quiz_status = True
                 if event.key == pygame.K_ESCAPE:
-                    self.player_stats.exp_cybersecurity += int(self.score*randint(40, 60))
+                    self.player_stats.exp_cybersecurity += int(self.score * randint(40, 60))
                     if self.player_stats.highscore_cybersecurity < self.score:
                         self.player_stats.highscore_cybersecurity = self.score
                     DB.update_user(self.player_stats)
@@ -387,9 +394,9 @@ class Game:
 
     def instruction_draw(self, surf, line_number):
         self.screen.blit(surf, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
-                                                    - self.grid_surf.get_width()*2 + self.INSTRUCTION_OFFSET,
-                                                    self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
-                                                    + self.instruction_surf.get_height()*line_number))
+                                - self.grid_surf.get_width() * 2 + self.INSTRUCTION_OFFSET,
+                                self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
+                                + self.instruction_surf.get_height() * line_number))
 
     def setup(self):
         # background
@@ -405,15 +412,15 @@ class Game:
 
         # instruction title
         self.screen.blit(self.instruction_surf, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
-                                                 - self.grid_surf.get_width()*2 + self.INSTRUCTION_OFFSET,
+                                                 - self.grid_surf.get_width() * 2 + self.INSTRUCTION_OFFSET,
                                                  self.grid_surf.get_height() - self.instruction_surf.get_height() / 2))
 
         for i_index, i_surf in enumerate(self.instruction_surfaces):
-            self.instruction_draw(i_surf, i_index+1)
+            self.instruction_draw(i_surf, i_index + 1)
 
     def draw_board(self):
         for index, value in enumerate(self.tic_tac_toe.board_array):
-            index_str = str(index+1)
+            index_str = str(index + 1)
             if value != "-":
                 if value == "x":
                     self.screen.blit(self.x_surf, self.draw_x_o_dict[index_str])
@@ -435,47 +442,46 @@ class Game:
         self.player_turn_surf_l5 = self.medium_font.render("(789) -> bottom row", False, (101, 64, 83))
 
         self.screen.blit(self.player_turn_surf, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
-                                                    + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
-                                                    self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
-                                                    + self.instruction_surf_l1.get_height()*3))
+                                                 + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
+                                                 self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
+                                                 + self.instruction_surf_l1.get_height() * 3))
 
         self.screen.blit(self.player_turn_surf_l2, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
-                                               + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
-                                               self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
-                                               + self.instruction_surf_l1.get_height() * 6))
+                                                    + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
+                                                    self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
+                                                    + self.instruction_surf_l1.get_height() * 6))
 
         self.screen.blit(self.player_turn_surf_l3, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
-                                               + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
-                                               self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
-                                               + self.instruction_surf_l1.get_height() * 6
-                                               + self.player_turn_surf_l2.get_height()))
+                                                    + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
+                                                    self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
+                                                    + self.instruction_surf_l1.get_height() * 6
+                                                    + self.player_turn_surf_l2.get_height()))
 
         self.screen.blit(self.player_turn_surf_l4, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
                                                     + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
                                                     self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
                                                     + self.instruction_surf_l1.get_height() * 6
-                                                    + self.player_turn_surf_l2.get_height()*2))
+                                                    + self.player_turn_surf_l2.get_height() * 2))
 
         self.screen.blit(self.player_turn_surf_l5, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
                                                     + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
                                                     self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
                                                     + self.instruction_surf_l1.get_height() * 6
-                                                    + self.player_turn_surf_l2.get_height()*3))
-
+                                                    + self.player_turn_surf_l2.get_height() * 3))
 
     def draw_computer_turn_display(self):
         self.comp_turn_surf = self.large_font.render("Computers turn", False, (101, 64, 83))
         self.comp_turn_surf_l2 = self.largeish_font.render("Press X to Answer Quiz", False, (101, 64, 83))
 
         self.screen.blit(self.comp_turn_surf, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
-                                                    + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
-                                                    self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
-                                                    + self.instruction_surf_l1.get_height()*3))
-
-        self.screen.blit(self.comp_turn_surf_l2, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
                                                + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
                                                self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
-                                               + self.instruction_surf_l1.get_height() * 6))
+                                               + self.instruction_surf_l1.get_height() * 3))
+
+        self.screen.blit(self.comp_turn_surf_l2, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
+                                                  + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
+                                                  self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
+                                                  + self.instruction_surf_l1.get_height() * 6))
 
     def draw_winner(self):
         if self.tic_tac_toe.winner == "x":
@@ -488,15 +494,14 @@ class Game:
         self.winner_surf_l2 = self.largeish_font.render("Press SPACE to restart", False, (101, 64, 83))
 
         self.screen.blit(self.winner_surf, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
-                                                    + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
-                                                    self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
-                                                    + self.instruction_surf_l1.get_height()*3))
+                                            + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
+                                            self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
+                                            + self.instruction_surf_l1.get_height() * 3))
 
         self.screen.blit(self.winner_surf_l2, (self.SCREEN_WIDTH / 2 - self.instruction_surf.get_width() / 2
                                                + self.grid_surf.get_width() + self.INSTRUCTION_OFFSET,
                                                self.grid_surf.get_height() - self.instruction_surf.get_height() / 2
                                                + self.instruction_surf_l1.get_height() * 6))
-
 
     def run(self):
         while self.loop:
@@ -527,6 +532,7 @@ class Game:
             self.check_events()
             pygame.display.update()
             self.clock.tick(60)
+
 
 if __name__ == '__main__':
     game = Game()
