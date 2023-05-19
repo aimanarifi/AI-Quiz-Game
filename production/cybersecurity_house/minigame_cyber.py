@@ -520,6 +520,7 @@ class Game:
                             self.tic_tac_toe.was_q_correct = False
                         self.run_quiz_status = False
                         self.quiz.reset()
+                        self.quiz = random.choice(self.quizzes)
                 else:
                     self.draw_player_turn_display()
                 self.tic_tac_toe.run()
