@@ -219,7 +219,7 @@ class Level:
 
         while self.player.run_cyber_status == True:
             print("running cybersec minigame")
-            gameCyber = minigame_cyber.Game()
+            gameCyber = minigame_cyber.Game("cybersecurity")
             gameCyber.run()
             self.player.run_cyber_status = False
 
@@ -227,6 +227,12 @@ class Level:
             print("running credit page")
             run_credits()
             self.player.run_credits_status = False
+
+        while self.player.run_iot_status:
+            print("running iot house")
+            gameIOT = minigame_cyber.Game("blockchain")
+            gameIOT.run()
+            self.player.run_iot_status = False
 
 
 

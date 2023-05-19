@@ -19,6 +19,8 @@ from production.general.loading_screen import loading_screen
 from production.general.watson import Text2Speech
 from ibm_watson import ApiException
 
+pygame.init()
+screen = pygame.display.set_mode((1280,720))
 
 class MultilineText():
 
@@ -34,7 +36,8 @@ class MultilineText():
     """
 
     def __init__(self, text: str, max_char: int=30, font: pygame.font.Font= None, color: str="Black"):
-
+        pygame.init()
+        
         self.MAX_CHAR_PER_LINE = max_char
 
         #set wrappers object to None, it'll be updated later based on the text
@@ -339,6 +342,8 @@ class Quiz:
     async def convert_question_to_speech(self):
 
         await asyncio.sleep(1.1)
+        #T2S_API_KEY = 'HCsRX4eQCfmvI4BqFO5_zeXsXgh9SrhzCmp-6psJsYjt'
+        #T2S_URL = 'https://api.eu-gb.text-to-speech.watson.cloud.ibm.com/instances/35d8bb6c-9061-4ed2-82ba-d46e558cdec8'
         T2S_API_KEY = 'uOUrfG5RxGWbvGGhDTtpCO41uGBpUaihUbnb6Hx2Xu6o'
         T2S_URL = 'https://api.eu-gb.text-to-speech.watson.cloud.ibm.com/instances/39bd2aae-af32-48c2-8c04-20131d0adde1'
 

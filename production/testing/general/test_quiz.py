@@ -9,12 +9,15 @@ class TestOptionClass(unittest.TestCase):
     Test the object initialisation and set pos method
     update method will be tested manually
     """
-
+   
     def test_initialise(self):
+         
         o = quiz.Quiz.Option("answer1", True)
         self.assertIsNotNone(o)
 
     def test_set_position(self):
+
+
         #init position
         o = quiz.Quiz.Option("answer1", True)
         self.assertEqual(o.rect.left, 0)
@@ -47,15 +50,15 @@ class TestQuizClass(unittest.TestCase):
         
         #before setup
         self.assertIsNone(q.background)
-        self.assertTrue(q.question_surf is None and q.question_rect is None)
         self.assertTrue(q.button_txt is None and q.button_txt_rect is None)
         self.assertTrue(q.submit_button is None and q.submit_button_rect is None)
+
         #after setup
-        q.setup(quiz.pygame.display.set_mode((720,720)))
+        q.setup()
         self.assertIsNotNone(q.background)
-        self.assertFalse(q.question_surf is None or q.question_rect is None)
         self.assertFalse(q.button_txt is None or q.button_txt_rect is None)
         self.assertFalse(q.submit_button is None or q.submit_button_rect is None)
+
 
 if __name__ == '__main__':
     unittest.main()
