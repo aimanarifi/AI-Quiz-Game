@@ -262,7 +262,7 @@ class Game:
     INSTRUCTION_OFFSET = 10
     PIECE_OFFSET = 20
 
-    def __init__(self):
+    def __init__(self, type):
 
         pygame.init()
 
@@ -275,7 +275,7 @@ class Game:
         self.tic_tac_toe = TicTacToe(self)
 
         #self.quiz = Quiz("This is the prompt", ["True", "False", "True", "False"], "True")
-        self.quizzes = DB.get_questions(1, "cybersecurity")
+        self.quizzes = DB.get_questions(1, type)
         self.quiz = random.choice(self.quizzes)
 
         self.score = 0
