@@ -19,6 +19,8 @@ from production.general.loading_screen import loading_screen
 from production.general.watson import Text2Speech
 from ibm_watson import ApiException
 
+pygame.init()
+screen = pygame.display.set_mode((1280,720))
 
 class MultilineText():
 
@@ -34,7 +36,8 @@ class MultilineText():
     """
 
     def __init__(self, text: str, max_char: int=30, font: pygame.font.Font= None, color: str="Black"):
-
+        pygame.init()
+        
         self.MAX_CHAR_PER_LINE = max_char
 
         #set wrappers object to None, it'll be updated later based on the text
