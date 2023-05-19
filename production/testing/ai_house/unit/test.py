@@ -2,6 +2,8 @@ import unittest
 from production.ai_house.code.pong_minigame import ball,paddle
 from production.ai_house.code.level2 import Level, CameraGroup
 from production.ai_house.code.player2 import Player
+import sys,os
+sys.path.append(os.path.join(os.path.dirname(__file__),'../../../'))
 import pygame
 
 class TestPong(unittest.TestCase):
@@ -49,6 +51,9 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(self.player.intro_text_status, False)
         self.assertEqual(self.player.run_mg_status, False)
         self.assertEqual(self.player.z, 2, "Should be 2")
+
+if __name__ == '__main__':
+    unittest.main()
     
 
     
