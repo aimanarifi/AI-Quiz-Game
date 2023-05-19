@@ -156,15 +156,15 @@ class LevelThreePage:
             countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (125, 125, 125))
             if (7 - self.reminder3_textLastTime) >= 0:
                 window.blit(self.levelThreePageText.reminder3_textLine1,
-                            (300, 230))
+                            (260, 230))
                 window.blit(self.levelThreePageText.reminder3_textLine2,
-                            (300, 280))
+                            (260, 280))
                 window.blit(self.levelThreePageText.reminder3_textLine3,
-                            (300, 330))
+                            (260, 330))
                 window.blit(self.levelThreePageText.reminder3_textLine4,
-                            (300, 370))
+                            (260, 370))
                 window.blit(self.levelThreePageText.reminder3_textLine5,
-                            (580, 420))
+                            (260, 420))
                 window.blit(countdown_text, (10, 690))
             else:
                 self.needToShowReminder3Text = False
@@ -182,14 +182,14 @@ class LevelThreePage:
             countdown_text_time_left = 12 - self.introduction2_textLastTime
             countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (125, 125, 125))
             if (12 - self.introduction2_textLastTime) >= 0:
-                window.blit(self.levelThreePageText.introduction2_textLine1, (320, 160))
-                window.blit(self.levelThreePageText.introduction2_textLine2, (320, 210))
-                window.blit(self.levelThreePageText.introduction2_textLine3, (320, 260))
-                window.blit(self.levelThreePageText.introduction2_textLine4, (320, 310))
-                window.blit(self.levelThreePageText.introduction2_textLine5, (320, 360))
-                window.blit(self.levelThreePageText.introduction2_textLine6, (320, 410))
-                window.blit(self.levelThreePageText.introduction2_textLine7, (320, 460))
-                window.blit(self.levelThreePageText.introduction2_textLine8, (547, 510))
+                window.blit(self.levelThreePageText.introduction2_textLine1, (300, 160))
+                window.blit(self.levelThreePageText.introduction2_textLine2, (300, 210))
+                window.blit(self.levelThreePageText.introduction2_textLine3, (300, 260))
+                window.blit(self.levelThreePageText.introduction2_textLine4, (300, 310))
+                window.blit(self.levelThreePageText.introduction2_textLine5, (300, 360))
+                window.blit(self.levelThreePageText.introduction2_textLine6, (300, 410))
+                window.blit(self.levelThreePageText.introduction2_textLine7, (300, 460))
+                window.blit(self.levelThreePageText.introduction2_textLine8, (527, 510))
                 window.blit(countdown_text, (10, 690))
             else:
                 self.needToShowIntroduction2Text = False
