@@ -202,7 +202,7 @@ class Level:
 
         while self.player.run_cloud_status == True:
             print("running cloud page")
-            cloud_house.run()
+            cloud_house.run("cloud")
             self.player.run_cloud_status = False
 
         while self.player.run_player_house_status == True:
@@ -234,6 +234,10 @@ class Level:
             gameIOT.run()
             self.player.run_iot_status = False
 
+        while self.player.run_blockchain_status == True:
+            print("running blockchain page")
+            cloud_house.run("blockchain")
+            self.player.run_blockchain_status = False
 
 
 

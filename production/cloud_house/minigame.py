@@ -193,7 +193,7 @@ def run_level(level: level_builder.Level):
     in_between_sublevel = False
 
 
-def setup(**setting):
+def setup(house,**setting):
 
     global screen, bg, bg_banner, clock
     global levels, score
@@ -228,21 +228,36 @@ def setup(**setting):
     clock = pygame.time.Clock()
     difficulty = setting["difficulty"]
     player_stats = setting["player_stats"]
-    levels = level_builder.get_levels( 3*(difficulty-1),3*(difficulty-1)+2)
-    quizzes = DB.get_questions(difficulty,"cloud")
+
+
+    if house == "cloud":
+        levels = level_builder.get_levels( 3*(difficulty-1),3*(difficulty-1)+2)
+
+    elif house == "blockchain":
+
+        levels = level_builder.get_levels(1,2)
+
+    if house == "blockchain":
+        difficulty = 1
+    
+    quizzes = DB.get_questions(difficulty,house)
     score = 0
     in_between_sublevel = False
+
+    
 
     #set quizzes to the sublevels
     for i, level in enumerate(levels):
         level.quiz = quizzes[i]
 
 
-def run(diff: int = 0, user=None):
+
+
+def run(house,diff: int = 0, user=None):
     """
     This is the entry point of the minigame
     """
-    setup(difficulty = diff, player_stats = user)
+    setup(house,difficulty = diff, player_stats = user)
 
     global player_stats, score 
     global levels, level_counter
@@ -258,8 +273,13 @@ def run(diff: int = 0, user=None):
     score = int( MAX_SCORE / int(pygame.time.get_ticks()/1000 - initial_time))
 
     
-    player_stats.exp_cloud += int(score/5)  
-    player_stats.highscore_cloud = score
+    if house == "cloud":
+        player_stats.exp_cloud += int(score/5)  
+        player_stats.highscore_cloud = score
+
+    elif house == "blockchain":
+        player_stats.exp_blockchain += int(score/5)  
+        player_stats.highscore_blockchain = score
     DB.update_user(player_stats)
 
     score_screen()

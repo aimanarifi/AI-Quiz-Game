@@ -77,6 +77,7 @@ class Player(pygame.sprite.Sprite):
         self.run_cyber_status = False
         self.run_credits_status = False
         self.run_iot_status = False
+        self.run_blockchain_status = False
 
         # self.font = pygame.font.Font('graphics/font/PeaberryBase.ttf', 24)
         # self.banner_image = pygame.transform.scale_by(pygame.image.load('graphics/art/UI/beige_rectangle_2x7.png'),6.7)
@@ -142,6 +143,8 @@ class Player(pygame.sprite.Sprite):
                     self.run_credits_status = True
                 if collided_interaction_sprite[0].name == 'IOT_House':
                     self.run_iot_status = True
+                if collided_interaction_sprite[0].name == 'Blockchain_House':
+                    self.run_blockchain_status= True
 
         collided_interaction_sprite = pygame.sprite.spritecollide(self, self.interaction_sprites, False)
         #print(collided_interaction_sprite)

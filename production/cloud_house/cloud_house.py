@@ -16,7 +16,7 @@ from sys import exit
 
 ZOOM_SCALE = 2.5
 
-def setup():
+def setup(house):
     """
     Declare essential variables and objects
     """
@@ -68,7 +68,7 @@ def setup():
     display_text_banner = False
 
     temp_txt = ["Hey buddy, come try this minigame :D", "Wow you got potential! Try the medium one",
-            "Come beat this 'Boss' level" , "You need more experience to beat this level", "Welcome to the Cloud House!",
+            "Come beat this 'Boss' level" , "You need more experience to beat this level", f"Welcome to the {house.capitalize()} House!",
             "Hold [F] to play", "Go explore and interact with the NPC :D"]
 
     all_text_messages = [ FONT.render(txt, False, 'Black') for txt in temp_txt]
@@ -163,14 +163,14 @@ def check_player_movement():
     if is_idle:
         player_sprite.animation_status = player_sprite.animation_status.split('_')[0] + '_idle'
 
-def check_npc_interaction():
+def check_npc_interaction(house):
     """
     This function controls the interaction of player with the minigame access point
 
     There is an internal function that is used to check player holding a key for certain period of time
     """
     
-    def hold_f_to_enter(difficulty: int = 0):
+    def hold_f_to_enter(house, difficulty: int = 0,):
         """
         This detects player holding f for until counter hits 100.
         The counter resets if the key is released or after it reaches 100
@@ -185,7 +185,7 @@ def check_npc_interaction():
             if key_hold_counter == 50:
                 print("successfully hold")
                 key_hold_counter = 0
-                minigame.run(difficulty, player_stats)
+                minigame.run(house,difficulty, player_stats)
 
         else:
             key_hold = True
@@ -202,7 +202,7 @@ def check_npc_interaction():
             displayed_text_messages[0] = all_text_messages[i]
             displayed_text_messages[1] = all_text_messages[5]
             any_collision = True
-            hold_f_to_enter( i + 1)
+            hold_f_to_enter(house, i + 1)
 
         if player_stats.exp_cloud < exp_threshold and player_feet_rect.colliderect(npc_rect):
             displayed_text_messages[0] = all_text_messages[3]
@@ -219,14 +219,14 @@ def check_sign_interaction():
         displayed_text_messages[0] = all_text_messages[4]
         displayed_text_messages[1] = all_text_messages[len(all_text_messages)-1]
 
-def run():
+def run(house):
     """
     The cloud house entry point and it controls all stuff
     """
 
     global key_hold
     loop = True
-    setup()
+    setup(house)
 
     while loop:
 
@@ -242,7 +242,7 @@ def run():
                 loop = False
 
         check_player_movement()
-        check_npc_interaction()
+        check_npc_interaction(house)
         check_sign_interaction()
         display_level_page()
 
