@@ -9,7 +9,7 @@ from production.datascience_house.Levels.Pages.PageText.LevelThreePageText impor
 
 class LevelThreePage:
     def __init__(self):
-        self.image_background = pygame.image.load('datascience_house/images/LevelThreeBackground.png')
+        self.image_background = pygame.image.load('datascience_house/images/green background.png')
         self.levelThreePageText = LevelThreePageText()
 
         # The display attributes for the introduction text when the player hasn't answered the question

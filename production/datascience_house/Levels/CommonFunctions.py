@@ -7,12 +7,12 @@ import time
 from production.datascience_house.Window import pygame, window, font
 from production.general.db.DatabaseService import get_questions
 
-image_plane = pygame.image.load('datascience_house/images/Plane.jpg')  # plane
-image_bullet = pygame.image.load('datascience_house/images/weapon.jpg')  # bullet
-image_bullet_auto_track = pygame.image.load('datascience_house/images/weapon_auto_track.jpg')  # bullet(auto-track)
-image_enemy = pygame.image.load('datascience_house/images/enemy.jpg')  # enemy
-image_enemy_weapon = pygame.image.load('datascience_house/images/Enemy_weapon.jpg')  # enemy bullet
-image_exit = pygame.image.load('datascience_house/images/exit.png')  # level exit
+image_plane = pygame.transform.scale_by(pygame.image.load('datascience_house/images/ship.png'), 5)  # plane
+image_bullet = pygame.transform.scale_by(pygame.image.load('datascience_house/images/bullet.png'), 2)  # bullet
+image_bullet_auto_track = pygame.transform.scale_by(pygame.image.load('datascience_house/images/auto.png'),2)  # bullet(auto-track)
+image_enemy = pygame.transform.scale_by(pygame.image.load('datascience_house/images/enemy.png'), 3)  # enemy
+image_enemy_weapon = pygame.transform.scale_by(pygame.transform.flip(pygame.image.load('datascience_house/images/enemybullet.png'), True, True),2)  # enemy bullet
+image_exit = pygame.transform.scale_by(pygame.image.load('datascience_house/images/portal.png'), 8)  # level exit
 sound_hit = pygame.mixer.Sound('datascience_house/music/hit.mp3')  # hit sound effect
 
 

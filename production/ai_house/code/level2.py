@@ -32,7 +32,7 @@ class Level:
         tmx_data = load_pygame('ai_house/data/tmx/intro_map.tmx')
         self.player = Player((400, 400), self.all_sprites, self.collision_sprites, self.interaction_sprites)
 
-        print(f"position{self.player.pos}")
+        
         
         
         for layer in ['Floor', 'LPad', 'Main', 'Railings']:
