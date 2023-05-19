@@ -378,7 +378,8 @@ class Game:
                     self.run_quiz_status = True
                 if event.key == pygame.K_ESCAPE:
                     self.player_stats.exp_cybersecurity += int(self.score*randint(40, 60))
-                    self.player_stats.highscore_cybersecurity = self.score
+                    if self.player_stats.highscore_cybersecurity < self.score:
+                        self.player_stats.highscore_cybersecurity = self.score
                     DB.update_user(self.player_stats)
                     self.loop = False
             if event.type == pygame.MOUSEBUTTONDOWN:
