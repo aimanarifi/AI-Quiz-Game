@@ -7,8 +7,11 @@
 - Things to Note: Based on the contract, everybody needs to build their own IBM House and MiniGame.
 
 ## Getting started
-Before executing the program. Make sure you have all the required packages. You can do it simply by running the code below in the terminal
+To Run Game, go into production folder and run 'python general/title.py'
 
+
+Have 'pip already installed on your system'
+Before executing the program. Make sure you have all the required packages. You can do it simply by running the code below in the terminal
 
 > pip install -r requirement.txt
 

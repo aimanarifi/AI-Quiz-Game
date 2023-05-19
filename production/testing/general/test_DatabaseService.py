@@ -1,8 +1,8 @@
 import os, sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../../'))
 import unittest
-from general.db.DatabaseService import get_user, update_user, get_questions, User
-from general.quiz import Quiz
+from production.general.db.DatabaseService import get_user, update_user, get_questions, User
+from production.general.quiz import Quiz
 
 
 class DatabaseServiceTest(unittest.TestCase):

@@ -117,7 +117,7 @@ class TestGame(unittest.TestCase):
     def test_initialise(self):
          
         #should have a default param value
-        g = Game()
+        g = Game("iot")
         self.assertIsNotNone(g)
 
         #it should instantite a tictactoe obj
@@ -129,7 +129,7 @@ class TestGame(unittest.TestCase):
     """
     def test_new_game(self):
 
-        g = Game()
+        g = Game("iot")
 
         #simulate a winning condition
         init_ttt = g.tic_tac_toe
@@ -145,7 +145,7 @@ class TestGame(unittest.TestCase):
         #see incrment in score
         self.assertEqual(g.score, init_score+1)
 
-        g = Game()
+        g = Game("iot")
 
         #simulate a losing condition
         init_ttt = g.tic_tac_toe
