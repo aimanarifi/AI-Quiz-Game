@@ -342,6 +342,8 @@ class Quiz:
     async def convert_question_to_speech(self):
 
         await asyncio.sleep(1.1)
+        #T2S_API_KEY = 'HCsRX4eQCfmvI4BqFO5_zeXsXgh9SrhzCmp-6psJsYjt'
+        #T2S_URL = 'https://api.eu-gb.text-to-speech.watson.cloud.ibm.com/instances/35d8bb6c-9061-4ed2-82ba-d46e558cdec8'
         T2S_API_KEY = 'uOUrfG5RxGWbvGGhDTtpCO41uGBpUaihUbnb6Hx2Xu6o'
         T2S_URL = 'https://api.eu-gb.text-to-speech.watson.cloud.ibm.com/instances/39bd2aae-af32-48c2-8c04-20131d0adde1'
 
