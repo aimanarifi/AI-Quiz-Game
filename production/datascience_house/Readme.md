@@ -1,9 +1,11 @@
 Intoduction:
+
 Here is the minigame used by Data Science House, where players take on the role of interstellar travellers and explore the different stars.
-There are three levels in this game and players will quickly familiarise themselves with the gameplay in the first level and in the second and third levels they will need to answer questions before they can play.
+    There are three levels in this game and players will quickly familiarise themselves with the gameplay in the first level and in the second and third levels they will need to answer questions before they can play.
 After the player has completed all three levels, the data for this house will be reset, meaning that the player will need to start again from the beginning if they are playing.
 
 Object-Oriented Design:
+
 WindowScript: Instantiate pygame and set up other related functionalities here.
 Plane class: Contains properties and functions of the plane, such as health, speed, bullet firing, etc. The Plane class includes Bullet class (objects created by it will be member variables of the Plane class).
 Enemy class: Contains properties and abilities of the enemy. The Enemy class includes a Bullet class (objects created by it will be member variables of the Enemy class).
