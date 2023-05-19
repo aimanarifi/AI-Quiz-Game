@@ -46,7 +46,7 @@ class MainPage:
         self.text_rect_goBack = self.text_goBack.get_rect(center=self.button_goBack.center)
 
         # The button to go back if previous level was not passed
-        self.button_goBack_notPassed = pygame.Rect(555, 370, 230, 20)
+        self.button_goBack_notPassed = pygame.Rect(525, 370, 230, 20)
         pygame.draw.rect(window, (0, 255, 0), self.button_goBack_notPassed)
         self.text_goBack_notPassed = font.render("Click here to go Back", True, (165, 0, 42))
         self.text_rect_goBack_notPassed = self.text_goBack_notPassed.get_rect(center=self.button_goBack_notPassed.center)
@@ -72,7 +72,7 @@ class MainPage:
 
     def showReminderText(self):
         if self.needToShowReminderText:
-            window.blit(self.mainPageText.reminder_textLine, (430, 320))
+            window.blit(self.mainPageText.reminder_textLine, (385, 320))
 
     def showButtons_notPassed(self):
         if self.needToShowButtons_notPassed:

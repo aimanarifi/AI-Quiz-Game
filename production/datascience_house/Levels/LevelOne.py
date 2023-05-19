@@ -8,7 +8,7 @@ import sqlite3
 from production.datascience_house.Plane import Plane
 from production.datascience_house.Enemy import Enemy
 from production.datascience_house.Window import window
-from production.datascience_house.Levels.CommonFunctions import image_bullet, showPlane_setPlaneMoveRange, showScoreObtained, showEnemy, showRemainingEnemies, hitByEnemy_judge, hit_judge, end
+from production.datascience_house.Levels.CommonFunctions import image_bullet, showPlane_setPlaneMoveRange, showScoreObtained, showEnemy, showRemainingEnemies, hitByEnemy_judge, hit_judge, end, gainScoreAndExp
 from production.datascience_house.Levels.Pages.LevelOnePage import LevelOnePage
 from production.datascience_house.Levels.Pages.PageText.CommonText import showDefeatedText
 
@@ -21,7 +21,7 @@ class LevelOne:
         self.plane = Plane()
         self.levelOnePage = LevelOnePage()
         self.enemies = []  # All enemies
-        self.allEnemies = 30  # Total number of enemies
+        self.allEnemies = 15  # Total number of enemies
         self.enemiesPresent = 0  # Enemies that have appeared
         self.enemyDestroyed = 0
         self.score = 0  # Score
@@ -46,6 +46,7 @@ class LevelOne:
                 else:
                     self.gameIsOn = False
                     self.plane.HP_current = 100
+                    self.plane.healthBar_width = 42
                     i = 0
                     while self.plane.all_bullets:
                         del self.plane.all_bullets[i]
@@ -66,10 +67,10 @@ class LevelOne:
                 # Up to five enemies can exist simultaneously.
                 if self.enemiesPresent < self.allEnemies:
                     while len(self.enemies) < 5:
-                        self.enemies.append(Enemy(random.randint(0, 1250), -28, random.randint(-2, -2), 0.1))
+                        self.enemies.append(Enemy(random.randint(0, 1250), -28, random.randint(-2, -2), 0.15))
                         self.enemiesPresent += 1
                 # If no enemies, end the game
-                if not self.enemies:
+                if not self.enemies and self.plane.HP_current > 0:
                     end(self.levelOnePage, self, 12)
 
                 showEnemy(self)
@@ -91,17 +92,20 @@ class LevelOne:
 
     # To reset all the states of the level when the player exits,
     # call this method to ensure that the player can restart the level without encountering errors.
-    def finish(self, levelOnePage):
-        if 1190 > self.plane.position_x > 1010 and 28 < self.plane.position_y < 172:
+    def finish(self):
+        if 1150 > self.plane.position_x > 1070 and 60 < self.plane.position_y < 160:
+            gainScoreAndExp(self)
             self.gameIsOn = False
             self.plane.position_x, self.plane.position_y = 0, 675
             self.plane.speed_x, self.plane.speed_y = 0, 0
+            self.plane.HP_current = 100
+            self.plane.healthBar_width = 42
             self.enemiesPresent = 0
             self.enemyDestroyed = 0
             self.score = 0
-            levelOnePage.needToShowIntroductionText = True
-            levelOnePage.needToShowEndText = True
-            levelOnePage.needToShowExitText = False
+            self.levelOnePage.needToShowIntroductionText = True
+            self.levelOnePage.needToShowEndText = True
+            self.levelOnePage.needToShowExitText = False
             self.passed = 'True'
             with sqlite3.connect('general/db/AIGame.db') as connection:
                 cursor = connection.cursor()

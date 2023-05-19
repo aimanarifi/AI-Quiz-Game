@@ -11,7 +11,7 @@ class Plane:
         # health points of the aircraft
         self.HP_max = 100
         self.HP_current = 100
-        self.healthBar_width = 77
+        self.healthBar_width = 42
 
         # The position of the aircraft
         self.position_x = 0

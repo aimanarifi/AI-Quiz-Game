@@ -7,7 +7,7 @@ from production.datascience_house.Window import font
 
 class LevelThreePageText:
     def __init__(self):
-        self.colour = (193,223,132)
+        self.colour = (193, 223, 132)
 
         # Introduction text to welcome players to the level 3 (players have not answered any questions yet).
         # Players will be informed that they will need to answer questions in this level.
@@ -22,7 +22,7 @@ class LevelThreePageText:
                                                    self.colour)
         self.introduction1_textLine5 = font.render(
             "I assume you are aware of the rules.", True,
-            (0, 0, 0))
+            self.colour)
         self.introduction1_textLine6 = font.render("Would you like to take on the challenge?", True, self.colour)
 
         # Reminder text after a player chooses to answer the questions
@@ -34,9 +34,9 @@ class LevelThreePageText:
 
         # Reminder text after a player fails to answer the questions
         self.reminder2_textLine1 = font.render("I'm sorry, but you did not meet the requirements,", True,
-                                                   self.colour)
+                                               self.colour)
         self.reminder2_textLine2 = font.render("so I cannot grant you access. Please feel free to", True,
-                                                   self.colour)
+                                               self.colour)
         self.reminder2_textLine3 = font.render("come back and challenge again in the future.", True, self.colour)
 
         # Reminder text after a player has successfully answered the questions

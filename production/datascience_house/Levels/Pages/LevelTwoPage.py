@@ -50,7 +50,7 @@ class LevelTwoPage:
         self.reminder4_textLastTime = 0
 
         # The display attributes for the reminder text when the game is over
-        self.needTOShowEndText = True
+        self.needToShowEndText = True
         self.end_textStartTime = 0
         self.end_textEndTime = 0
         self.end_textLastTime = 0
@@ -64,13 +64,13 @@ class LevelTwoPage:
         self.defeated_text_lastTime = 0
 
         # The button for the player to choose to answer the questions
-        self.button_acceptChallenge = pygame.Rect(385, 500, 210, 40)
+        self.button_acceptChallenge = pygame.Rect(380, 500, 210, 40)
         pygame.draw.rect(window, (0, 255, 0), self.button_acceptChallenge)
         self.text_acceptChallenge = font.render("Click here to start!", True, (255, 255, 255))
         self.text_rect_acceptChallenge = self.text_acceptChallenge.get_rect(center=self.button_acceptChallenge.center)
 
         # The button for the player to refuse answering the questions
-        self.button_refuseChallenge = pygame.Rect(695, 500, 210, 40)
+        self.button_refuseChallenge = pygame.Rect(690, 500, 210, 40)
         pygame.draw.rect(window, (0, 255, 0), self.button_refuseChallenge)
         self.text_refuseChallenge = font.render("Click here to go back!", True, (255, 255, 255))
         self.text_rect_refuseChallenge = self.text_refuseChallenge.get_rect(center=self.button_refuseChallenge.center)
@@ -85,12 +85,12 @@ class LevelTwoPage:
 
     def showIntroduction1Text(self):
         if self.needToShowIntroduction1Text:
-            window.blit(self.levelTwoPageText.introduction1_textLine1, (290, 170))
-            window.blit(self.levelTwoPageText.introduction1_textLine2, (290, 220))
-            window.blit(self.levelTwoPageText.introduction1_textLine3, (290, 270))
-            window.blit(self.levelTwoPageText.introduction1_textLine4, (290, 320))
-            window.blit(self.levelTwoPageText.introduction1_textLine5, (290, 370))
-            window.blit(self.levelTwoPageText.introduction1_textLine6, (290, 420))
+            window.blit(self.levelTwoPageText.introduction1_textLine1, (270, 170))
+            window.blit(self.levelTwoPageText.introduction1_textLine2, (270, 220))
+            window.blit(self.levelTwoPageText.introduction1_textLine3, (270, 270))
+            window.blit(self.levelTwoPageText.introduction1_textLine4, (270, 320))
+            window.blit(self.levelTwoPageText.introduction1_textLine5, (270, 370))
+            window.blit(self.levelTwoPageText.introduction1_textLine6, (270, 420))
 
     def showButtons(self):
         if self.needToShowButtons:
@@ -106,10 +106,10 @@ class LevelTwoPage:
             countdown_text_time_left = 7 - self.reminder1_textLastTime
             countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
             if (7 - self.reminder1_textLastTime) >= 0:
-                window.blit(self.levelTwoPageText.reminder1_textLine1, (420, 270))
-                window.blit(self.levelTwoPageText.reminder1_textLine2, (420, 320))
-                window.blit(self.levelTwoPageText.reminder1_textLine3, (420, 370))
-                window.blit(self.levelTwoPageText.reminder1_textLine4, (575, 420))
+                window.blit(self.levelTwoPageText.reminder1_textLine1, (400, 270))
+                window.blit(self.levelTwoPageText.reminder1_textLine2, (400, 320))
+                window.blit(self.levelTwoPageText.reminder1_textLine3, (400, 370))
+                window.blit(self.levelTwoPageText.reminder1_textLine4, (555, 420))
                 window.blit(countdown_text, (10, 690))
             else:
                 self.needToShowReminder1Text = False
@@ -125,10 +125,10 @@ class LevelTwoPage:
         countdown_text_time_left = 7 - self.reminder2_textLastTime
         countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
         if (7 - self.reminder2_textLastTime) >= 0:
-            window.blit(self.levelTwoPageText.reminder2_textLine1, (325, 260))
-            window.blit(self.levelTwoPageText.reminder2_textLine2, (325, 310))
-            window.blit(self.levelTwoPageText.reminder2_textLine3, (325, 360))
-            window.blit(self.levelTwoPageText.reminder2_textLine4, (325, 410))
+            window.blit(self.levelTwoPageText.reminder2_textLine1, (315, 260))
+            window.blit(self.levelTwoPageText.reminder2_textLine2, (315, 310))
+            window.blit(self.levelTwoPageText.reminder2_textLine3, (315, 360))
+            window.blit(self.levelTwoPageText.reminder2_textLine4, (315, 410))
             window.blit(countdown_text, (10, 690))
         else:
             self.needToShowIntroduction1Text = True
@@ -152,9 +152,9 @@ class LevelTwoPage:
             countdown_text_time_left = 7 - self.reminder3_textLastTime
             countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
             if (7 - self.reminder3_textLastTime) >= 0:
-                window.blit(self.levelTwoPageText.reminder3_textLine1, (315, 283))
-                window.blit(self.levelTwoPageText.reminder3_textLine2, (315, 333))
-                window.blit(self.levelTwoPageText.reminder3_textLine3, (315, 383))
+                window.blit(self.levelTwoPageText.reminder3_textLine1, (295, 283))
+                window.blit(self.levelTwoPageText.reminder3_textLine2, (295, 333))
+                window.blit(self.levelTwoPageText.reminder3_textLine3, (295, 383))
                 window.blit(countdown_text, (10, 690))
             else:
                 self.needToShowReminder3Text = False
@@ -172,13 +172,13 @@ class LevelTwoPage:
             countdown_text_time_left = 12 - self.introduction2_textLastTime
             countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
             if (12 - self.introduction2_textLastTime) >= 0:
-                window.blit(self.levelTwoPageText.introduction2_textLine1, (315, 170))
-                window.blit(self.levelTwoPageText.introduction2_textLine2, (315, 220))
-                window.blit(self.levelTwoPageText.introduction2_textLine3, (315, 270))
-                window.blit(self.levelTwoPageText.introduction2_textLine4, (315, 320))
-                window.blit(self.levelTwoPageText.introduction2_textLine5, (315, 370))
-                window.blit(self.levelTwoPageText.introduction2_textLine6, (315, 420))
-                window.blit(self.levelTwoPageText.introduction2_textLine7, (587, 470))
+                window.blit(self.levelTwoPageText.introduction2_textLine1, (295, 170))
+                window.blit(self.levelTwoPageText.introduction2_textLine2, (295, 220))
+                window.blit(self.levelTwoPageText.introduction2_textLine3, (295, 270))
+                window.blit(self.levelTwoPageText.introduction2_textLine4, (295, 320))
+                window.blit(self.levelTwoPageText.introduction2_textLine5, (295, 370))
+                window.blit(self.levelTwoPageText.introduction2_textLine6, (295, 420))
+                window.blit(self.levelTwoPageText.introduction2_textLine7, (567, 470))
                 window.blit(countdown_text, (10, 690))
             else:
                 self.needToShowIntroduction2Text = False
@@ -197,7 +197,7 @@ class LevelTwoPage:
             countdown_text_time_left = 7 - self.reminder4_textLastTime
             countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
             if (7 - self.reminder4_textLastTime) >= 0:
-                window.blit(self.levelTwoPageText.reminder4_textLine, (290, 513))
+                window.blit(self.levelTwoPageText.reminder4_textLine, (240, 513))
                 window.blit(countdown_text, (10, 690))
             else:
                 self.needToShowReminder4Text = False
@@ -206,13 +206,13 @@ class LevelTwoPage:
                 self.reminder4_textLastTime = 0
 
     def showEndText(self):
-        window.blit(self.levelTwoPageText.end_textLine1, (317, 170))
-        window.blit(self.levelTwoPageText.end_textLine2, (317, 220))
-        window.blit(self.levelTwoPageText.end_textLine3, (317, 270))
-        window.blit(self.levelTwoPageText.end_textLine4, (317, 320))
-        window.blit(self.levelTwoPageText.end_textLine5, (317, 370))
-        window.blit(self.levelTwoPageText.end_textLine6, (317, 420))
+        window.blit(self.levelTwoPageText.end_textLine1, (277, 170))
+        window.blit(self.levelTwoPageText.end_textLine2, (277, 220))
+        window.blit(self.levelTwoPageText.end_textLine3, (277, 270))
+        window.blit(self.levelTwoPageText.end_textLine4, (277, 320))
+        window.blit(self.levelTwoPageText.end_textLine5, (277, 370))
+        window.blit(self.levelTwoPageText.end_textLine6, (277, 420))
 
     def showExitText(self):
-        window.blit(self.levelTwoPageText.exit_textLine1, (314, 315))
-        window.blit(self.levelTwoPageText.exit_textLine2, (337, 365))
+        window.blit(self.levelTwoPageText.exit_textLine1, (304, 315))
+        window.blit(self.levelTwoPageText.exit_textLine2, (327, 365))

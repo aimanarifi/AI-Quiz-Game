@@ -61,11 +61,13 @@ def startGame():
 
         pygame.display.update()
 
+    # Releasing resources
     del clock
     del mainPage
     del levelOne
     del levelTwo
     del levelThree
+    pygame.mixer.music.stop()
 
 
 if __name__ == '__main__':

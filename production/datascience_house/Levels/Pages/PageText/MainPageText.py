@@ -8,7 +8,7 @@ from production.datascience_house.Window import font
 class MainPageText:
     def __init__(self):
         # Welcome to "Data Science House" (Homepage) - Introduction Text for Players
-        self.colour = (248,170,148)
+        self.colour = (248, 170, 148)
         self.introduction_textLine1 = font.render(
             "Welcome to the Data Science House !",
             True, self.colour)

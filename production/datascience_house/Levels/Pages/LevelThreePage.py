@@ -50,7 +50,7 @@ class LevelThreePage:
         self.reminder4_textLastTime = 0
 
         # The display attributes for the reminder text when the game is over
-        self.needTOShowEndText = True
+        self.needToShowEndText = True
         self.end_textStartTime = 0
         self.end_textEndTime = 0
         self.end_textLastTime = 0
@@ -209,9 +209,9 @@ class LevelThreePage:
             countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (125, 125, 125))
             if (7 - self.reminder4_textLastTime) >= 0:
                 window.blit(self.levelThreePageText.reminder4_textLine1,
-                            (220, 500))
+                            (160, 500))
                 window.blit(self.levelThreePageText.reminder4_textLine2,
-                            (490, 550))
+                            (430, 550))
                 window.blit(countdown_text, (10, 690))
             else:
                 self.needToShowReminder4Text = False

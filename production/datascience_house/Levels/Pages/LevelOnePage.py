@@ -25,7 +25,7 @@ class LevelOnePage:
         self.reminder_textLastTime = 0
 
         # Properties for reminder text (game over)
-        self.needTOShowEndText = True
+        self.needToShowEndText = True
         self.end_textStartTime = 0
         self.end_textEndTime = 0
         self.end_textLastTime = 0
@@ -72,8 +72,8 @@ class LevelOnePage:
             countdown_text_time_left = 7 - self.reminder_textLastTime
             countdown_text = font.render("Time left: " + str(int(countdown_text_time_left)), True, (255, 255, 255))
             if (7 - self.reminder_textLastTime) >= 0:
-                window.blit(self.levelOnePageText.reminder_textLine1, (355, 500))
-                window.blit(self.levelOnePageText.reminder_textLine2, (550, 550))
+                window.blit(self.levelOnePageText.reminder_textLine1, (325, 500))
+                window.blit(self.levelOnePageText.reminder_textLine2, (520, 550))
                 window.blit(countdown_text, (10, 690))
             else:
                 self.needToShowReminderText = False
@@ -82,11 +82,11 @@ class LevelOnePage:
                 self.reminder_textLastTime = 0
 
     def showEndText(self):
-        window.blit(self.levelOnePageText.end_textLine1, (245, 170))
-        window.blit(self.levelOnePageText.end_textLine2, (245, 220))
-        window.blit(self.levelOnePageText.end_textLine3, (245, 270))
-        window.blit(self.levelOnePageText.end_textLine4, (245, 320))
-        window.blit(self.levelOnePageText.end_textLine5, (480, 370))
+        window.blit(self.levelOnePageText.end_textLine1, (215, 170))
+        window.blit(self.levelOnePageText.end_textLine2, (215, 220))
+        window.blit(self.levelOnePageText.end_textLine3, (215, 270))
+        window.blit(self.levelOnePageText.end_textLine4, (215, 320))
+        window.blit(self.levelOnePageText.end_textLine5, (450, 370))
 
     def showExitText(self):
         window.blit(self.levelOnePageText.exit_textLine1, (314, 315))

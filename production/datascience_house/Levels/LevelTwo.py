@@ -8,7 +8,7 @@ import sqlite3
 from production.datascience_house.Window import pygame, window
 from production.datascience_house.Plane import Plane
 from production.datascience_house.Enemy import Enemy
-from production.datascience_house.Levels.CommonFunctions import showQuestions, image_bullet, showPlane_setPlaneMoveRange, showScoreObtained, showEnemy, showRemainingEnemies, hitByEnemy_judge, hit_judge, end
+from production.datascience_house.Levels.CommonFunctions import showQuestions, image_bullet, showPlane_setPlaneMoveRange, showScoreObtained, showEnemy, showRemainingEnemies, hitByEnemy_judge, hit_judge, end, gainScoreAndExp
 from production.datascience_house.Levels.Pages.LevelTwoPage import LevelTwoPage
 from production.datascience_house.Levels.Pages.PageText.CommonText import showDefeatedText
 
@@ -22,7 +22,7 @@ class LevelTwo:
         self.plane.move_speed_improve()
         self.levelTwoPage = LevelTwoPage()
         self.enemies = []  # All enemies
-        self.allEnemies = 60  # Total number of enemies
+        self.allEnemies = 30  # Total number of enemies
         self.enemiesPresent = 0  # Enemies that have appeared
         self.enemyDestroyed = 0
         self.score = 0  # Score
@@ -76,6 +76,7 @@ class LevelTwo:
                     else:
                         self.gameIsOn = False
                         self.plane.HP_current = 100
+                        self.plane.healthBar_width = 42
                         i = 0
                         while self.plane.all_bullets:
                             del self.plane.all_bullets[i]
@@ -95,7 +96,7 @@ class LevelTwo:
                     # and the total number of enemies and their movement speed are increased compared to the first level.
                     if self.enemiesPresent < self.allEnemies:
                         while len(self.enemies) < 10:
-                            self.enemies.append(Enemy(random.randint(0, 1250), -28, random.randint(-3, 3), 0.2))
+                            self.enemies.append(Enemy(random.randint(0, 1250), -28, random.randint(-3, 3), 0.23))
                             self.enemiesPresent += 1
                     if not self.enemies and self.plane.HP_current > 0:
                         end(self.levelTwoPage, self, 12)
@@ -126,25 +127,27 @@ class LevelTwo:
 
     # To reset all the states of the level when the player exits,
     # call this method to ensure that the player can restart the level without encountering errors.
-    def finish(self, levelTwoPage):
-        if 1190 > self.plane.position_x > 1010 and 28 < self.plane.position_y < 172:
+    def finish(self):
+        if 1150 > self.plane.position_x > 1070 and 60 < self.plane.position_y < 160:
+            gainScoreAndExp(self)
             self.gameIsOn = False
             self.plane.position_x, self.plane.position_y = 0, 675
             self.plane.speed_x, self.plane.speed_y = 0, 0
             self.plane.HP_current = 100
+            self.plane.healthBar_width = 42
             self.enemiesPresent = 0
             self.enemyDestroyed = 0
             self.score = 0
             self.acceptChallenge = False
             self.questionScore = 0
             self.questionAnswered = False
-            levelTwoPage.needToShowIntroduction1Text = True
-            levelTwoPage.needToShowButtons = True
-            levelTwoPage.needToShowReminder1Text = True
-            levelTwoPage.showText_beforeGame = True
-            levelTwoPage.needToShowReminder3Text = True
-            levelTwoPage.needTOShowEndText = True
-            levelTwoPage.needToShowExitText = False
+            self.levelTwoPage.needToShowIntroduction1Text = True
+            self.levelTwoPage.needToShowButtons = True
+            self.levelTwoPage.needToShowReminder1Text = True
+            self.levelTwoPage.showText_beforeGame = True
+            self.levelTwoPage.needToShowReminder3Text = True
+            self.levelTwoPage.needToShowEndText = True
+            self.levelTwoPage.needToShowExitText = False
             self.passed = 'True'
             with sqlite3.connect('general/db/AIGame.db') as connection:
                 cursor = connection.cursor()

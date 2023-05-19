@@ -2,13 +2,14 @@
 Last modified: 18/05/2023
 Written by Zhongjie Huang
 """
+import sqlite3
 import time
 import random
 import math
 from production.datascience_house.Window import pygame, window
 from production.datascience_house.Plane import Plane
 from production.datascience_house.Enemy import Enemy
-from production.datascience_house.Levels.CommonFunctions import showQuestions, image_bullet, image_bullet_auto_track, showPlane_setPlaneMoveRange, showScoreObtained, showEnemy, showRemainingEnemies, image_enemy_weapon, hitByEnemy_judge, hit_judge, end
+from production.datascience_house.Levels.CommonFunctions import showQuestions, image_bullet, image_bullet_auto_track, showPlane_setPlaneMoveRange, showScoreObtained, showEnemy, showRemainingEnemies, image_enemy_weapon, hitByEnemy_judge, hit_judge, end, gainScoreAndExp
 from production.datascience_house.Levels.Pages.LevelThreePage import LevelThreePage
 from production.datascience_house.Levels.Pages.PageText.CommonText import showDefeatedText
 
@@ -21,7 +22,7 @@ class LevelThree:
         self.plane.move_speed_improve()
         self.levelThreePage = LevelThreePage()
         self.enemies = []  # All enemies
-        self.allEnemies = 90  # Total number of enemies
+        self.allEnemies = 60  # Total number of enemies
         self.enemiesPresent = 0  # Enemies that have appeared
         self.enemyDestroyed = 0
         self.score = 0  # Score
@@ -75,6 +76,7 @@ class LevelThree:
                     else:
                         self.gameIsOn = False
                         self.plane.HP_current = 100
+                        self.plane.healthBar_width = 42
                         i = 0
                         while self.plane.all_bullets:
                             del self.plane.all_bullets[i]
@@ -96,7 +98,7 @@ class LevelThree:
                         while len(self.enemies) < 15:
                             self.enemies.append(Enemy(random.randint(0, 1250), -28, random.randint(-4, 4), 0.25))
                             self.enemiesPresent += 1
-                    elif not self.enemies and self.plane.HP_current > 0:
+                    if not self.enemies and self.plane.HP_current > 0:
                         end(self.levelThreePage, self, 12)
 
                     showEnemy(self)
@@ -173,22 +175,28 @@ class LevelThree:
 
     # To reset all the states of the level when the player exits,
     # call this method to ensure that the player can restart the level without encountering errors.
-    def finish(self, levelThreePage):
-        if 1190 > self.plane.position_x > 1010 and 28 < self.plane.position_y < 172:
+    def finish(self):
+        if 1150 > self.plane.position_x > 1070 and 60 < self.plane.position_y < 160:
+            gainScoreAndExp(self)
             self.gameIsOn = False
             self.plane.position_x, self.plane.position_y = 0, 675
             self.plane.speed_x, self.plane.speed_y = 0, 0
             self.plane.HP_current = 100
+            self.plane.healthBar_width = 42
             self.enemiesPresent = 0
             self.enemyDestroyed = 0
             self.acceptChallenge = False
             self.questionScore = 0
             self.score = 0
             self.questionAnswered = False
-            levelThreePage.needToShowIntroduction1Text = True
-            levelThreePage.needToShowButtons = True
-            levelThreePage.needToShowReminder1Text = True
-            levelThreePage.showText_beforeGame = True
-            levelThreePage.needToShowReminder3Text = True
-            levelThreePage.needTOShowEndText = True
-            levelThreePage.needToShowExitText = False
+            self.levelThreePage.needToShowIntroduction1Text = True
+            self.levelThreePage.needToShowButtons = True
+            self.levelThreePage.needToShowReminder1Text = True
+            self.levelThreePage.showText_beforeGame = True
+            self.levelThreePage.needToShowReminder3Text = True
+            self.levelThreePage.needToShowEndText = True
+            self.levelThreePage.needToShowExitText = False
+            with sqlite3.connect('general/db/AIGame.db') as connection:
+                cursor = connection.cursor()
+                cursor.execute("UPDATE DATASCIENCELEVELSTATE SET levelOne = 'False', levelTwo = 'False' WHERE id = 1")
+                connection.commit()
